@@ -35,7 +35,7 @@ body.font-bricolage-azeret {
   --border: #24283b;
   --text: #a9b1d6;
   --text-bright: #c0caf5;
-  --text-dim: #565f89;
+  --text-dim: #7982a9;
   --accent: #bb9af3;
   --accent-dim: rgba(187, 154, 243, 0.15);
   --accent-border: rgba(187, 154, 243, 0.3);
@@ -46,7 +46,7 @@ body.font-bricolage-azeret {
   /* Syntax Highlighting */
   --syntax-keyword: #bb9af3;
   --syntax-string: #9ece6a;
-  --syntax-comment: #565f89;
+  --syntax-comment: #7982a9;
   --syntax-number: #ff9e64;
   --syntax-function: #7aa2f7;
   --syntax-tag: #f7768e;
@@ -1261,6 +1261,23 @@ textarea:focus-visible {
     .mobile-app-layout nav button {
       gap: 0 !important;
     }
+  }
+}
+
+/* 5. Global focus-visible outlines */
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, [role="button"]:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
+}
+
+/* 6. Motion preferences compliance */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
   }
 }
 

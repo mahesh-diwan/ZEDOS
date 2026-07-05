@@ -41,8 +41,18 @@ export const ProjectsView: React.FC = () => {
             >
               {/* Card Header (Clickable) */}
               <div 
-                style={styles.cardHeader} 
+                style={{ ...styles.cardHeader, cursor: 'pointer' }} 
                 onClick={() => toggleExpand(proj.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleExpand(proj.id);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-expanded={isExpanded}
+                aria-label={`Toggle case details for ${proj.name}`}
               >
                 <div style={styles.headerInfo}>
                   <span style={styles.projectIcon}>{proj.icon}</span>

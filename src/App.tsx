@@ -240,7 +240,7 @@ export const App: React.FC = () => {
         }}
       >
         {/* Mobile Header Bar */}
-        <header style={mobileStyles.header} className="no-select">
+        <header style={mobileStyles.header} className="no-select" role="banner">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <button 
               style={mobileStyles.menuBtn} 
@@ -284,7 +284,7 @@ export const App: React.FC = () => {
         </main>
 
         {/* Bottom Tab Navigation Bar */}
-        <nav style={mobileStyles.bottomNav} className="no-select">
+        <nav style={mobileStyles.bottomNav} className="no-select" role="navigation">
           <button 
             style={{ 
               ...mobileStyles.navBtn, 
@@ -398,16 +398,18 @@ export const App: React.FC = () => {
       <div className="main-layout" style={{ position: 'relative' }}>
         {/* Left Side File Tree */}
         {projectPanelOpen && (
-          <ProjectPanel
-            activeFile={activeFile}
-            onFileSelect={handleOpenFile}
-            openFiles={openFiles}
-            onClose={() => setProjectPanelOpen(false)}
-          />
+          <aside role="complementary" aria-label="Project Explorer">
+            <ProjectPanel
+              activeFile={activeFile}
+              onFileSelect={handleOpenFile}
+              openFiles={openFiles}
+              onClose={() => setProjectPanelOpen(false)}
+            />
+          </aside>
         )}
 
         {/* Center / Editor + Terminal Area */}
-        <div className="editor-terminal-container">
+        <main role="main" className="editor-terminal-container" style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
           <EditorArea
             activeFile={activeFile}
             setActiveFile={setActiveFile}
@@ -421,7 +423,7 @@ export const App: React.FC = () => {
               onOpenFile={handleOpenFile}
             />
           )}
-        </div>
+        </main>
 
         {/* Right AI Assistant Dock */}
         {assistantOpen && (
