@@ -38,16 +38,7 @@ export const App: React.FC = () => {
   // Custom Toast State
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  // Retro Dual Cursor States
-  const [innerPos, setInnerPos] = useState({ x: -100, y: -100 });
-  const [outerPos, setOuterPos] = useState({ x: -100, y: -100 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
-  const innerRef = useRef({ x: -100, y: -100 });
-  const outerRef = useRef({ x: -100, y: -100 });
-  const requestRef = useRef<number | null>(null);
 
   // Check mobile device
   useEffect(() => {
@@ -62,59 +53,7 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Track Mouse movement and trailing physics for custom cursor
-  useEffect(() => {
-    if (isMobile) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      innerRef.current = { x: e.clientX, y: e.clientY };
-      setInnerPos({ x: e.clientX, y: e.clientY });
-      
-      // Check if hovering over clickable elements
-      const target = e.target as HTMLElement;
-      const isClickable = 
-        target.tagName === 'BUTTON' || 
-        target.tagName === 'A' || 
-        target.closest('button') !== null || 
-        target.closest('a') !== null ||
-        target.closest('.file-tree-row') !== null ||
-        target.closest('.social-card-item') !== null ||
-        target.closest('.other-skill-tag') !== null ||
-        target.style.cursor === 'pointer';
-        
-      setIsHovering(!!isClickable);
-    };
-
-    const handleMouseDown = () => setIsClicked(true);
-    const handleMouseUp = () => setIsClicked(false);
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mouseup', handleMouseUp);
-
-    // Lerp calculation for smooth trailing ring motion
-    const animateCursor = () => {
-      const dx = innerRef.current.x - outerRef.current.x;
-      const dy = innerRef.current.y - outerRef.current.y;
-      
-      // Lerping factor - 5 is a sweet spot for responsive but smooth lag
-      outerRef.current.x += dx / 5;
-      outerRef.current.y += dy / 5;
-      
-      setOuterPos({ x: outerRef.current.x, y: outerRef.current.y });
-      requestRef.current = requestAnimationFrame(animateCursor);
-    };
-    requestRef.current = requestAnimationFrame(animateCursor);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mouseup', handleMouseUp);
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
-      }
-    };
-  }, [isMobile]);
+  // Custom cursor logic removed to optimize rendering performance (bypassing mousemove repaint overhead)
 
   // Panel toggle handlers with mobile overlay constraints
   const handleToggleProject = useCallback((val?: boolean | ((prev: boolean) => boolean)) => {
@@ -378,10 +317,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div 
-      className={`app-container ${!isMobile ? 'custom-cursor-active' : ''}`}
-      style={{ cursor: isMobile ? 'auto' : 'none' }}
-    >
+    <div className="app-container">
       {/* 1. Title bar */}
       <TitleBar
         activeFile={activeFile}
@@ -459,37 +395,7 @@ export const App: React.FC = () => {
         ))}
       </div>
 
-      {/* 5. Custom Retro Spring Cursor (hide on mobile) */}
-      {!isMobile && (
-        <>
-          {/* Inner solid coordinate dot */}
-          <div 
-            style={{
-              ...styles.customCursorDot,
-              left: `${innerPos.x}px`,
-              top: `${innerPos.y}px`,
-              transform: `translate(-50%, -50%) scale(${isClicked ? 0.6 : 1})`,
-              backgroundColor: isHovering ? 'var(--accent)' : 'var(--text-bright)',
-            }}
-          />
-          {/* Outer trailing organic ring */}
-          <div 
-            style={{
-              ...styles.customCursorRing,
-              left: `${outerPos.x}px`,
-              top: `${outerPos.y}px`,
-              transform: `translate(-50%, -50%) scale(${
-                isHovering ? (isClicked ? 1.2 : 1.5) : (isClicked ? 0.8 : 1)
-              })`,
-              borderColor: isHovering ? 'var(--accent)' : 'var(--text-bright)',
-              backgroundColor: isHovering ? 'var(--accent-dim)' : 'transparent',
-              boxShadow: isHovering 
-                ? '0 0 12px var(--accent-dim), inset 0 0 8px var(--accent-dim)' 
-                : 'none',
-            }}
-          />
-        </>
-      )}
+      {/* Custom cursor overlay removed to optimize frame rendering rates */}
     </div>
   );
 };
