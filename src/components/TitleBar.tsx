@@ -31,7 +31,7 @@ export const TitleBar: React.FC<TitleBarProps> = ({
   };
 
   return (
-    <div style={styles.titleBar} className="no-select">
+    <header style={styles.titleBar} className="no-select" role="banner">
       {/* 1. Window Controls (MacOS style dots) */}
       <div style={styles.windowControls}>
         <div style={{ ...styles.dot, backgroundColor: '#ff5f56' }} />
@@ -121,7 +121,7 @@ export const TitleBar: React.FC<TitleBarProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
