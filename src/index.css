@@ -1154,6 +1154,8 @@ textarea:focus-visible {
   
   .view-container {
     padding: 24px 16px !important;
+    height: auto !important;
+    overflow-y: visible !important;
   }
 
   .projects-grid {
