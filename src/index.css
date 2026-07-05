@@ -434,6 +434,7 @@ button, input, textarea {
 .view-container p {
   color: var(--text);
   line-height: 1.6;
+  max-width: 68ch;
 }
 
 /* Hide default cursor if custom retro cursor is active */
