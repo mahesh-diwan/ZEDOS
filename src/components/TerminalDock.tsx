@@ -58,19 +58,21 @@ export const TerminalDock: React.FC<TerminalDockProps> = ({ onClose, onOpenFile 
   pwd              — print working directory path
   cat <file>       — open and view a file in the editor (e.g., cat ABOUT.md)
   open <file>      — same as cat
-  whoami           — display bio overview
-  date             — show current date and time
-  git log          — show simulated commits
+  about            — open biography and objectives (ABOUT.md)
+  skills           — open skills matrix (ABOUT.md)
+  projects         — open projects portfolio (PROJECTS.md)
+  resume           — open resume panel (RESUME.pdf)
+  blog             — open writings feed (BLOGS.md)
+  contact          — open contact details (CONTACT.md)
+  github           — open GitHub profile in a new tab
+  linkedin         — open LinkedIn profile in a new tab
   neofetch         — display ZEDOS system diagnostics
   docker ps        — check running container tasks (DevOps)
   kubectl get pods — fetch active Kubernetes pods status (K8s)
   terraform plan   — generate simulated infrastructure plans (IaC)
-  skills           — open skills panel
-  projects         — open projects panel
-  resume           — open resume panel
-  blog             — open writings panel
-  contact          — open contact details
-  joke             — display a random developer joke
+  whoami           — display bio overview
+  date             — show current date and time
+  git log          — show simulated commits
   clear            — clear terminal output history`;
         break;
 
@@ -192,7 +194,6 @@ Plan: 2 to add, 0 to change, 0 to destroy.`;
           else if (fileArg.includes('ABOUT') || fileArg.includes('PROFILE')) matchedFile = 'ABOUT.md';
           else if (fileArg.includes('PROJ')) matchedFile = 'PROJECTS.md';
           else if (fileArg.includes('BLOG')) matchedFile = 'BLOGS.md';
-          else if (fileArg.includes('CERT')) matchedFile = 'CERTIFICATIONS.md';
           else if (fileArg.includes('RESU')) matchedFile = 'RESUME.pdf';
           else if (fileArg.includes('CONT')) matchedFile = 'CONTACT.md';
 
@@ -221,6 +222,18 @@ Plan: 2 to add, 0 to change, 0 to destroy.`;
       case 'contact':
         onOpenFile('CONTACT.md');
         output = 'Opening CONTACT.md in editor tabs...';
+        break;
+      case 'about':
+        onOpenFile('ABOUT.md');
+        output = 'Opening ABOUT.md in editor tabs...';
+        break;
+      case 'github':
+        window.open('https://github.com/mahesh-diwan', '_blank');
+        output = 'Opening GitHub profile in a new browser tab...';
+        break;
+      case 'linkedin':
+        window.open('https://www.linkedin.com/in/mahesh-diwan/', '_blank');
+        output = 'Opening LinkedIn profile in a new browser tab...';
         break;
       case 'skills':
         onOpenFile('ABOUT.md');
