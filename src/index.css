@@ -1064,14 +1064,23 @@ textarea:focus-visible {
     }
   }
 
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
   /* Main Drawers as absolute overlays */
   .project-sidebar {
     position: absolute !important;
     left: 0 !important;
-    top: 38px !important;
-    height: calc(100vh - 38px - 24px) !important;
-    width: 220px !important;
-    z-index: 95 !important;
+    top: 0 !important;
+    height: 100% !important;
+    width: 240px !important;
+    z-index: 100 !important;
     box-shadow: 6px 0 20px rgba(0, 0, 0, 0.4) !important;
     border-right: 1px solid var(--border) !important;
     animation: slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
@@ -1080,11 +1089,11 @@ textarea:focus-visible {
   .assistant-dock-panel {
     position: absolute !important;
     right: 0 !important;
-    top: 38px !important;
-    height: calc(100vh - 38px - 24px) !important;
+    top: 0 !important;
+    height: 100% !important;
     width: 100% !important;
     max-width: 320px !important;
-    z-index: 95 !important;
+    z-index: 100 !important;
     box-shadow: -6px 0 20px rgba(0, 0, 0, 0.4) !important;
     border-left: 1px solid var(--border) !important;
     animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
@@ -1092,42 +1101,24 @@ textarea:focus-visible {
   
   .terminal-dock-panel {
     position: absolute !important;
-    bottom: 24px !important;
+    bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    height: 220px !important;
+    height: 60% !important;
     width: 100vw !important;
-    z-index: 90 !important;
-    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.4) !important;
+    z-index: 100 !important;
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.5) !important;
     border-top: 1px solid var(--border) !important;
+    animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   }
 
-  /* Tab Bar horizontally scrollable on mobile */
+  /* Hide tabs and gutters on mobile to maximize viewport content area */
   .editor-tabbar {
-    overflow-x: auto !important;
-    white-space: nowrap !important;
-    display: flex !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-  
-  .editor-tabbar::-webkit-scrollbar {
     display: none !important;
   }
 
   .editor-pane-header {
-    padding: 0 8px !important;
-  }
-  
-  .editor-breadcrumbs {
-    font-size: 10px !important;
-    max-width: 120px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-  
-  .editor-toggle-container {
-    gap: 4px !important;
+    display: none !important;
   }
 
   /* Command Palette Modal adjustment */
@@ -1196,6 +1187,17 @@ textarea:focus-visible {
     word-break: break-all !important;
     max-width: 100% !important;
     overflow-x: auto !important;
+  }
+
+  /* Terminal Font Enhancements */
+  .terminal-dock-panel input,
+  .terminal-dock-panel span,
+  .terminal-dock-panel div {
+    font-size: 13.5px !important;
+  }
+
+  .terminal-dock-panel input {
+    height: 32px !important;
   }
 }
 

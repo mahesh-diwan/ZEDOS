@@ -10,6 +10,7 @@ import { TerminalDock } from './components/TerminalDock';
 import { AssistantDock } from './components/AssistantDock';
 import { CommandPalette } from './components/CommandPalette';
 import { StatusBar } from './components/StatusBar';
+import { Menu, Download, Mail, Home, User, Folder, Award, Terminal as TerminalIcon } from 'lucide-react';
 
 interface Toast {
   id: string;
@@ -223,6 +224,167 @@ export const App: React.FC = () => {
     addToast('🔤', `Typography switched to ${fontName}`);
   };
 
+  if (isMobile) {
+    return (
+      <div 
+        className="app-container mobile-app-layout"
+        style={{ 
+          cursor: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          width: '100vw',
+          overflow: 'hidden',
+          backgroundColor: 'var(--bg)',
+          position: 'relative'
+        }}
+      >
+        {/* Mobile Header Bar */}
+        <header style={mobileStyles.header} className="no-select">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button 
+              style={mobileStyles.menuBtn} 
+              onClick={() => setProjectPanelOpen(true)}
+              title="Open Navigation Explorer"
+            >
+              <Menu size={20} />
+            </button>
+            <span style={mobileStyles.headerTitle}>ZEDOS</span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <a 
+              href="/Mahesh_Diwan_Resume.pdf" 
+              download="Mahesh_Diwan_Resume.pdf"
+              style={mobileStyles.headerDownloadBtn}
+              title="Download Resume (1-click)"
+            >
+              <Download size={13} style={{ marginRight: '4px' }} />
+              <span>Resume</span>
+            </a>
+            <button 
+              onClick={() => handleOpenFile('CONTACT.md')}
+              style={mobileStyles.headerMailBtn}
+              title="Contact Me"
+            >
+              <Mail size={15} />
+            </button>
+          </div>
+        </header>
+
+        {/* Content Body viewport (Full width content, single main scroll container) */}
+        <main style={mobileStyles.contentBody}>
+          <EditorArea
+            activeFile={activeFile}
+            setActiveFile={setActiveFile}
+            openFiles={openFiles}
+            closeFile={handleCloseFile}
+            onToast={addToast}
+          />
+        </main>
+
+        {/* Bottom Tab Navigation Bar */}
+        <nav style={mobileStyles.bottomNav} className="no-select">
+          <button 
+            style={{ 
+              ...mobileStyles.navBtn, 
+              color: activeFile === 'README.md' ? 'var(--accent)' : 'var(--text-dim)' 
+            }}
+            onClick={() => handleOpenFile('README.md')}
+          >
+            <Home size={18} />
+            <span style={mobileStyles.navLabel}>Home</span>
+          </button>
+          <button 
+            style={{ 
+              ...mobileStyles.navBtn, 
+              color: activeFile === 'ABOUT.md' ? 'var(--accent)' : 'var(--text-dim)' 
+            }}
+            onClick={() => handleOpenFile('ABOUT.md')}
+          >
+            <User size={18} />
+            <span style={mobileStyles.navLabel}>About</span>
+          </button>
+          <button 
+            style={{ 
+              ...mobileStyles.navBtn, 
+              color: activeFile === 'PROJECTS.md' ? 'var(--accent)' : 'var(--text-dim)' 
+            }}
+            onClick={() => handleOpenFile('PROJECTS.md')}
+          >
+            <Folder size={18} />
+            <span style={mobileStyles.navLabel}>Projects</span>
+          </button>
+          <button 
+            style={{ 
+              ...mobileStyles.navBtn, 
+              color: activeFile === 'CERTIFICATIONS.md' ? 'var(--accent)' : 'var(--text-dim)' 
+            }}
+            onClick={() => handleOpenFile('CERTIFICATIONS.md')}
+          >
+            <Award size={18} />
+            <span style={mobileStyles.navLabel}>Credentials</span>
+          </button>
+          <button 
+            style={{ 
+              ...mobileStyles.navBtn, 
+              color: terminalOpen ? 'var(--accent)' : 'var(--text-dim)' 
+            }}
+            onClick={() => {
+              setTerminalOpen(!terminalOpen);
+            }}
+          >
+            <TerminalIcon size={18} />
+            <span style={mobileStyles.navLabel}>Terminal</span>
+          </button>
+        </nav>
+
+        {/* Sliding Explorer Drawer */}
+        {projectPanelOpen && (
+          <div style={mobileStyles.overlayContainer} className="drawer-overlay">
+            <div 
+              style={mobileStyles.drawerBackdrop} 
+              onClick={() => setProjectPanelOpen(false)}
+            />
+            <div style={mobileStyles.drawer} className="project-sidebar">
+              <ProjectPanel
+                activeFile={activeFile}
+                onFileSelect={handleOpenFile}
+                openFiles={openFiles}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Slide-up Terminal Bottom Sheet */}
+        {terminalOpen && (
+          <div style={mobileStyles.overlayContainer} className="terminal-overlay">
+            <div 
+              style={mobileStyles.drawerBackdrop} 
+              onClick={() => setTerminalOpen(false)}
+            />
+            <div style={mobileStyles.terminalSheet} className="terminal-dock-panel animate-slide-up">
+              <TerminalDock
+                onClose={() => setTerminalOpen(false)}
+                onOpenFile={handleOpenFile}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Global Toast System */}
+        <div style={styles.toastContainer} className="no-select">
+          {toasts.map((toast) => (
+            <div key={toast.id} style={styles.toastCard} className="animate-slide-up">
+              <span style={styles.toastIcon}>{toast.icon}</span>
+              <span style={styles.toastMsg}>{toast.msg}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div 
       className={`app-container ${!isMobile ? 'custom-cursor-active' : ''}`}
@@ -242,21 +404,6 @@ export const App: React.FC = () => {
 
       {/* 2. Workspace Content Layout */}
       <div className="main-layout" style={{ position: 'relative' }}>
-        {isMobile && projectPanelOpen && (
-          <div 
-            className="sidebar-backdrop-overlay"
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              zIndex: 90,
-            }}
-            onClick={() => setProjectPanelOpen(false)}
-          />
-        )}
         {/* Left Side File Tree */}
         {projectPanelOpen && (
           <ProjectPanel
@@ -352,6 +499,141 @@ export const App: React.FC = () => {
   );
 };
 
+const mobileStyles: { [key: string]: React.CSSProperties } = {
+  header: {
+    height: '48px',
+    backgroundColor: 'var(--bg-titlebar)',
+    borderBottom: '1px solid var(--border)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '0 12px',
+    zIndex: 50,
+    flexShrink: 0,
+  },
+  menuBtn: {
+    backgroundColor: 'transparent',
+    border: 'none',
+    color: 'var(--text-bright)',
+    cursor: 'pointer',
+    width: '40px',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
+  },
+  headerTitle: {
+    fontSize: '15px',
+    fontWeight: 700,
+    color: 'var(--text-bright)',
+    letterSpacing: '0.05em',
+  },
+  headerDownloadBtn: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'var(--accent)',
+    color: '#ffffff',
+    padding: '6px 12px',
+    borderRadius: '4px',
+    fontSize: '11px',
+    fontWeight: 600,
+    textDecoration: 'none',
+    boxShadow: '0 2px 8px rgba(167, 139, 250, 0.2)',
+  },
+  headerMailBtn: {
+    backgroundColor: 'transparent',
+    border: '1px solid var(--border)',
+    color: 'var(--text-bright)',
+    borderRadius: '4px',
+    width: '28px',
+    height: '28px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    padding: 0,
+  },
+  contentBody: {
+    flex: 1,
+    width: '100%',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  bottomNav: {
+    height: '56px',
+    backgroundColor: 'var(--bg-sidebar)',
+    borderTop: '1px solid var(--border)',
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    padding: '0 4px',
+    zIndex: 50,
+    flexShrink: 0,
+  },
+  navBtn: {
+    backgroundColor: 'transparent',
+    border: 'none',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '3px',
+    flex: 1,
+    height: '100%',
+    cursor: 'pointer',
+    padding: 0,
+  },
+  navLabel: {
+    fontSize: '9.5px',
+    fontWeight: 600,
+  },
+  overlayContainer: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 99,
+    display: 'flex',
+  },
+  drawerBackdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  },
+  drawer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    width: '240px',
+    backgroundColor: 'var(--bg-sidebar)',
+    boxShadow: '4px 0 20px rgba(0, 0, 0, 0.5)',
+    zIndex: 100,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  terminalSheet: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '60%',
+    backgroundColor: 'var(--bg-terminal)',
+    boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.5)',
+    zIndex: 100,
+    borderTop: '1px solid var(--border)',
+    borderTopLeftRadius: '12px',
+    borderTopRightRadius: '12px',
+    overflow: 'hidden',
+  },
+};
+
 const styles: { [key: string]: React.CSSProperties } = {
   toastContainer: {
     position: 'fixed',
@@ -390,8 +672,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     pointerEvents: 'none',
     zIndex: 99999,
     boxSizing: 'border-box',
-    // Note: Do NOT animate top/left positions because that causes heavy layout repaints and laggy trail!
-    // Transition size and border/glow properties instead
     transition: 'transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.15s, background-color 0.15s, box-shadow 0.15s',
   },
   customCursorDot: {
@@ -406,3 +686,4 @@ const styles: { [key: string]: React.CSSProperties } = {
     transition: 'transform 0.1s ease, background-color 0.15s ease',
   },
 };
+
