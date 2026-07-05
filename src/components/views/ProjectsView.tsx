@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { portfolioConfig } from '../../portfolioConfig';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, ChevronDown, ChevronUp, Cpu, Server, BarChart3, AlertCircle } from 'lucide-react';
 
 const GithubIcon: React.FC<{ size?: number; style?: React.CSSProperties }> = ({ size = 16, style }) => (
   <svg style={style} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -10,69 +10,166 @@ const GithubIcon: React.FC<{ size?: number; style?: React.CSSProperties }> = ({ 
 );
 
 export const ProjectsView: React.FC = () => {
+  // First project expanded by default
+  const [expandedId, setExpandedId] = useState<string | null>(portfolioConfig.projects[0].id);
+
+  const toggleExpand = (id: string) => {
+    setExpandedId((prev) => (prev === id ? null : id));
+  };
+
   return (
     <div style={styles.container} className="view-container animate-slide-up">
-      <span style={styles.comment}>{"# projects.tf — DevOps infrastructure & pipeline declarations"}</span>
+      <span style={styles.comment}>{"# projects.tf — detailed infrastructure declarations & deployments"}</span>
       
-      <h1 style={styles.heading}>Projects</h1>
+      <h1 style={styles.heading}>Projects & Architectures</h1>
       <p style={styles.subtitle}>
-        <span className="syntax-keyword">resource</span> <span style={{ color: 'var(--text-bright)' }}>"projects"</span> <span className="syntax-string">"catalog"</span>
+        Deep dive into my system integrations, container orchestrations, and automation pipelines.
       </p>
 
-      {/* Grid of Projects */}
-      <div style={styles.grid} className="projects-grid">
-        {portfolioConfig.projects.map((proj) => (
-          <div key={proj.id} style={styles.card} className="reveal project-card">
-            {/* Top row with project Icon & Links */}
-            <div style={styles.cardHeader}>
-              <span style={styles.projectIcon} className="project-icon">{proj.icon}</span>
-              <div style={styles.linksGroup}>
-                <a
-                  href={proj.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={styles.linkButton}
-                  title="Source code on GitHub"
-                >
-                  <GithubIcon size={12} style={{ marginRight: '4px' }} />
-                  <span>GitHub ↗</span>
-                </a>
-                {proj.demo && (
-                  <a
-                    href={proj.demo}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ ...styles.linkButton, borderColor: proj.accent, color: proj.accent }}
-                    title="Live demonstration link"
+      <div style={styles.list}>
+        {portfolioConfig.projects.map((proj) => {
+          const isExpanded = expandedId === proj.id;
+
+          return (
+            <div 
+              key={proj.id} 
+              style={{ 
+                ...styles.card, 
+                borderColor: isExpanded ? proj.accent : 'var(--border)',
+              }}
+              className="reveal project-card-custom"
+            >
+              {/* Card Header (Clickable) */}
+              <div 
+                style={styles.cardHeader} 
+                onClick={() => toggleExpand(proj.id)}
+              >
+                <div style={styles.headerInfo}>
+                  <span style={styles.projectIcon}>{proj.icon}</span>
+                  <div>
+                    <h3 style={styles.projectName}>{proj.name}</h3>
+                    <span style={{ ...styles.projectType, color: proj.accent }}>{proj.type}</span>
+                  </div>
+                </div>
+
+                <div style={styles.headerActions} onClick={(e) => e.stopPropagation()}>
+                  <div style={styles.linksGroup}>
+                    <a
+                      href={proj.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={styles.linkButton}
+                      title="Source Code"
+                    >
+                      <GithubIcon size={11} style={{ marginRight: '4px' }} />
+                      <span>Code ↗</span>
+                    </a>
+                    {proj.demo && (
+                      <a
+                        href={proj.demo}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ ...styles.linkButton, borderColor: proj.accent, color: proj.accent }}
+                        title="Live Demonstration"
+                      >
+                        <ExternalLink size={11} style={{ marginRight: '4px' }} />
+                        <span>Live ↗</span>
+                      </a>
+                    )}
+                  </div>
+                  <button 
+                    style={styles.toggleBtn}
+                    onClick={() => toggleExpand(proj.id)}
                   >
-                    <ExternalLink size={12} style={{ marginRight: '4px' }} />
-                    <span>Live ↗</span>
-                  </a>
-                )}
+                    {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  </button>
+                </div>
               </div>
+
+              {/* Tag Pills */}
+              <div style={styles.tagsContainer}>
+                {proj.tags.map((tag) => (
+                  <span key={tag} style={styles.tagBadge}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Expanded Details Accordion */}
+              {isExpanded && (
+                <div style={styles.expandedContent} className="animate-fade-in">
+                  <hr style={styles.cardDivider} />
+
+                  {/* Problem & Solution block */}
+                  <div style={styles.detailsGrid}>
+                    <div style={styles.detailCol}>
+                      <h4 style={styles.detailsSectionTitle}>
+                        <AlertCircle size={13} style={{ marginRight: '6px', color: 'var(--error)' }} />
+                        Problem Statement
+                      </h4>
+                      <p style={styles.detailText}>{proj.problem}</p>
+                    </div>
+
+                    <div style={styles.detailCol}>
+                      <h4 style={styles.detailsSectionTitle}>
+                        <Server size={13} style={{ marginRight: '6px', color: 'var(--success)' }} />
+                        DevOps Solution
+                      </h4>
+                      <p style={styles.detailText}>{proj.solution}</p>
+                    </div>
+                  </div>
+
+                  {/* Architecture Diagram */}
+                  {proj.architecture && (
+                    <div style={styles.architectureBlock}>
+                      <h4 style={styles.detailsSectionTitle}>
+                        <Cpu size={13} style={{ marginRight: '6px', color: 'var(--blue)' }} />
+                        System Architecture Flow
+                      </h4>
+                      <pre style={styles.architectureCode} className="no-select">
+                        {proj.architecture}
+                      </pre>
+                    </div>
+                  )}
+
+                  {/* Metrics Block */}
+                  {proj.metrics && (
+                    <div style={styles.metricsBlock}>
+                      <h4 style={styles.detailsSectionTitle}>
+                        <BarChart3 size={13} style={{ marginRight: '6px', color: 'var(--accent)' }} />
+                        Results & Deployment Metrics
+                      </h4>
+                      <div style={styles.metricsGrid}>
+                        {proj.metrics.map((metric, idx) => (
+                          <div key={idx} style={styles.metricCard} className="glass-card">
+                            <span style={styles.metricCheck}>✓</span>
+                            <span style={styles.metricTextVal}>{metric}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Challenges & Lessons */}
+                  <div style={styles.detailsGrid}>
+                    {proj.challenges && (
+                      <div style={styles.detailCol}>
+                        <strong style={styles.subDetailLabel}>Challenge Faced:</strong>
+                        <p style={styles.detailTextSmall}>{proj.challenges}</p>
+                      </div>
+                    )}
+                    {proj.lessons && (
+                      <div style={styles.detailCol}>
+                        <strong style={styles.subDetailLabel}>Lesson Learned:</strong>
+                        <p style={styles.detailTextSmall}>{proj.lessons}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
-
-            {/* Type classification */}
-            <div style={{ ...styles.projectType, color: proj.accent }}>
-              {proj.type}
-            </div>
-
-            {/* Project Name */}
-            <h3 style={styles.projectName}>{proj.name}</h3>
-
-            {/* Project Desc */}
-            <p style={styles.projectDesc}>{proj.desc}</p>
-
-            {/* Technologies tags list */}
-            <div style={styles.tagsContainer}>
-              {proj.tags.map((tag) => (
-                <span key={tag} style={styles.tagBadge}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -80,7 +177,7 @@ export const ProjectsView: React.FC = () => {
 
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
-    maxWidth: '900px',
+    maxWidth: '850px',
     margin: '0 auto',
     padding: '40px 24px',
   },
@@ -95,39 +192,58 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: '36px',
     fontWeight: 800,
     color: 'var(--text-bright)',
-    marginBottom: '8px',
+    marginBottom: '4px',
     letterSpacing: '-0.02em',
   },
   subtitle: {
-    fontFamily: 'var(--font-mono)',
-    fontSize: '13px',
+    fontSize: '14.5px',
     color: 'var(--text-dim)',
     marginBottom: '32px',
   },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
-    gap: '16px',
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
   },
   card: {
     backgroundColor: 'var(--bg-sidebar)',
     border: '1px solid var(--border)',
     borderRadius: '8px',
-    padding: '24px',
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'relative',
-    overflow: 'hidden',
-    transition: 'transform 0.2s, border-color 0.2s, background-color 0.2s',
+    padding: '20px',
+    transition: 'border-color 0.2s',
   },
   cardHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '16px',
+    cursor: 'pointer',
+    flexWrap: 'wrap',
+    gap: '12px',
+  },
+  headerInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
   },
   projectIcon: {
     fontSize: '24px',
+  },
+  projectName: {
+    fontSize: '18px',
+    fontWeight: 800,
+    color: 'var(--text-bright)',
+    margin: 0,
+  },
+  projectType: {
+    fontSize: '11px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em',
+    fontWeight: 600,
+  },
+  headerActions: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
   },
   linksGroup: {
     display: 'flex',
@@ -138,38 +254,30 @@ const styles: { [key: string]: React.CSSProperties } = {
     alignItems: 'center',
     textDecoration: 'none',
     fontSize: '11px',
-    color: 'var(--text-dim)',
+    color: 'var(--text)',
     backgroundColor: 'var(--bg-terminal)',
     border: '1px solid var(--border)',
     borderRadius: '4px',
     padding: '3px 8px',
-    fontWeight: 500,
-    transition: 'color 0.15s, border-color 0.15s, background-color 0.15s',
-  },
-  projectType: {
-    fontSize: '10.5px',
-    textTransform: 'uppercase',
-    letterSpacing: '0.12em',
     fontWeight: 600,
-    marginBottom: '8px',
+    transition: 'background-color 0.15s, color 0.15s, border-color 0.15s',
   },
-  projectName: {
-    fontSize: '18px',
-    fontWeight: 800,
-    color: 'var(--text-bright)',
-    marginBottom: '10px',
-  },
-  projectDesc: {
-    fontSize: '12.5px',
-    lineHeight: '1.6',
-    color: 'var(--text)',
-    marginBottom: '20px',
-    flex: 1,
+  toggleBtn: {
+    backgroundColor: 'transparent',
+    border: 'none',
+    color: 'var(--text-dim)',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '4px',
+    borderRadius: '4px',
   },
   tagsContainer: {
     display: 'flex',
     flexWrap: 'wrap',
     gap: '6px',
+    marginTop: '12px',
   },
   tagBadge: {
     fontFamily: 'var(--font-mono)',
@@ -179,5 +287,89 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: 'var(--text-dim)',
     borderRadius: '4px',
     padding: '2px 6px',
+  },
+  expandedContent: {
+    marginTop: '16px',
+  },
+  cardDivider: {
+    border: 'none',
+    borderTop: '1px solid var(--border)',
+    margin: '12px 0 16px 0',
+  },
+  detailsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+    gap: '20px',
+    marginBottom: '20px',
+  },
+  detailCol: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  detailsSectionTitle: {
+    fontSize: '12px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em',
+    color: 'var(--text-bright)',
+    marginBottom: '8px',
+    marginTop: 0,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  detailText: {
+    fontSize: '13px',
+    lineHeight: '1.6',
+    color: 'var(--text)',
+    margin: 0,
+  },
+  detailTextSmall: {
+    fontSize: '12.5px',
+    lineHeight: '1.5',
+    color: 'var(--text)',
+    margin: '4px 0 0 0',
+  },
+  subDetailLabel: {
+    fontSize: '12px',
+    color: 'var(--text-bright)',
+  },
+  architectureBlock: {
+    marginBottom: '20px',
+  },
+  architectureCode: {
+    fontFamily: 'var(--font-mono)',
+    fontSize: '11px',
+    lineHeight: '1.5',
+    backgroundColor: 'var(--bg-terminal)',
+    border: '1px solid var(--border)',
+    borderRadius: '6px',
+    padding: '16px',
+    overflowX: 'auto',
+    color: 'var(--text-bright)',
+    margin: 0,
+  },
+  metricsBlock: {
+    marginBottom: '20px',
+  },
+  metricsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+    gap: '10px',
+  },
+  metricCard: {
+    backgroundColor: 'var(--bg-terminal)',
+    border: '1px solid var(--border)',
+    borderRadius: '6px',
+    padding: '10px 14px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+  },
+  metricCheck: {
+    color: 'var(--success)',
+    fontWeight: 'bold',
+  },
+  metricTextVal: {
+    fontSize: '12.5px',
+    color: 'var(--text-bright)',
   },
 };

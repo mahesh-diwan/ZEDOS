@@ -1045,6 +1045,25 @@ textarea:focus-visible {
     gap: 4px !important;
   }
 
+  /* Keyframe slide animations for absolute overlays */
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
   /* Main Drawers as absolute overlays */
   .project-sidebar {
     position: absolute !important;
@@ -1055,6 +1074,7 @@ textarea:focus-visible {
     z-index: 95 !important;
     box-shadow: 6px 0 20px rgba(0, 0, 0, 0.4) !important;
     border-right: 1px solid var(--border) !important;
+    animation: slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   }
   
   .assistant-dock-panel {
@@ -1067,6 +1087,7 @@ textarea:focus-visible {
     z-index: 95 !important;
     box-shadow: -6px 0 20px rgba(0, 0, 0, 0.4) !important;
     border-left: 1px solid var(--border) !important;
+    animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   }
   
   .terminal-dock-panel {
@@ -1152,6 +1173,29 @@ textarea:focus-visible {
   .contact-layout-grid {
     grid-template-columns: 1fr !important;
     gap: 24px !important;
+  }
+
+  /* Mobile Touch Targets & Scrolling */
+  .toolBtn, .shareBtn, .tabClose {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  .editor-tab {
+    padding: 0 8px 0 12px !important;
+    min-width: 110px !important;
+    height: 38px !important;
+  }
+
+  pre, code {
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
   }
 }
 

@@ -31,15 +31,13 @@ export const ProjectPanel: React.FC<ProjectPanelProps> = ({
   const [isExpanded, setIsExpanded] = useState(true);
 
   const files: FileItem[] = [
-    { name: 'home.tsx', type: 'ts', color: '#61afef' },
-    { name: 'profile.yaml', type: 'yaml', color: '#e5c07b', gitStatus: 'M' },
-    { name: 'projects.tf', type: 'tf', color: '#c678dd', gitStatus: 'M' },
-    { name: 'skills.sh', type: 'sh', color: '#98c379' },
-    { name: 'experience.dockerfile', type: 'dockerfile', color: '#56b6c2', gitStatus: 'A' },
-    { name: 'contact.yaml', type: 'yaml', color: '#e5c07b' },
-    { name: 'blog.md', type: 'md', color: '#98c379', gitStatus: 'U' },
     { name: 'README.md', type: 'md', color: '#98c379' },
-    { name: 'Mahesh_Diwan_Resume.pdf', type: 'pdf', color: '#e06c75' },
+    { name: 'ABOUT.md', type: 'md', color: '#61afef', gitStatus: 'M' },
+    { name: 'PROJECTS.md', type: 'md', color: '#c678dd', gitStatus: 'M' },
+    { name: 'BLOGS.md', type: 'md', color: '#e5c07b' },
+    { name: 'CERTIFICATIONS.md', type: 'md', color: '#e06c75', gitStatus: 'A' },
+    { name: 'RESUME.pdf', type: 'pdf', color: '#56b6c2' },
+    { name: 'CONTACT.md', type: 'md', color: '#d19a66' },
   ];
 
   const getFileIcon = (type: string, color: string) => {

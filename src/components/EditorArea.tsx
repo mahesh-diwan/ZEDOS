@@ -9,6 +9,7 @@ import { ExperienceView } from './views/ExperienceView';
 import { ContactView } from './views/ContactView';
 import { ReadmeView } from './views/ReadmeView';
 import { BlogView } from './views/BlogView';
+import { CertificationsView } from './views/CertificationsView';
 import { fileRawContents } from '../fileContents';
 
 interface EditorAreaProps {
@@ -27,16 +28,14 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
   onToast,
 }) => {
   // Mode: 'preview' (renders formatted page) vs 'code' (renders syntax highlighted source code)
-  // Mode: 'preview' (renders formatted page) vs 'code' (renders syntax highlighted source code)
   const [viewMode, setViewMode] = useState<{ [key: string]: 'preview' | 'code' }>({
-    'home.tsx': 'preview',
-    'profile.yaml': 'preview',
-    'projects.tf': 'preview',
-    'skills.sh': 'preview',
-    'experience.dockerfile': 'preview',
-    'contact.yaml': 'preview',
-    'blog.md': 'preview',
     'README.md': 'preview',
+    'ABOUT.md': 'preview',
+    'PROJECTS.md': 'preview',
+    'BLOGS.md': 'preview',
+    'CERTIFICATIONS.md': 'preview',
+    'RESUME.pdf': 'preview',
+    'CONTACT.md': 'preview',
   });
 
   const getActiveViewMode = () => {
@@ -58,7 +57,7 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
       return <CodeView fileName={activeFile} code={codeString} />;
     }
 
-    if (activeFile === 'Mahesh_Diwan_Resume.pdf') {
+    if (activeFile === 'RESUME.pdf') {
       return (
         <div style={styles.pdfContainer} className="view-container animate-fade-in">
           <div style={styles.pdfHeader}>
@@ -100,22 +99,18 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
     }
 
     switch (activeFile) {
-      case 'home.tsx':
-        return <HomeView onNavigate={setActiveFile} />;
-      case 'profile.yaml':
-        return <AboutView />;
-      case 'projects.tf':
-        return <ProjectsView />;
-      case 'skills.sh':
-        return <SkillsView />;
-      case 'experience.dockerfile':
-        return <ExperienceView />;
-      case 'contact.yaml':
-        return <ContactView onToast={onToast} />;
-      case 'blog.md':
-        return <BlogView />;
       case 'README.md':
-        return <ReadmeView />;
+        return <HomeView onNavigate={setActiveFile} />;
+      case 'ABOUT.md':
+        return <AboutView />;
+      case 'PROJECTS.md':
+        return <ProjectsView />;
+      case 'BLOGS.md':
+        return <BlogView />;
+      case 'CERTIFICATIONS.md':
+        return <CertificationsView />;
+      case 'CONTACT.md':
+        return <ContactView onToast={onToast} />;
       default:
         return <HomeView onNavigate={setActiveFile} />;
     }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { portfolioConfig } from '../../portfolioConfig';
-import { Terminal as TermIcon, ChevronRight } from 'lucide-react';
+import { Terminal as TermIcon, ChevronRight, Download, Mail, ExternalLink, ArrowRight } from 'lucide-react';
 
 const ClusterMonitor: React.FC = () => {
   const [cpu, setCpu] = useState(42);
@@ -239,21 +239,55 @@ interface HomeViewProps {
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
+  // Use first project as strongest featured project
+  const featuredProject = portfolioConfig.projects[0];
+
   return (
     <div style={styles.container} className="view-container animate-slide-up">
-      {/* 1. Main Greeting */}
+      {/* 1. Comment Header */}
       <span style={styles.comment}>{"// Welcome! Feel free to explore my developer workspace."}</span>
       
-      <div style={styles.titleRow}>
-        <h1 style={styles.title} className="gradient-title">{portfolioConfig.name}</h1>
-        {/* Pulsing Status Badge */}
-        <div style={styles.badgeContainer}>
-          <span style={styles.pulseDot} />
-          <span style={styles.badgeText}>Open to Opportunities</span>
+      {/* 2. Hero Section */}
+      <div style={styles.heroSection}>
+        <div style={styles.titleRow}>
+          <h1 style={styles.heroTitle} className="gradient-title">{portfolioConfig.name}</h1>
+          <div style={styles.badgeContainer}>
+            <span style={styles.pulseDot} />
+            <span style={styles.badgeText}>Open to Opportunities</span>
+          </div>
+        </div>
+        <p style={styles.heroRole}>{portfolioConfig.role}</p>
+        <p style={styles.heroTagline}>{portfolioConfig.bioShort}</p>
+
+        {/* CTA Actions */}
+        <div style={styles.ctaRow}>
+          <a 
+            href="/Mahesh_Diwan_Resume.pdf" 
+            download="Mahesh_Diwan_Resume.pdf" 
+            style={styles.primaryCta}
+            className="primary-cta-btn"
+          >
+            <Download size={14} style={{ marginRight: '6px' }} />
+            <span>Download Resume PDF</span>
+          </a>
+          <button 
+            onClick={() => onNavigate('CONTACT.md')} 
+            style={styles.secondaryCta}
+            className="secondary-cta-btn"
+          >
+            <Mail size={14} style={{ marginRight: '6px' }} />
+            <span>Contact Me</span>
+          </button>
+          <button 
+            onClick={() => onNavigate('PROJECTS.md')} 
+            style={styles.secondaryCta}
+            className="secondary-cta-btn"
+          >
+            <span>Explore Projects</span>
+            <ChevronRight size={14} style={{ marginLeft: '4px' }} />
+          </button>
         </div>
       </div>
-      
-      <p style={styles.subtitle}>{portfolioConfig.role}</p>
 
       {/* Tip Card (Theme & Font customization) */}
       <div style={styles.tipCard}>
@@ -265,18 +299,45 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* 2. Tag pills */}
-      <div style={styles.tagsContainer}>
-        {['Python', 'Docker', 'GitHub Actions', 'Jenkins', 'Nginx', 'AWS', 'Linux', 'Bash'].map((tag) => (
-          <span key={tag} style={styles.tag} className="home-tag-pill">
-            {tag}
-          </span>
-        ))}
+      {/* Strongest Featured Project Teaser (High Priority Checklist Item) */}
+      <div style={styles.featuredSection}>
+        <h2 style={styles.sectionTitle}>Featured Project</h2>
+        <div 
+          style={{ ...styles.featuredProjectCard, borderColor: featuredProject.accent }}
+          onClick={() => onNavigate('PROJECTS.md')}
+          className="featured-project-card reveal"
+        >
+          <div style={styles.featuredHeader}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '24px' }}>{featuredProject.icon}</span>
+              <div>
+                <h3 style={styles.featuredTitle}>{featuredProject.name}</h3>
+                <span style={{ ...styles.featuredType, color: featuredProject.accent }}>{featuredProject.type}</span>
+              </div>
+            </div>
+            <span style={styles.featuredCta}>
+              View Details <ArrowRight size={13} style={{ marginLeft: '4px' }} />
+            </span>
+          </div>
+          <p style={styles.featuredDesc}>{featuredProject.desc}</p>
+          <div style={styles.featuredMetricsRow}>
+            {featuredProject.metrics && featuredProject.metrics.slice(0, 2).map((metric, i) => (
+              <div key={i} style={styles.featuredMetricItem}>
+                <span style={{ color: featuredProject.accent, marginRight: '6px' }}>✓</span>
+                <span>{metric}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <hr style={styles.divider} />
+      {/* DevOps Live Activity Monitor */}
+      <div style={{ marginTop: '36px' }}>
+        <h2 style={styles.sectionTitle}>Infrastructure Activity</h2>
+        <ClusterMonitor />
+      </div>
 
-      {/* 2.5 Metrics Dashboard (Inspiration: itsairamkumar.github.io) */}
+      {/* Key Stats & Impact */}
       <div style={styles.metricsSection}>
         <h2 style={styles.sectionTitle}>Key Stats & Impact</h2>
         <div style={styles.metricsGrid}>
@@ -299,81 +360,33 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* DevOps Live Activity Monitor */}
-      <ClusterMonitor />
-
-      {/* 3. Quick Summary / Highlights */}
-      <div style={styles.highlightsContainer}>
-        <h2 style={styles.sectionTitle}>Status Highlights</h2>
-        <div style={styles.bulletsList}>
-          {portfolioConfig.bioBullets.map((bullet, idx) => (
-            <div key={idx} style={styles.bulletItem} className="bullet-item">
-              <span style={styles.bulletIcon}>{bullet.icon}</span>
-              <span style={styles.bulletText}>
-                {bullet.text} <strong>{bullet.boldText}</strong> {bullet.afterText}
-              </span>
+      {/* Terminal Interactive Teaser */}
+      <div style={{ marginTop: '36px' }}>
+        <h2 style={styles.sectionTitle}>Interactive Teaser</h2>
+        <div style={styles.terminalTeaser}>
+          <div style={styles.termHeader}>
+            <TermIcon size={12} style={{ color: 'var(--text-dim)' }} />
+            <span style={styles.termTitle}>interactive-shell.sh</span>
+          </div>
+          <div style={styles.termBody}>
+            <div style={styles.termLine}>
+              <span style={styles.termPrompt}>$</span> whoami
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 4. Terminal Interactive Teaser */}
-      <div style={styles.terminalTeaser}>
-        <div style={styles.termHeader}>
-          <TermIcon size={12} style={{ color: 'var(--text-dim)' }} />
-          <span style={styles.termTitle}>interactive-shell.sh</span>
-        </div>
-        <div style={styles.termBody}>
-          <div style={styles.termLine}>
-            <span style={styles.termPrompt}>$</span> whoami
+            <div style={styles.termOutput}>
+              Mahesh Diwan — Computer Science Student & DevOps Enthusiast based in Pune, India.
+            </div>
+            <div style={styles.termLine}>
+              <span style={styles.termPrompt}>$</span> kubectl get pods
+            </div>
+            <div style={styles.termOutput}>
+              NAME                               READY   STATUS    RESTARTS   AGE<br />
+              linkedin-mern-web-7fd89c56-abcde   1/1     Running   0          5d<br />
+              voting-app-worker-c4d92a18-xyz12   1/1     Running   1          2d
+            </div>
+            <div style={styles.termLine}>
+              <span style={styles.termPrompt}>$</span> <span className="typing-cursor"></span>
+            </div>
           </div>
-          <div style={styles.termOutput}>
-            Mahesh Diwan — Computer Science Student & DevOps Enthusiast based in Pune, India.
-          </div>
-          <div style={styles.termLine}>
-            <span style={styles.termPrompt}>$</span> cat interests.txt
-          </div>
-          <div style={styles.termOutput}>
-            Writing guides on Hashnode, trying out open-source projects, playing around with terminal configs 🚀
-          </div>
-          <div style={styles.termLine}>
-            <span style={styles.termPrompt}>$</span> docker ps
-          </div>
-          <div style={styles.termOutput}>
-            CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS<br />
-            f9a2e31bc439   nginx:alpine   "/docker-entrypoint.…"   2 hours ago     Up 2 hours     0.0.0.0:80-&gt;80/tcp
-          </div>
-          <div style={styles.termLine}>
-            <span style={styles.termPrompt}>$</span> <span className="typing-cursor"></span>
-          </div>
-        </div>
-      </div>
-
-      {/* 5. Navigation Buttons */}
-      <div style={styles.navSection}>
-        <h2 style={styles.sectionTitle}>Explore workspace files</h2>
-        <div style={styles.btnGrid}>
-          {[
-            { label: 'profile.yaml', desc: 'Background & education details', icon: 'about' },
-            { label: 'projects.tf', desc: 'DevOps & automation infrastructures', icon: 'projects' },
-            { label: 'skills.sh', desc: 'My technical automation toolkit', icon: 'skills' },
-            { label: 'experience.dockerfile', desc: 'Docker career progression stages', icon: 'experience' },
-            { label: 'blog.md', desc: 'Technical writings & Hashnode guides', icon: 'blog' },
-            { label: 'contact.yaml', desc: 'Get in touch & social coordinates', icon: 'contact' },
-          ].map((item) => (
-            <button
-              key={item.label}
-              style={styles.navCard}
-              onClick={() => onNavigate(item.label)}
-              className="reveal nav-card"
-            >
-              <div style={styles.navCardHeader}>
-                <span style={styles.navCardLabel}>{item.label}</span>
-                <ChevronRight size={14} style={styles.navCardArrow} className="nav-card-arrow" />
-              </div>
-              <p style={styles.navCardDesc}>{item.desc}</p>
-            </button>
-          ))}
         </div>
       </div>
     </div>
@@ -393,15 +406,20 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'block',
     marginBottom: '10px',
   },
+  heroSection: {
+    padding: '16px 0 32px 0',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+  },
   titleRow: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
     gap: '16px',
-    marginBottom: '4px',
   },
-  title: {
+  heroTitle: {
     fontSize: '44px',
     fontWeight: 800,
     color: 'var(--text-bright)',
@@ -430,31 +448,55 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: 600,
     color: '#10b981',
   },
-  subtitle: {
-    fontSize: '16px',
-    color: 'var(--text)',
-    marginBottom: '20px',
-    fontWeight: 400,
-  },
-  tagsContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '8px',
-    marginBottom: '32px',
-  },
-  tag: {
-    fontSize: '11.5px',
-    backgroundColor: 'var(--accent-dim)',
+  heroRole: {
+    fontSize: '18px',
     color: 'var(--accent)',
-    border: '1px solid var(--accent-border)',
-    borderRadius: '4px',
-    padding: '3px 10px',
-    fontWeight: 500,
+    fontWeight: 600,
+    margin: 0,
   },
-  divider: {
+  heroTagline: {
+    fontSize: '14.5px',
+    lineHeight: '1.6',
+    color: 'var(--text)',
+    maxWidth: '700px',
+    margin: 0,
+  },
+  ctaRow: {
+    display: 'flex',
+    gap: '12px',
+    flexWrap: 'wrap',
+    marginTop: '12px',
+  },
+  primaryCta: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'var(--accent)',
+    color: '#ffffff',
+    padding: '10px 20px',
+    borderRadius: '6px',
+    fontSize: '13px',
+    fontWeight: 600,
+    textDecoration: 'none',
+    boxShadow: '0 4px 15px rgba(167, 139, 250, 0.25)',
+    transition: 'opacity 0.15s, transform 0.15s',
     border: 'none',
-    borderTop: '1px solid var(--border)',
-    margin: '24px 0',
+    cursor: 'pointer',
+  },
+  secondaryCta: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    border: '1px solid var(--border)',
+    color: 'var(--text-bright)',
+    padding: '10px 20px',
+    borderRadius: '6px',
+    fontSize: '13px',
+    fontWeight: 600,
+    textDecoration: 'none',
+    transition: 'background-color 0.15s, border-color 0.15s',
+    cursor: 'pointer',
   },
   sectionTitle: {
     fontSize: '12px',
@@ -464,8 +506,63 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: '16px',
     fontWeight: 700,
   },
+  featuredSection: {
+    marginTop: '36px',
+  },
+  featuredProjectCard: {
+    backgroundColor: 'var(--bg-sidebar)',
+    border: '1px solid var(--border)',
+    borderRadius: '8px',
+    padding: '24px',
+    cursor: 'pointer',
+    transition: 'transform 0.18s, border-color 0.18s, background-color 0.18s',
+  },
+  featuredHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '12px',
+    flexWrap: 'wrap',
+    gap: '8px',
+  },
+  featuredTitle: {
+    fontSize: '18px',
+    fontWeight: 800,
+    color: 'var(--text-bright)',
+    margin: 0,
+  },
+  featuredType: {
+    fontSize: '10.5px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.1em',
+    fontWeight: 600,
+  },
+  featuredCta: {
+    fontSize: '12px',
+    color: 'var(--accent)',
+    fontWeight: 600,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  featuredDesc: {
+    fontSize: '13.5px',
+    lineHeight: '1.65',
+    color: 'var(--text)',
+    marginBottom: '16px',
+  },
+  featuredMetricsRow: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6px',
+  },
+  featuredMetricItem: {
+    fontSize: '12px',
+    color: 'var(--text-dim)',
+    display: 'flex',
+    alignItems: 'center',
+  },
   metricsSection: {
-    marginBottom: '36px',
+    marginTop: '36px',
   },
   metricsGrid: {
     display: 'grid',
@@ -480,7 +577,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
-    transition: 'border-color 0.15s',
   },
   metricVal: {
     fontSize: '26px',
@@ -492,34 +588,11 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: 'var(--text-dim)',
     fontWeight: 500,
   },
-  highlightsContainer: {
-    marginBottom: '36px',
-  },
-  bulletsList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-  },
-  bulletItem: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: '10px',
-    fontSize: '14px',
-  },
-  bulletIcon: {
-    fontSize: '15px',
-    width: '20px',
-    textAlign: 'center',
-  },
-  bulletText: {
-    color: 'var(--text)',
-  },
   terminalTeaser: {
     backgroundColor: 'var(--bg-terminal)',
     border: '1px solid var(--border)',
     borderRadius: '8px',
     overflow: 'hidden',
-    marginBottom: '40px',
   },
   termHeader: {
     backgroundColor: 'var(--bg-sidebar)',
@@ -555,51 +628,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     paddingLeft: '16px',
     marginBottom: '10px',
   },
-  navSection: {
-    marginTop: '20px',
-  },
-  btnGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-    gap: '12px',
-  },
-  navCard: {
-    background: 'var(--bg-sidebar)',
-    border: '1px solid var(--border)',
-    borderRadius: '8px',
-    padding: '16px',
-    textAlign: 'left',
-    cursor: 'pointer',
-    transition: 'transform 0.18s, border-color 0.18s, background-color 0.18s',
-    outline: 'none',
-  },
-  navCardHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: '6px',
-  },
-  navCardLabel: {
-    fontFamily: 'var(--font-mono)',
-    fontSize: '12px',
-    color: 'var(--accent)',
-    fontWeight: 500,
-  },
-  navCardArrow: {
-    color: 'var(--text-dim)',
-    transition: 'transform 0.15s, color 0.15s',
-  },
-  navCardDesc: {
-    fontSize: '12px',
-    color: 'var(--text-dim)',
-    lineHeight: '1.4',
-  },
   tipCard: {
     backgroundColor: 'var(--accent-dim)',
     border: '1px solid var(--accent-border)',
     borderRadius: '6px',
     padding: '10px 14px',
-    marginBottom: '20px',
+    marginTop: '24px',
     display: 'flex',
     alignItems: 'center',
   },

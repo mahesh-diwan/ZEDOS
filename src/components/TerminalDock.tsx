@@ -56,22 +56,26 @@ export const TerminalDock: React.FC<TerminalDockProps> = ({ onClose, onOpenFile 
         output = `Available commands:
   ls               — list files in current workspace
   pwd              — print working directory path
-  cat <file>       — open and view a file in the editor
+  cat <file>       — open and view a file in the editor (e.g., cat ABOUT.md)
   open <file>      — same as cat
   whoami           — display bio overview
   date             — show current date and time
-  echo <text>      — print text to terminal
   git log          — show simulated commits
-  python --version — show Python runtime version
   neofetch         — display ZEDOS system diagnostics
+  docker ps        — check running container tasks (DevOps)
+  kubectl get pods — fetch active Kubernetes pods status (K8s)
+  terraform plan   — generate simulated infrastructure plans (IaC)
+  skills           — open skills panel
+  projects         — open projects panel
+  resume           — open resume panel
+  blog             — open writings panel
+  contact          — open contact details
   joke             — display a random developer joke
-  matrix           — enter the matrix code rain
-  antigravity      — import flight simulator
   clear            — clear terminal output history`;
         break;
 
       case 'ls':
-        output = `home.tsx    profile.yaml    projects.tf    skills.sh    experience.dockerfile    contact.yaml    blog.md    README.md    Mahesh_Diwan_Resume.pdf`;
+        output = `README.md    ABOUT.md    PROJECTS.md    BLOGS.md    CERTIFICATIONS.md    RESUME.pdf    CONTACT.md`;
         break;
 
       case 'pwd':
@@ -114,11 +118,66 @@ Date:   Mon Jun 2 11:34:52 2026 +0530
         }
         break;
 
-      case 'python':
-        if (args[0] === '--version' || args[0] === '-V') {
-          output = `Python 3.11.4`;
+      case 'neofetch':
+        output = `     /\\_/\\      mahesh@ZEDOS
+    ( o.o )     ------------
+     > ^ <      OS: ZEDOS v1.0.0 (Custom Portfolio Shell)
+    /     \\     Host: Web-Vite-SPA Engine
+   (  | |  )    Kernel: React 19.2.7 + TypeScript
+    (__|__)     Uptime: 3 hours, 12 mins
+                Shell: Bash interactive-shell.sh
+                Themes: Tokyo Night, Catppuccin, Nord, Dracula, Rosé Pine
+                Monospace Font: Geist Mono / Fira Code / JetBrains Mono
+                Career Path: Cloud & DevOps Engineer
+                Stack: Kubernetes, Terraform, Docker, AWS (ECS/EKS)`;
+        break;
+
+      case 'docker':
+        if (args[0] === 'ps') {
+          output = `CONTAINER ID   IMAGE                 COMMAND                  CREATED        STATUS        PORTS
+f9a2e31bc439   nginx:alpine          "/docker-entrypoint.…"   2 hours ago    Up 2 hours    0.0.0.0:80->80/tcp
+8d2a1c4e9b92   node:20-alpine        "docker-entrypoint.s…"   2 hours ago    Up 2 hours    0.0.0.0:3000->3000/tcp
+a1b2c3d4e5f6   mongo:latest          "docker-entrypoint.s…"   2 hours ago    Up 2 hours    27017/tcp`;
         } else {
-          output = `Python interactive mode not supported in browser. Use --version to check runtime.`;
+          output = `docker: support command option 'ps' to view container tasks.`;
+        }
+        break;
+
+      case 'kubectl':
+        if (args.join(' ') === 'get pods') {
+          output = `NAME                               READY   STATUS    RESTARTS   AGE
+linkedin-mern-web-7fd89c56-abcde   1/1     Running   0          5d
+voting-app-worker-c4d92a18-xyz12   1/1     Running   1          2d
+redis-cache-77c858546b-pqrst       1/1     Running   0          12d
+postgres-db-0                      1/1     Running   0          12d`;
+        } else {
+          output = `kubectl: support options 'get pods' to query cluster workload statuses.`;
+        }
+        break;
+
+      case 'terraform':
+        if (args[0] === 'plan') {
+          output = `Terraform used the selected providers to generate the following execution plan:
+
+# aws_s3_bucket.portfolio_assets will be created
++ resource "aws_s3_bucket" "portfolio_assets" {
+    + arn                         = (known after apply)
+    + bucket                      = "mahesh-portfolio-static-assets"
+    + force_destroy               = false
+    + id                          = (known after apply)
+  }
+
+# github_repository_deploy_key.pages_key will be created
++ resource "github_repository_deploy_key" "pages_key" {
+    + id         = (known after apply)
+    + key        = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQ..."
+    + repository = "ZEDOS"
+    + title      = "GitHub Pages Deployment Key"
+  }
+
+Plan: 2 to add, 0 to change, 0 to destroy.`;
+        } else {
+          output = `terraform: support 'plan' command to audit state adjustments.`;
         }
         break;
 
@@ -127,39 +186,45 @@ Date:   Mon Jun 2 11:34:52 2026 +0530
         if (args.length === 0) {
           output = `Usage: ${command} <filename>`;
         } else {
-          const fileName = args[0];
-          const files = [
-            'home.tsx',
-            'profile.yaml',
-            'projects.tf',
-            'skills.sh',
-            'experience.dockerfile',
-            'contact.yaml',
-            'blog.md',
-            'README.md',
-            'Mahesh_Diwan_Resume.pdf',
-          ];
-          if (files.includes(fileName)) {
-            onOpenFile(fileName);
-            output = `Opening ${fileName} in editor tabs...`;
+          const fileArg = args[0].toUpperCase();
+          let matchedFile = '';
+          if (fileArg.includes('READ') || fileArg.includes('HOME')) matchedFile = 'README.md';
+          else if (fileArg.includes('ABOUT') || fileArg.includes('PROFILE')) matchedFile = 'ABOUT.md';
+          else if (fileArg.includes('PROJ')) matchedFile = 'PROJECTS.md';
+          else if (fileArg.includes('BLOG')) matchedFile = 'BLOGS.md';
+          else if (fileArg.includes('CERT')) matchedFile = 'CERTIFICATIONS.md';
+          else if (fileArg.includes('RESU')) matchedFile = 'RESUME.pdf';
+          else if (fileArg.includes('CONT')) matchedFile = 'CONTACT.md';
+
+          if (matchedFile) {
+            onOpenFile(matchedFile);
+            output = `Opening ${matchedFile} in editor tabs...`;
           } else {
-            output = `cat: ${fileName}: File not found in workspace. Type 'ls' to see files.`;
+            output = `cat: ${args[0]}: File not found. Type 'ls' to see list of valid files.`;
           }
         }
         break;
 
-      case 'neofetch':
-        output = `     /\\_/\\      mahesh@ZEDOS
-    ( o.o )     ------------
-     > ^ <      OS: ZEDOS v1.0.0 (Custom Portfolio Shell)
-    /     \\     Host: Web-Vite-SPA Engine
-   (  | |  )    Kernel: React 19.2.7 + TypeScript
-    (__|__)     Uptime: 2 hours, 48 mins
-                Shell: Bash interactive-shell.sh
-                Themes: Tokyo Night, Catppuccin, Nord, Dracula, Rosé Pine
-                Monospace Font: Geist Mono / Fira Code / JetBrains Mono
-                Career Path: Cloud & DevOps Engineer
-                Stack: Kubernetes, Terraform, Docker, AWS (ECS/EKS)`;
+      case 'projects':
+        onOpenFile('PROJECTS.md');
+        output = 'Opening PROJECTS.md in editor tabs...';
+        break;
+      case 'resume':
+        onOpenFile('RESUME.pdf');
+        output = 'Opening RESUME.pdf in editor tabs...';
+        break;
+      case 'blog':
+      case 'blogs':
+        onOpenFile('BLOGS.md');
+        output = 'Opening BLOGS.md in editor tabs...';
+        break;
+      case 'contact':
+        onOpenFile('CONTACT.md');
+        output = 'Opening CONTACT.md in editor tabs...';
+        break;
+      case 'skills':
+        onOpenFile('ABOUT.md');
+        output = 'Opening ABOUT.md (Skills tab) in editor tabs...';
         break;
 
       case 'joke': {

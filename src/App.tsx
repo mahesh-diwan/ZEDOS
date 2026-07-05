@@ -29,11 +29,10 @@ export const App: React.FC = () => {
 
   // File States
   const [openFiles, setOpenFiles] = useState<string[]>([
-    'home.tsx',
-    'profile.yaml',
     'README.md',
+    'ABOUT.md',
   ]);
-  const [activeFile, setActiveFile] = useState<string>('home.tsx');
+  const [activeFile, setActiveFile] = useState<string>('README.md');
 
   // Custom Toast State
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -197,6 +196,9 @@ export const App: React.FC = () => {
       setOpenFiles((prev) => [...prev, fileName]);
     }
     setActiveFile(fileName);
+    if (isMobile) {
+      setProjectPanelOpen(false);
+    }
   };
 
   const handleCloseFile = (fileName: string) => {
@@ -239,7 +241,22 @@ export const App: React.FC = () => {
       />
 
       {/* 2. Workspace Content Layout */}
-      <div className="main-layout">
+      <div className="main-layout" style={{ position: 'relative' }}>
+        {isMobile && projectPanelOpen && (
+          <div 
+            className="sidebar-backdrop-overlay"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 90,
+            }}
+            onClick={() => setProjectPanelOpen(false)}
+          />
+        )}
         {/* Left Side File Tree */}
         {projectPanelOpen && (
           <ProjectPanel

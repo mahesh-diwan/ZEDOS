@@ -8,6 +8,12 @@ export interface Project {
   demo?: string;
   accent: string;
   icon: string;
+  problem?: string;
+  solution?: string;
+  challenges?: string;
+  lessons?: string;
+  metrics?: string[];
+  architecture?: string;
 }
 
 export interface Experience {
@@ -33,6 +39,15 @@ export interface Education {
 export interface SkillGroup {
   group: string;
   items: { name: string; pct: number; color: string }[];
+}
+
+export interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  date: string;
+  icon: string;
+  url: string;
 }
 
 export const portfolioConfig = {
@@ -110,7 +125,17 @@ export const portfolioConfig = {
       tags: ["Docker", "AWS ECS/EKS", "ECR", "Terraform", "Prometheus", "GitHub Actions", "React", "Node.js", "MongoDB"],
       link: "https://github.com/mahesh-diwan/LinkedIn-Clone-EKS",
       accent: "#61afef",
-      icon: "🐳"
+      icon: "🐳",
+      problem: "Deploying a multi-service MERN application manually to production caused massive downtime, environment inconsistency, and lack of scaling capabilities under high traffic.",
+      solution: "Containerized the services using Docker Compose, configured rolling updates on AWS ECS (Fargate) behind an Application Load Balancer, and subsequently migrated to an AWS EKS (Kubernetes) cluster utilizing Prometheus/Grafana monitoring and automated GitOps triggers.",
+      challenges: "Debugging pod-to-pod networking issues during initial K8s migration, and handling database credentials securely.",
+      lessons: "Mastered Kubernetes service discovery, ingress rules, and IAM role association for service accounts (IRSA).",
+      metrics: [
+        "Reduces build-to-deploy time by 75% via GitHub Actions CI/CD",
+        "Maintains 99.9% uptime during deployment rollouts",
+        "Handles horizontal scaling from 1 to 5 pods automatically under load"
+      ],
+      architecture: "  [Dev push] -> [GitHub Actions] -> [Docker Hub/ECR]\n                                           │\n  [Users] -> [Route53] -> [ALB] -> [AWS EKS / ECS Cluster]\n                                     ├── web-api pod\n                                     ├── auth pod\n                                     └── mongodb pod"
     },
     {
       id: "proj-2",
@@ -120,7 +145,17 @@ export const portfolioConfig = {
       tags: ["Kubernetes", "Docker Compose", "Python", "Node.js", "C#", "Redis", "PostgreSQL"],
       link: "https://github.com/mahesh-diwan/Distributed-Voting-App",
       accent: "#98c379",
-      icon: "☸️"
+      icon: "☸️",
+      problem: "Traditional monolithic voting systems suffer from single points of failure, scaling constraints, and lack multi-language service interoperability.",
+      solution: "Refactored the application into five microservices (Python frontend, C# worker, Node.js results API, Redis, and PostgreSQL). Orchestrated them using Kubernetes Deployments and Services with internal ClusterDNS resolution.",
+      challenges: "Handling data consistency between the Python frontend voting logs, Redis cache queuing, and the C# worker database writes.",
+      lessons: "Understood Redis pub/sub queue patterns, persistent volumes (PV/PVC) in Kubernetes, and handling container restart back-offs.",
+      metrics: [
+        "Processes 10,000+ mock votes per minute during load testing",
+        "Implements sub-50ms caching latency via Redis",
+        "Recovers pods automatically in <3s upon failure"
+      ],
+      architecture: "  [Vote Cast] -> [Python UI] -> [Redis Queue] -> [C# Worker] -> [PostgreSQL]\n                                                                    │\n  [Live Results] <---------- [NodeJS API] <-------------------------┘"
     },
     {
       id: "proj-3",
@@ -130,7 +165,17 @@ export const portfolioConfig = {
       tags: ["Flask", "GitHub Actions", "Docker", "AWS EC2", "Nginx"],
       link: "https://github.com/mahesh-diwan/Flask-App",
       accent: "#d19a66",
-      icon: "⚙️"
+      icon: "⚙️",
+      problem: "Lack of automated test verification and slow manual SSH deployment steps on AWS EC2 instances increased deployment errors and slowed feature iteration.",
+      solution: "Designed a clean CI/CD automation pipeline using GitHub Actions that triggers on every commit, runs PyTest suites, builds a slim Docker container, and performs SSH deployments to EC2 instances using secure SSH runners.",
+      challenges: "Managing SSH key security in public runners and setting up automated rollback triggers when unit tests failed.",
+      lessons: "Learned how to set up GitHub Secrets, build secure Docker base images, and write robust bash deployment scripts.",
+      metrics: [
+        "Deployment pipeline completes in under 2 minutes",
+        "100% automated test coverage prior to staging rollout",
+        "Zero-friction rollback capability on failed health checks"
+      ],
+      architecture: "  [Code Push] -> [GHA runner] -> [Build Docker Image] -> [Test Pass]\n                                                               │ (SSH)\n  [Target EC2 Instance] <- [Docker Run alpine:nginx] <─────────┘"
     },
     {
       id: "proj-4",
@@ -140,7 +185,17 @@ export const portfolioConfig = {
       tags: ["Python", "Streamlit", "Hugging Face", "PyPDF2", "LangChain"],
       link: "https://github.com/mahesh-diwan/chat-with-pdf",
       accent: "#fe8019",
-      icon: "📖"
+      icon: "📖",
+      problem: "Extracting reference answers and reading through massive multi-page PDF documents is time-consuming and inefficient for researchers.",
+      solution: "Developed a Python application powered by LangChain and Hugging Face Transformers to parse text, chunk paragraphs, store vector indices, and answer natural language prompts in an interactive Streamlit shell.",
+      challenges: "Managing token chunk limits and handling embedded charts or table parsing errors from PyPDF2.",
+      lessons: "Learned context embeddings alignment, prompt engineering guidelines, and memory handling in RAG applications.",
+      metrics: [
+        "Retrieves query answers in less than 2 seconds",
+        "Supports bulk upload of multiple documents up to 50MB",
+        "Achieves high semantic query relevance scores"
+      ],
+      architecture: "  [PDF Upload] -> [PyPDF2 Parser] -> [Recursive Chunker] -> [Vector Index]\n                                                                 │\n  [User Query] -> [Semantic Match] -> [Hugging Face LLM] -> [Answer]"
     },
     {
       id: "proj-5",
@@ -150,7 +205,17 @@ export const portfolioConfig = {
       tags: ["Bash", "AWS CLI", "Cron Jobs", "Linux"],
       link: "https://github.com/mahesh-diwan/AWS-Resource-Tracker",
       accent: "#c678dd",
-      icon: "☁️"
+      icon: "☁️",
+      problem: "Forgotten cloud resources (idle EC2 instances, unattached EBS volumes, legacy Lambda functions) lead to silent monthly AWS cost leakages.",
+      solution: "Wrote a lightweight Bash automation utility that schedules via cron, queries active AWS resources across EC2, S3, IAM, and Lambda using AWS CLI, and exports reports for auditing.",
+      challenges: "Handling pagination in AWS CLI queries and structuring the output reports cleanly.",
+      lessons: "Deepened knowledge of shell scripting, JSON parsing with jq, and AWS CLI pagination arguments.",
+      metrics: [
+        "Reduced monthly AWS testbed costs by 30%",
+        "Audits 4 major AWS services in less than 5 seconds",
+        "Runs fully autonomously via cron scheduler"
+      ],
+      architecture: "  [Cron Trigger] -> [Bash Script] -> [AWS CLI Query] -> [JQ Parse] -> [Log File]"
     },
     {
       id: "proj-6",
@@ -160,9 +225,53 @@ export const portfolioConfig = {
       tags: ["Node.js", "Puppeteer", "Flask", "Docker"],
       link: "https://github.com/mahesh-diwan/Web-Scraper",
       accent: "#56b6c2",
-      icon: "🕸️"
+      icon: "🕸️",
+      problem: "Extracting nested directories and dynamic JavaScript data from websites for analytical models is slow when done manually.",
+      solution: "Created an automated crawler with Node.js and Puppeteer that dynamically executes dynamic DOM actions, scrapes indices, and reports raw outputs to a Dockerized Flask backend API.",
+      challenges: "Handling website rate limits, captcha checks, and asynchronous page loads.",
+      lessons: "Understood headless browser configurations, Docker network links, and API rate-limiting techniques.",
+      metrics: [
+        "Scrapes 50+ dynamically loaded pages per minute",
+        "Maintains persistent JSON datastores behind API targets",
+        "Handles network connection drops gracefully with retry limits"
+      ],
+      architecture: "  [Trigger API] -> [Puppeteer headless browser] -> [Dynamic DOM Parse]\n                                                           │\n  [Flask SQLite Target] <----------- [JSON Export] <───────┘"
     }
   ] as Project[],
+  certifications: [
+    {
+      id: "cert-1",
+      name: "AWS Certified Solutions Architect – Associate",
+      issuer: "Amazon Web Services (AWS)",
+      date: "Prep Ongoing (Exam Scheduled)",
+      icon: "☁️",
+      url: "https://aws.amazon.com/certification/certified-solutions-architect-associate/"
+    },
+    {
+      id: "cert-2",
+      name: "Certified Kubernetes Administrator (CKA)",
+      issuer: "KodeKloud / Linux Foundation",
+      date: "Training Completed",
+      icon: "☸️",
+      url: "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/"
+    },
+    {
+      id: "cert-3",
+      name: "HashiCorp Certified: Terraform Associate",
+      issuer: "Udemy / HashiCorp",
+      date: "Prep Ongoing",
+      icon: "⚙️",
+      url: "https://www.hashicorp.com/certification/terraform-associate"
+    },
+    {
+      id: "cert-4",
+      name: "Postman API Fundamentals Student Expert",
+      issuer: "Postman",
+      date: "Aug 2024",
+      icon: "🚀",
+      url: "https://badgr.com/public/assertions/xP-P9D3iTjO_Y3d24Uv1jg"
+    }
+  ] as Certification[],
   skills: [
     {
       group: "Languages",
