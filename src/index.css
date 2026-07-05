@@ -1205,6 +1205,62 @@ textarea:focus-visible {
   .terminal-dock-panel input {
     height: 36px !important;
   }
+
+  /* Safe Area layout support */
+  .mobile-app-layout header {
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    padding-left: calc(12px + env(safe-area-inset-left, 0px)) !important;
+    padding-right: calc(12px + env(safe-area-inset-right, 0px)) !important;
+    height: calc(48px + env(safe-area-inset-top, 0px)) !important;
+  }
+
+  .mobile-app-layout nav {
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    padding-left: calc(4px + env(safe-area-inset-left, 0px)) !important;
+    padding-right: calc(4px + env(safe-area-inset-right, 0px)) !important;
+    height: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .mobile-app-layout main {
+    padding-left: env(safe-area-inset-left, 0px) !important;
+    padding-right: env(safe-area-inset-right, 0px) !important;
+  }
+
+  /* Scrollable subtabs with edge fade mask */
+  .about-subtabs {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    -webkit-overflow-scrolling: touch !important;
+    mask-image: linear-gradient(to right, black 82%, transparent 100%) !important;
+    -webkit-mask-image: linear-gradient(to right, black 82%, transparent 100%) !important;
+    padding-right: 28px !important;
+  }
+  
+  .about-subtabs::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* Low Height Landscape Mode Optimization */
+  @media (max-height: 480px) and (orientation: landscape) {
+    .mobile-app-layout header {
+      height: 38px !important;
+    }
+    .mobile-app-layout nav {
+      height: 44px !important;
+    }
+    .mobile-app-layout header span,
+    .mobile-app-layout header button,
+    .mobile-app-layout header a {
+      transform: scale(0.85) !important;
+    }
+    .mobile-app-layout nav span {
+      display: none !important;
+    }
+    .mobile-app-layout nav button {
+      gap: 0 !important;
+    }
+  }
 }
 
 

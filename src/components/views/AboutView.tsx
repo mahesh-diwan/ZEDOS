@@ -45,7 +45,7 @@ export const AboutView: React.FC = () => {
       <h1 style={styles.heading}>Profile & Qualifications</h1>
 
       {/* Sub tabs navigation */}
-      <div style={styles.tabHeader} className="no-select">
+      <div style={styles.tabHeader} className="no-select about-subtabs">
         <button 
           style={{ 
             ...styles.tabBtn, 
