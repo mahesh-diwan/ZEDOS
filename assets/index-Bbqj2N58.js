@@ -188,19 +188,21 @@ DevOps & Cloud Engineer based in Pune, India.
   pwd              — print working directory path
   cat <file>       — open and view a file in the editor (e.g., cat ABOUT.md)
   open <file>      — same as cat
-  whoami           — display bio overview
-  date             — show current date and time
-  git log          — show simulated commits
+  about            — open biography and objectives (ABOUT.md)
+  skills           — open skills matrix (ABOUT.md)
+  projects         — open projects portfolio (PROJECTS.md)
+  resume           — open resume panel (RESUME.pdf)
+  blog             — open writings feed (BLOGS.md)
+  contact          — open contact details (CONTACT.md)
+  github           — open GitHub profile in a new tab
+  linkedin         — open LinkedIn profile in a new tab
   neofetch         — display ZEDOS system diagnostics
   docker ps        — check running container tasks (DevOps)
   kubectl get pods — fetch active Kubernetes pods status (K8s)
   terraform plan   — generate simulated infrastructure plans (IaC)
-  skills           — open skills panel
-  projects         — open projects panel
-  resume           — open resume panel
-  blog             — open writings panel
-  contact          — open contact details
-  joke             — display a random developer joke
+  whoami           — display bio overview
+  date             — show current date and time
+  git log          — show simulated commits
   clear            — clear terminal output history`;break;case`ls`:f=`README.md    ABOUT.md    PROJECTS.md    BLOGS.md    CERTIFICATIONS.md    RESUME.pdf    CONTACT.md`;break;case`pwd`:f=`/home/mahesh-diwan/zedos`;break;case`whoami`:f=`${k.name} - ${k.role}\nBased in ${k.location}.\nBio: ${k.bioShort}`;break;case`date`:f=new Date().toString();break;case`echo`:f=d.join(` `);break;case`git`:f=d[0]===`log`?`commit a3f1c2e (HEAD -> main)
 Author: Mahesh Diwan <diwanmahesh11@gmail.com>
 Date:   Thu Jul 2 14:20:11 2026 +0530
@@ -252,7 +254,7 @@ postgres-db-0                      1/1     Running   0          12d`:`kubectl: s
     + title      = "GitHub Pages Deployment Key"
   }
 
-Plan: 2 to add, 0 to change, 0 to destroy.`:`terraform: support 'plan' command to audit state adjustments.`;break;case`cat`:case`open`:if(d.length===0)f=`Usage: ${u} <filename>`;else{let e=d[0].toUpperCase(),n=``;e.includes(`READ`)||e.includes(`HOME`)?n=`README.md`:e.includes(`ABOUT`)||e.includes(`PROFILE`)?n=`ABOUT.md`:e.includes(`PROJ`)?n=`PROJECTS.md`:e.includes(`BLOG`)?n=`BLOGS.md`:e.includes(`CERT`)?n=`CERTIFICATIONS.md`:e.includes(`RESU`)?n=`RESUME.pdf`:e.includes(`CONT`)&&(n=`CONTACT.md`),n?(t(n),f=`Opening ${n} in editor tabs...`):f=`cat: ${d[0]}: File not found. Type 'ls' to see list of valid files.`}break;case`projects`:t(`PROJECTS.md`),f=`Opening PROJECTS.md in editor tabs...`;break;case`resume`:t(`RESUME.pdf`),f=`Opening RESUME.pdf in editor tabs...`;break;case`blog`:case`blogs`:t(`BLOGS.md`),f=`Opening BLOGS.md in editor tabs...`;break;case`contact`:t(`CONTACT.md`),f=`Opening CONTACT.md in editor tabs...`;break;case`skills`:t(`ABOUT.md`),f=`Opening ABOUT.md (Skills tab) in editor tabs...`;break;case`joke`:{let e=[`Why did the DevOps engineer separate their dev and prod environments? They wanted some isolation time.`,`There are 10 types of people: those who understand binary, and those who don't.`,`Why did the Docker container get sent to principal? Too many packaging issues.`,`How many programmers does it take to change a light bulb? None, it's a hardware issue.`,`What's a database administrator's favorite game? Table tennis!`];f=e[Math.floor(Math.random()*e.length)];break}case`matrix`:f=`Initializing Matrix Stream...
+Plan: 2 to add, 0 to change, 0 to destroy.`:`terraform: support 'plan' command to audit state adjustments.`;break;case`cat`:case`open`:if(d.length===0)f=`Usage: ${u} <filename>`;else{let e=d[0].toUpperCase(),n=``;e.includes(`READ`)||e.includes(`HOME`)?n=`README.md`:e.includes(`ABOUT`)||e.includes(`PROFILE`)?n=`ABOUT.md`:e.includes(`PROJ`)?n=`PROJECTS.md`:e.includes(`BLOG`)?n=`BLOGS.md`:e.includes(`RESU`)?n=`RESUME.pdf`:e.includes(`CONT`)&&(n=`CONTACT.md`),n?(t(n),f=`Opening ${n} in editor tabs...`):f=`cat: ${d[0]}: File not found. Type 'ls' to see list of valid files.`}break;case`projects`:t(`PROJECTS.md`),f=`Opening PROJECTS.md in editor tabs...`;break;case`resume`:t(`RESUME.pdf`),f=`Opening RESUME.pdf in editor tabs...`;break;case`blog`:case`blogs`:t(`BLOGS.md`),f=`Opening BLOGS.md in editor tabs...`;break;case`contact`:t(`CONTACT.md`),f=`Opening CONTACT.md in editor tabs...`;break;case`about`:t(`ABOUT.md`),f=`Opening ABOUT.md in editor tabs...`;break;case`github`:window.open(`https://github.com/mahesh-diwan`,`_blank`),f=`Opening GitHub profile in a new browser tab...`;break;case`linkedin`:window.open(`https://www.linkedin.com/in/mahesh-diwan/`,`_blank`),f=`Opening LinkedIn profile in a new browser tab...`;break;case`skills`:t(`ABOUT.md`),f=`Opening ABOUT.md (Skills tab) in editor tabs...`;break;case`joke`:{let e=[`Why did the DevOps engineer separate their dev and prod environments? They wanted some isolation time.`,`There are 10 types of people: those who understand binary, and those who don't.`,`Why did the Docker container get sent to principal? Too many packaging issues.`,`How many programmers does it take to change a light bulb? None, it's a hardware issue.`,`What's a database administrator's favorite game? Table tennis!`];f=e[Math.floor(Math.random()*e.length)];break}case`matrix`:f=`Initializing Matrix Stream...
 🤖 0101010101010101010101010101010101010101
 💾 Follow the white rabbit, Mahesh...
 🕶️ You took the red pill. ZEDOS rules the grid.`;break;case`antigravity`:f=`✈️  import antigravity
