@@ -332,6 +332,25 @@ export const App: React.FC = () => {
 
       {/* 2. Workspace Content Layout */}
       <div className="main-layout" style={{ position: 'relative' }}>
+        {/* Mobile drawer backdrop overlay */}
+        {isMobile && (projectPanelOpen || assistantOpen) && (
+          <div 
+            onClick={() => {
+              setProjectPanelOpen(false);
+              setAssistantOpen(false);
+            }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: 'rgba(0, 0, 0, 0.4)',
+              zIndex: 99,
+            }}
+          />
+        )}
+
         {/* Left Side File Tree */}
         {projectPanelOpen && (
           <aside role="complementary" aria-label="Project Explorer">
