@@ -1190,14 +1190,18 @@ textarea:focus-visible {
   }
 
   /* Terminal Font Enhancements */
-  .terminal-dock-panel input,
   .terminal-dock-panel span,
   .terminal-dock-panel div {
     font-size: 13.5px !important;
   }
 
+  /* Prevent Safari input auto-zoom on mobile across all inputs */
+  input, textarea, select, .terminal-dock-panel input {
+    font-size: 16px !important;
+  }
+
   .terminal-dock-panel input {
-    height: 32px !important;
+    height: 36px !important;
   }
 }
 
