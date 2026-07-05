@@ -254,7 +254,7 @@ export const App: React.FC = () => {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <a 
-              href="/Mahesh_Diwan_Resume.pdf" 
+              href="./Mahesh_Diwan_Resume.pdf" 
               download="Mahesh_Diwan_Resume.pdf"
               style={mobileStyles.headerDownloadBtn}
               title="Download Resume (1-click)"
@@ -315,16 +315,7 @@ export const App: React.FC = () => {
             <Folder size={18} />
             <span style={mobileStyles.navLabel}>Projects</span>
           </button>
-          <button 
-            style={{ 
-              ...mobileStyles.navBtn, 
-              color: activeFile === 'CERTIFICATIONS.md' ? 'var(--accent)' : 'var(--text-dim)' 
-            }}
-            onClick={() => handleOpenFile('CERTIFICATIONS.md')}
-          >
-            <Award size={18} />
-            <span style={mobileStyles.navLabel}>Credentials</span>
-          </button>
+
           <button 
             style={{ 
               ...mobileStyles.navBtn, 
@@ -351,6 +342,7 @@ export const App: React.FC = () => {
                 activeFile={activeFile}
                 onFileSelect={handleOpenFile}
                 openFiles={openFiles}
+                onClose={() => setProjectPanelOpen(false)}
               />
             </div>
           </div>
@@ -410,6 +402,7 @@ export const App: React.FC = () => {
             activeFile={activeFile}
             onFileSelect={handleOpenFile}
             openFiles={openFiles}
+            onClose={() => setProjectPanelOpen(false)}
           />
         )}
 

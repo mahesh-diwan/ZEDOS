@@ -7,13 +7,15 @@ import {
   FileText, 
   Settings, 
   Plus, 
-  FolderPlus 
+  FolderPlus,
+  X
 } from 'lucide-react';
 
 interface ProjectPanelProps {
   activeFile: string;
   onFileSelect: (fileName: string) => void;
   openFiles: string[];
+  onClose?: () => void;
 }
 
 interface FileItem {
@@ -27,6 +29,7 @@ export const ProjectPanel: React.FC<ProjectPanelProps> = ({
   activeFile,
   onFileSelect,
   openFiles,
+  onClose,
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -35,7 +38,6 @@ export const ProjectPanel: React.FC<ProjectPanelProps> = ({
     { name: 'ABOUT.md', type: 'md', color: '#61afef', gitStatus: 'M' },
     { name: 'PROJECTS.md', type: 'md', color: '#c678dd', gitStatus: 'M' },
     { name: 'BLOGS.md', type: 'md', color: '#e5c07b' },
-    { name: 'CERTIFICATIONS.md', type: 'md', color: '#e06c75', gitStatus: 'A' },
     { name: 'RESUME.pdf', type: 'pdf', color: '#56b6c2' },
     { name: 'CONTACT.md', type: 'md', color: '#d19a66' },
   ];
@@ -64,9 +66,21 @@ export const ProjectPanel: React.FC<ProjectPanelProps> = ({
       {/* Sidebar Header */}
       <div style={styles.header}>
         <span style={styles.headerTitle}>Project</span>
-        <div style={styles.actions}>
-          <button style={styles.iconButton} title="New File"><Plus size={13} /></button>
-          <button style={styles.iconButton} title="New Folder"><FolderPlus size={13} /></button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={styles.actions}>
+            <button style={styles.iconButton} title="New File"><Plus size={13} /></button>
+            <button style={styles.iconButton} title="New Folder"><FolderPlus size={13} /></button>
+          </div>
+          {onClose && (
+            <button 
+              onClick={onClose} 
+              style={styles.closeButton} 
+              title="Close Panel"
+              className="mobile-sidebar-close"
+            >
+              <X size={14} />
+            </button>
+          )}
         </div>
       </div>
 
@@ -239,5 +253,19 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     alignItems: 'center',
     cursor: 'pointer',
+  },
+  closeButton: {
+    backgroundColor: 'transparent',
+    border: 'none',
+    color: 'var(--text-dim)',
+    cursor: 'pointer',
+    padding: '3px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '3px',
+    width: '24px',
+    height: '24px',
+    transition: 'color 0.15s',
   },
 };

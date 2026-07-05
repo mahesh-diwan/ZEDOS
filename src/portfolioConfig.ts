@@ -73,7 +73,7 @@ export const portfolioConfig = {
     instagram: "https://www.instagram.com/mahesh_diwan1",
     coffee: "https://buymeacoffee.com/mahesh-diwan",
     upi: "diwanmahesh11@ybl",
-    resume: "/Mahesh_Diwan_Resume.pdf",
+    resume: "./Mahesh_Diwan_Resume.pdf",
     hashnode: "https://mahesh1215.hashnode.dev/",
     twitter: "https://x.com/mahesh_diwan1",
   },
@@ -238,40 +238,7 @@ export const portfolioConfig = {
       architecture: "  [Trigger API] -> [Puppeteer headless browser] -> [Dynamic DOM Parse]\n                                                           │\n  [Flask SQLite Target] <----------- [JSON Export] <───────┘"
     }
   ] as Project[],
-  certifications: [
-    {
-      id: "cert-1",
-      name: "AWS Certified Solutions Architect – Associate",
-      issuer: "Amazon Web Services (AWS)",
-      date: "Prep Ongoing (Exam Scheduled)",
-      icon: "☁️",
-      url: "https://aws.amazon.com/certification/certified-solutions-architect-associate/"
-    },
-    {
-      id: "cert-2",
-      name: "Certified Kubernetes Administrator (CKA)",
-      issuer: "KodeKloud / Linux Foundation",
-      date: "Training Completed",
-      icon: "☸️",
-      url: "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/"
-    },
-    {
-      id: "cert-3",
-      name: "HashiCorp Certified: Terraform Associate",
-      issuer: "Udemy / HashiCorp",
-      date: "Prep Ongoing",
-      icon: "⚙️",
-      url: "https://www.hashicorp.com/certification/terraform-associate"
-    },
-    {
-      id: "cert-4",
-      name: "Postman API Fundamentals Student Expert",
-      issuer: "Postman",
-      date: "Aug 2024",
-      icon: "🚀",
-      url: "https://badgr.com/public/assertions/xP-P9D3iTjO_Y3d24Uv1jg"
-    }
-  ] as Certification[],
+
   skills: [
     {
       group: "Languages",

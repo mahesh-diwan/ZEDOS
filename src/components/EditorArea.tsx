@@ -9,7 +9,6 @@ import { ExperienceView } from './views/ExperienceView';
 import { ContactView } from './views/ContactView';
 import { ReadmeView } from './views/ReadmeView';
 import { BlogView } from './views/BlogView';
-import { CertificationsView } from './views/CertificationsView';
 import { fileRawContents } from '../fileContents';
 
 interface EditorAreaProps {
@@ -33,7 +32,6 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
     'ABOUT.md': 'preview',
     'PROJECTS.md': 'preview',
     'BLOGS.md': 'preview',
-    'CERTIFICATIONS.md': 'preview',
     'RESUME.pdf': 'preview',
     'CONTACT.md': 'preview',
   });
@@ -63,7 +61,7 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
           <div style={styles.pdfHeader}>
             <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-bright)' }}>Mahesh_Diwan_Resume.pdf</span>
             <a 
-              href="/Mahesh_Diwan_Resume.pdf" 
+              href="./Mahesh_Diwan_Resume.pdf" 
               download="Mahesh_Diwan_Resume.pdf"
               style={styles.pdfDownloadBtn}
             >
@@ -72,7 +70,7 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
           </div>
           <div style={styles.pdfFrameContainer} className="pdf-iframe-wrapper">
             <iframe 
-              src="/Mahesh_Diwan_Resume.pdf#toolbar=0&navpanes=0&view=FitH" 
+              src="./Mahesh_Diwan_Resume.pdf#toolbar=0&navpanes=0&view=FitH" 
               width="100%" 
               height="100%" 
               style={{ border: 'none', background: 'var(--bg-terminal)' }} 
@@ -86,7 +84,7 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
                 Direct PDF rendering is limited on mobile web. You can download the PDF to view it on your device.
               </p>
               <a 
-                href="/Mahesh_Diwan_Resume.pdf" 
+                href="./Mahesh_Diwan_Resume.pdf" 
                 download="Mahesh_Diwan_Resume.pdf"
                 style={styles.mobileDownloadBtn}
               >
@@ -107,8 +105,6 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
         return <ProjectsView />;
       case 'BLOGS.md':
         return <BlogView />;
-      case 'CERTIFICATIONS.md':
-        return <CertificationsView />;
       case 'CONTACT.md':
         return <ContactView onToast={onToast} />;
       default:

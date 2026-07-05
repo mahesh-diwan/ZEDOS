@@ -262,7 +262,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         {/* CTA Actions */}
         <div style={styles.ctaRow}>
           <a 
-            href="/Mahesh_Diwan_Resume.pdf" 
+            href="./Mahesh_Diwan_Resume.pdf" 
             download="Mahesh_Diwan_Resume.pdf" 
             style={styles.primaryCta}
             className="primary-cta-btn"
