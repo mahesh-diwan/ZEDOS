@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GitBranch, MessageSquare, Terminal, Folder, Share2, Search, Palette } from 'lucide-react';
+import { GitBranch, MessageSquare, Terminal, Folder, Share2, Search, Palette, Download } from 'lucide-react';
 
 interface TitleBarProps {
   activeFile: string;
@@ -57,6 +57,33 @@ export const TitleBar: React.FC<TitleBarProps> = ({
 
       {/* 4. Right Toolbar (Collaboration & Layouts) */}
       <div style={styles.rightToolbar}>
+        {/* Global Resume CTA for Recruiters */}
+        <div style={{ display: 'flex', alignItems: 'center', marginRight: '16px' }} className="titlebar-collab">
+          <a
+            href="./Mahesh_Diwan_Resume.pdf"
+            download="Mahesh_Diwan_Resume.pdf"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              color: 'var(--success)',
+              fontWeight: 700,
+              fontSize: '11px',
+              fontFamily: 'var(--font-mono)',
+              gap: '4px',
+              padding: '3px 8px',
+              borderRadius: '4px',
+              border: '1px solid rgba(158, 206, 106, 0.3)',
+              backgroundColor: 'rgba(158, 206, 106, 0.08)',
+              cursor: 'pointer',
+            }}
+            title="Download Resume PDF"
+          >
+            <Download size={11} />
+            <span>RESUME</span>
+          </a>
+        </div>
+
         {/* Collaboration Area */}
         <div style={styles.collabGroup} className="titlebar-collab">
           {/* Mahesh Avatar */}

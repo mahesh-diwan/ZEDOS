@@ -287,6 +287,14 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             <ChevronRight size={14} style={{ marginLeft: '4px' }} />
           </button>
         </div>
+
+        {/* Recruiter Navigation Alert Tooltip */}
+        <div style={styles.navigationGuide} className="recruiter-guide-banner">
+          <span style={{ marginRight: '8px', fontSize: '14px' }}>💡</span>
+          <span>
+            <strong>Recruiter Tip:</strong> This portfolio simulates a developer workspace IDE. Use the <strong>left File Tree Explorer</strong> or files tab list at the top to navigate between documents.
+          </span>
+        </div>
       </div>
 
       {/* Tip Card (Theme & Font customization) */}
@@ -641,5 +649,17 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: '12px',
     color: 'var(--text-bright)',
     lineHeight: '1.45',
+  },
+  navigationGuide: {
+    backgroundColor: 'var(--accent-dim)',
+    borderLeft: '4px solid var(--accent)',
+    borderRadius: '4px',
+    padding: '12px 16px',
+    fontSize: '12.5px',
+    color: 'var(--text-bright)',
+    lineHeight: '1.5',
+    marginTop: '20px',
+    display: 'flex',
+    alignItems: 'center',
   },
 };

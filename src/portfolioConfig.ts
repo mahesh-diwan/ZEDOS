@@ -102,7 +102,7 @@ export const portfolioConfig = {
       company: "ThynkTech India",
       role: "Associate Software Engineer (DevOps Intern)",
       date: "Dec 2025 — May 2026",
-      desc: "Deployed MERN-stack apps to AWS ECS (Fargate) and EKS configuring target groups and HPA autoscaling. Authored K8s Deployments, Services, ConfigMaps, Secrets and eksctl provisioning. Set up CloudWatch alarms on ECS CPU/memory metrics and tightened IAM policies. Built GitHub Actions pipelines for Docker build -> push ECR -> rolling ECS deploy.",
+      desc: "Automated deployment scaling of multi-service applications on AWS EKS and ECS (Fargate), reducing deployment lifecycle. Configured Horizontal Pod Autoscalers (HPAs) and CloudWatch monitoring alerts to scale resources dynamically. Authored secure Kubernetes manifests (Deployments, Services, ConfigMaps) and configured Secrets injection. Formed automated GitHub Actions CI/CD workflows, reducing container release pipeline latency.",
       tags: ["AWS ECS/EKS", "Kubernetes", "Docker", "GitHub Actions", "CloudWatch", "IAM", "VPC", "Nginx"],
       current: true
     },
@@ -111,7 +111,7 @@ export const portfolioConfig = {
       company: "Personal Projects & Automation",
       role: "DevOps & Cloud Automation Developer",
       date: "Jan 2024 — Present",
-      desc: "Automated application build configurations and multi-environment setups. Written custom Bash & Python infrastructure auditing utilities to track AWS running resources and reduce costs. Implemented SSL certificates and reversed proxy routers using Nginx configurations on EC2.",
+      desc: "Provisioned multi-region AWS environments utilizing Terraform HCL workflows to standardize developer environments. Developed Python and Bash cloud telemetry tools, auditing active AWS infrastructure to optimize monthly sandbox costs. Configured Nginx reverse proxies with Let's Encrypt SSL encryptions on EC2, establishing secure routing paths.",
       tags: ["Bash Scripting", "Python", "Docker Compose", "Terraform", "Prometheus", "Linux", "Git"],
       current: false
     }
