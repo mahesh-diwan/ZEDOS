@@ -128,7 +128,7 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
   };
 
   return (
-    <div style={styles.editorArea}>
+    <div style={styles.editorArea} className="editor-area-container">
       {/* 1. Tab Bar */}
       <div style={styles.tabBar} className="no-select editor-tabbar">
         {openFiles.map((file) => {
@@ -207,7 +207,7 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
       </div>
 
       {/* 3. View Window Content */}
-      <div style={styles.viewViewport}>
+      <div style={styles.viewViewport} className="editor-viewport-container">
         {renderActiveView()}
       </div>
     </div>

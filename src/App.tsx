@@ -53,7 +53,19 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Custom cursor logic removed to optimize rendering performance (bypassing mousemove repaint overhead)
+  // Lock body scroll only when mobile drawers are open to prevent background scrolling
+  useEffect(() => {
+    if (isMobile) {
+      if (projectPanelOpen || terminalOpen || assistantOpen) {
+        document.body.style.setProperty('overflow', 'hidden', 'important');
+      } else {
+        document.body.style.removeProperty('overflow');
+      }
+    }
+    return () => {
+      document.body.style.removeProperty('overflow');
+    };
+  }, [isMobile, projectPanelOpen, terminalOpen, assistantOpen]);
 
   // Panel toggle handlers with mobile overlay constraints
   const handleToggleProject = useCallback((val?: boolean | ((prev: boolean) => boolean)) => {
@@ -171,9 +183,8 @@ export const App: React.FC = () => {
           cursor: 'auto',
           display: 'flex',
           flexDirection: 'column',
-          height: '100vh',
+          minHeight: '100vh',
           width: '100vw',
-          overflow: 'hidden',
           backgroundColor: 'var(--bg)',
           position: 'relative'
         }}
@@ -212,7 +223,7 @@ export const App: React.FC = () => {
         </header>
 
         {/* Content Body viewport (Full width content, single main scroll container) */}
-        <main style={mobileStyles.contentBody}>
+        <main style={mobileStyles.contentBody} className="mobile-main-content">
           <EditorArea
             activeFile={activeFile}
             setActiveFile={setActiveFile}
