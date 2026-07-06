@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { portfolioConfig } from '../../portfolioConfig';
-import { Compass, GraduationCap, Calendar, ShieldCheck, CheckSquare, Wrench } from 'lucide-react';
+import { Compass, GraduationCap, Calendar, ShieldCheck, CheckSquare, Wrench, Cloud, Layers, Cpu, RefreshCw, Activity, Code, Database } from 'lucide-react';
+
+const getCategoryIcon = (group: string) => {
+  const g = group.toLowerCase();
+  if (g.includes('cloud')) return <Cloud size={14} style={{ marginRight: '6px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('container') || g.includes('orchestration')) return <Layers size={14} style={{ marginRight: '6px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('infrastructure') || g.includes('iac')) return <Cpu size={14} style={{ marginRight: '6px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('ci/cd') || g.includes('automation')) return <RefreshCw size={14} style={{ marginRight: '6px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('monitoring') || g.includes('log')) return <Activity size={14} style={{ marginRight: '6px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('programming') || g.includes('script') || g.includes('language')) return <Code size={14} style={{ marginRight: '6px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('database') || g.includes('cache') || g.includes('storage')) return <Database size={14} style={{ marginRight: '6px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  return null;
+};
 
 interface SkillBarProps {
   name: string;
@@ -187,7 +199,10 @@ export const AboutView: React.FC = () => {
               <div style={styles.skillsGrid}>
                 {portfolioConfig.skills.map((category) => (
                   <div key={category.group} style={styles.categoryCard}>
-                    <h3 style={styles.categoryTitle}>{category.group}</h3>
+                    <h3 style={styles.categoryTitle}>
+                      {getCategoryIcon(category.group)}
+                      <span style={{ verticalAlign: 'middle' }}>{category.group}</span>
+                    </h3>
                     <div style={styles.categoryItems}>
                       {category.items.map((skill) => (
                         <SkillBar 
@@ -295,6 +310,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: '12px',
     display: 'flex',
     alignItems: 'center',
+    borderLeft: '3px solid var(--accent)',
+    paddingLeft: '8px',
   },
   sectionIcon: {
     marginRight: '8px',
@@ -303,7 +320,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   paragraph: {
     fontSize: '14px',
     lineHeight: '1.75',
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
     margin: 0,
   },
   qaGrid: {
@@ -326,9 +343,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginTop: 0,
   },
   qaAnswer: {
-    fontSize: '13px',
+    fontSize: '14px',
     lineHeight: '1.6',
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
     margin: 0,
   },
   divider: {
@@ -368,13 +385,13 @@ const styles: { [key: string]: React.CSSProperties } = {
     alignItems: 'center',
   },
   eduDegree: {
-    fontSize: '13px',
-    color: 'var(--text)',
+    fontSize: '14px',
+    color: 'var(--text-bright)',
     margin: '0 0 4px 0',
   },
   eduMinor: {
-    fontSize: '12px',
-    color: 'var(--text-dim)',
+    fontSize: '13px',
+    color: 'var(--text-bright)',
     margin: 0,
     fontFamily: 'var(--font-mono)',
   },
@@ -409,9 +426,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: 'var(--text-bright)',
   },
   evidenceDesc: {
-    fontSize: '12px',
+    fontSize: '13.5px',
     lineHeight: '1.5',
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
     margin: 0,
   },
   skillsGrid: {
@@ -428,10 +445,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     textTransform: 'uppercase',
     letterSpacing: '0.12em',
     color: 'var(--syntax-keyword)',
-    borderBottom: '1px solid var(--border)',
+    borderBottom: '2px solid var(--accent)',
     paddingBottom: '6px',
     marginBottom: '12px',
     fontWeight: 700,
+    display: 'flex',
+    alignItems: 'center',
   },
   categoryItems: {
     display: 'flex',
@@ -445,8 +464,8 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   skillName: {
     width: '90px',
-    fontSize: '12.5px',
-    color: 'var(--text)',
+    fontSize: '14px',
+    color: 'var(--text-bright)',
     flexShrink: 0,
   },
   barTrack: {
@@ -512,9 +531,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: '4px',
   },
   expDesc: {
-    fontSize: '13.5px',
+    fontSize: '14px',
     lineHeight: '1.65',
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
     margin: '0 0 16px 0',
   },
   expTags: {

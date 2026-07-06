@@ -48,15 +48,17 @@ export const App: React.FC = () => {
   // Custom Toast State
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const isTabletLandscape = window.innerWidth <= 1024 && window.innerHeight < window.innerWidth && window.innerHeight <= 768;
+    return window.innerWidth <= 768 || isTabletLandscape;
+  });
 
   // Check mobile device
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(
-        window.innerWidth <= 768 || 
-        navigator.maxTouchPoints > 0
-      );
+      const isTabletLandscape = window.innerWidth <= 1024 && window.innerHeight < window.innerWidth && window.innerHeight <= 768;
+      setIsMobile(window.innerWidth <= 768 || isTabletLandscape);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -187,20 +189,9 @@ export const App: React.FC = () => {
 
   if (isMobile) {
     return (
-      <div 
-        className={`app-container mobile-app-layout theme-${themeId}`}
-        style={{ 
-          cursor: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100vh',
-          width: '100vw',
-          backgroundColor: 'var(--bg)',
-          position: 'relative'
-        }}
-      >
+      <div className={`app-container mobile-app-layout theme-${themeId}`}>
         {/* Mobile Header Bar */}
-        <header style={mobileStyles.header} className="no-select" role="banner">
+        <header className="no-select" role="banner">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <button 
               style={mobileStyles.menuBtn} 
@@ -233,7 +224,7 @@ export const App: React.FC = () => {
         </header>
 
         {/* Content Body viewport (Full width content, single main scroll container) */}
-        <main style={mobileStyles.contentBody} className="mobile-main-content">
+        <main className="mobile-main-content">
           <EditorArea
             activeFile={activeFile}
             setActiveFile={handleOpenFile}
@@ -244,7 +235,7 @@ export const App: React.FC = () => {
         </main>
 
         {/* Bottom Tab Navigation Bar */}
-        <nav style={mobileStyles.bottomNav} className="no-select" role="navigation">
+        <nav className="no-select" role="navigation">
           <button 
             style={{ 
               ...mobileStyles.navBtn, 
@@ -297,7 +288,7 @@ export const App: React.FC = () => {
               style={mobileStyles.drawerBackdrop} 
               onClick={() => setProjectPanelOpen(false)}
             />
-            <div style={mobileStyles.drawer} className="project-sidebar">
+            <div className="project-sidebar">
               <ProjectPanel
                 activeFile={activeFile}
                 onFileSelect={handleOpenFile}
@@ -315,7 +306,7 @@ export const App: React.FC = () => {
               style={mobileStyles.drawerBackdrop} 
               onClick={() => setTerminalOpen(false)}
             />
-            <div style={mobileStyles.terminalSheet} className="terminal-dock-panel animate-slide-up">
+            <div className="terminal-dock-panel animate-slide-up">
               <TerminalDock
                 onClose={() => setTerminalOpen(false)}
                 onOpenFile={handleOpenFile}
@@ -325,7 +316,15 @@ export const App: React.FC = () => {
         )}
 
         {/* Global Toast System */}
-        <div style={styles.toastContainer} className="no-select">
+        <div 
+          style={{
+            ...styles.toastContainer,
+            bottom: isMobile ? 'calc(56px + env(safe-area-inset-bottom, 0px) + 12px)' : '24px',
+            left: isMobile ? '12px' : 'auto',
+            right: isMobile ? '12px' : '24px',
+          }} 
+          className="no-select"
+        >
           {toasts.map((toast) => (
             <div key={toast.id} style={styles.toastCard} className="animate-slide-up">
               <span style={styles.toastIcon}>{toast.icon}</span>
@@ -374,7 +373,7 @@ export const App: React.FC = () => {
 
         {/* Left Side File Tree */}
         {projectPanelOpen && (
-          <aside role="complementary" aria-label="Project Explorer">
+          <aside role="complementary" aria-label="Project Explorer" style={{ width: '210px', flexShrink: 0, height: '100%' }}>
             <ProjectPanel
               activeFile={activeFile}
               onFileSelect={handleOpenFile}
@@ -385,7 +384,7 @@ export const App: React.FC = () => {
         )}
 
         {/* Center / Editor + Terminal Area */}
-        <main role="main" className="editor-terminal-container" style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+        <main role="main" className="editor-terminal-container">
           <EditorArea
             activeFile={activeFile}
             setActiveFile={handleOpenFile}
@@ -427,7 +426,15 @@ export const App: React.FC = () => {
       )}
 
       {/* 4. Global Toast System */}
-      <div style={styles.toastContainer} className="no-select">
+      <div 
+        style={{
+          ...styles.toastContainer,
+          bottom: isMobile ? 'calc(56px + env(safe-area-inset-bottom, 0px) + 12px)' : '24px',
+          left: isMobile ? '12px' : 'auto',
+          right: isMobile ? '12px' : '24px',
+        }} 
+        className="no-select"
+      >
         {toasts.map((toast) => (
           <div key={toast.id} style={styles.toastCard} className="animate-slide-up">
             <span style={styles.toastIcon}>{toast.icon}</span>

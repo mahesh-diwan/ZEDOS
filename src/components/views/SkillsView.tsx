@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { portfolioConfig } from '../../portfolioConfig';
+import { Cloud, Layers, Cpu, RefreshCw, Activity, Code, Database, Wrench } from 'lucide-react';
+
+const getCategoryIcon = (group: string) => {
+  const g = group.toLowerCase();
+  if (g.includes('cloud')) return <Cloud size={15} style={{ marginRight: '8px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('container') || g.includes('orchestration')) return <Layers size={15} style={{ marginRight: '8px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('infrastructure') || g.includes('iac')) return <Cpu size={15} style={{ marginRight: '8px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('ci/cd') || g.includes('automation')) return <RefreshCw size={15} style={{ marginRight: '8px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('monitoring') || g.includes('log')) return <Activity size={15} style={{ marginRight: '8px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('programming') || g.includes('script') || g.includes('language')) return <Code size={15} style={{ marginRight: '8px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  if (g.includes('database') || g.includes('cache') || g.includes('storage')) return <Database size={15} style={{ marginRight: '8px', color: 'var(--accent)', verticalAlign: 'middle' }} />;
+  return null;
+};
 
 interface SkillBarProps {
   name: string;
@@ -47,7 +60,10 @@ export const SkillsView: React.FC = () => {
       <div style={styles.skillsGrid}>
         {portfolioConfig.skills.map((category) => (
           <div key={category.group} style={styles.categoryCard} className="reveal">
-            <h2 style={styles.categoryTitle}>{category.group}</h2>
+            <h2 style={styles.categoryTitle}>
+              {getCategoryIcon(category.group)}
+              <span style={{ verticalAlign: 'middle' }}>{category.group}</span>
+            </h2>
             <div style={styles.categoryItems}>
               {category.items.map((skill) => (
                 <SkillBar 
@@ -66,7 +82,10 @@ export const SkillsView: React.FC = () => {
 
       {/* Other familiar tools */}
       <div style={styles.otherSection} className="reveal">
-        <h2 style={styles.categoryTitle}>Also familiar with</h2>
+        <h2 style={styles.categoryTitle}>
+          <Wrench size={15} style={{ marginRight: '8px', color: 'var(--accent)', verticalAlign: 'middle' }} />
+          <span style={{ verticalAlign: 'middle' }}>Also familiar with</span>
+        </h2>
         <div style={styles.tagsContainer}>
           {portfolioConfig.otherSkills.map((skill) => (
             <span key={skill} style={styles.otherTag} className="other-skill-tag">
@@ -118,10 +137,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     textTransform: 'uppercase',
     letterSpacing: '0.15em',
     color: 'var(--syntax-keyword)',
-    borderBottom: '1px solid var(--border)',
+    borderBottom: '2px solid var(--accent)',
     paddingBottom: '8px',
     marginBottom: '16px',
     fontWeight: 700,
+    display: 'flex',
+    alignItems: 'center',
   },
   categoryItems: {
     display: 'flex',
@@ -135,8 +156,8 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   skillName: {
     width: '100px',
-    fontSize: '13px',
-    color: 'var(--text)',
+    fontSize: '14px',
+    color: 'var(--text-bright)',
     flexShrink: 0,
   },
   barTrack: {
@@ -174,8 +195,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     gap: '8px',
   },
   otherTag: {
-    fontSize: '12.5px',
-    color: 'var(--text)',
+    fontSize: '13.5px',
+    color: 'var(--text-bright)',
     backgroundColor: 'var(--bg-sidebar)',
     border: '1px solid var(--border)',
     borderRadius: '6px',

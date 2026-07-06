@@ -165,7 +165,7 @@ export const ProjectPanel: React.FC<ProjectPanelProps> = ({
 
 const styles: { [key: string]: React.CSSProperties } = {
   sidebar: {
-    width: '210px',
+    width: '100%',
     backgroundColor: 'var(--bg-sidebar)',
     borderRight: '1px solid var(--border)',
     display: 'flex',

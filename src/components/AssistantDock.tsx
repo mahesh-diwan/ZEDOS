@@ -83,6 +83,13 @@ export const AssistantDock: React.FC<AssistantDockProps> = ({ onClose, onNavigat
   const [inputVal, setInputVal] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showDino, setShowDino] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   const chatBottomRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -464,7 +471,13 @@ Much appreciated! 💜`;
   };
 
   return (
-    <div style={styles.assistantDock} className="reveal animate-slide-up assistant-dock-panel">
+    <div 
+      style={{
+        ...styles.assistantDock,
+        width: isMobile ? '100%' : '380px',
+      }} 
+      className="reveal animate-slide-up assistant-dock-panel"
+    >
       {/* 1. Header */}
       <div style={styles.header} className="no-select">
         <div style={styles.headerLeft}>

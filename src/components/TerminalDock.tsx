@@ -22,6 +22,13 @@ export const TerminalDock: React.FC<TerminalDockProps> = ({ onClose, onOpenFile 
   const [historyIdx, setHistoryIdx] = useState<number>(-1);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -307,7 +314,14 @@ Loading gravity bypass module...
   };
 
   return (
-    <div style={styles.terminalPanel} className="reveal animate-slide-up terminal-dock-panel" onClick={handleFocus}>
+    <div 
+      style={{
+        ...styles.terminalPanel,
+        height: isMobile ? '100%' : '200px',
+      }} 
+      className="reveal animate-slide-up terminal-dock-panel" 
+      onClick={handleFocus}
+    >
       {/* Terminal Title Header */}
       <div style={styles.termHeader} className="no-select">
         <div style={styles.tabGroup}>

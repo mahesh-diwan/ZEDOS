@@ -160,9 +160,9 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
   }
 
   return (
-    <div style={styles.editorArea} className="editor-area-container">
+    <div className="editor-area-container">
       {/* 1. Tab Bar */}
-      <div style={styles.tabBar} className="no-select editor-tabbar">
+      <div className="no-select editor-tabbar">
         {openFiles.map((file) => {
           const isActive = file === activeFile;
           return (
@@ -170,7 +170,6 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
               key={file}
               className={`editor-tab ${isActive ? 'active' : ''}`}
               style={{
-                ...styles.tab,
                 backgroundColor: isActive ? 'var(--bg-active-tab)' : 'var(--bg-inactive-tab)',
                 color: isActive ? 'var(--text-bright)' : 'var(--text-dim)',
                 borderBottom: isActive ? '1px solid transparent' : '1px solid var(--border)',
@@ -239,7 +238,7 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
       </div>
 
       {/* 3. View Window Content */}
-      <div style={styles.viewViewport} className="editor-viewport-container">
+      <div className="editor-viewport-container">
         {renderActiveView()}
       </div>
     </div>

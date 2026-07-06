@@ -49,7 +49,7 @@ export const ExperienceView: React.FC = () => {
               {/* Technologies used list */}
               <div style={styles.tagsContainer}>
                 {exp.tags.map((tag) => (
-                  <span key={tag} style={styles.tagBadge}>
+                  <span key={tag} style={styles.tagBadge} className="tag-badge-custom">
                     {tag}
                   </span>
                 ))}
@@ -147,7 +147,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: 'var(--text-bright)',
   },
   companyName: {
-    fontSize: '13.5px',
+    fontSize: '14px',
     color: 'var(--accent)',
     fontWeight: 600,
   },
@@ -162,9 +162,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: '1px solid var(--border)',
   },
   description: {
-    fontSize: '13.5px',
+    fontSize: '14px',
     lineHeight: '1.7',
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
     marginBottom: '20px',
   },
   tagsContainer: {

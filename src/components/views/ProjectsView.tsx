@@ -451,17 +451,19 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginTop: 0,
     display: 'flex',
     alignItems: 'center',
+    borderLeft: '3px solid var(--accent)',
+    paddingLeft: '6px',
   },
   detailText: {
-    fontSize: '13px',
+    fontSize: '14px',
     lineHeight: '1.6',
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
     margin: 0,
   },
   detailTextSmall: {
-    fontSize: '12.5px',
+    fontSize: '13.5px',
     lineHeight: '1.5',
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
     margin: '4px 0 0 0',
   },
   subDetailLabel: {
@@ -505,7 +507,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: 'bold',
   },
   metricTextVal: {
-    fontSize: '12.5px',
+    fontSize: '13.5px',
     color: 'var(--text-bright)',
   },
 };

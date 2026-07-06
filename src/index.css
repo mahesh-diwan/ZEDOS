@@ -297,12 +297,17 @@ body {
   font-family: var(--font-ui);
   background-color: var(--bg);
   color: var(--text);
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
   font-size: 13px;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+@media (min-width: 769px) {
+  body {
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
 }
 
 /* Theme Switching Smooth Transition */
@@ -367,17 +372,27 @@ button, input, textarea {
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
   width: 100vw;
   background-color: var(--bg);
-  overflow: hidden;
+}
+
+@media (min-width: 769px) {
+  .app-container {
+    height: 100vh;
+    overflow: hidden;
+  }
 }
 
 .main-layout {
   display: flex;
   flex: 1;
-  overflow: hidden;
   position: relative;
+}
+
+@media (min-width: 769px) {
+  .main-layout {
+    overflow: hidden;
+  }
 }
 
 .editor-terminal-container {
@@ -385,7 +400,12 @@ button, input, textarea {
   flex-direction: column;
   flex: 1;
   min-width: 0;
-  overflow: hidden;
+}
+
+@media (min-width: 769px) {
+  .editor-terminal-container {
+    overflow: hidden;
+  }
 }
 
 .no-select {
@@ -702,6 +722,62 @@ textarea:focus-visible {
 
 .blog-read-more:hover svg {
   transform: translateX(3px);
+}
+
+/* Editor Layout Classes */
+.editor-area-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  background-color: var(--bg);
+}
+
+@media (min-width: 769px) {
+  .editor-area-container {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+.editor-viewport-container {
+  flex: 1;
+  background-color: var(--bg);
+}
+
+@media (min-width: 769px) {
+  .editor-viewport-container {
+    overflow-y: auto;
+  }
+}
+
+.editor-tabbar {
+  height: 35px;
+  background-color: var(--bg-inactive-tab);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.editor-tab {
+  padding: 0 12px 0 16px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.1s, color 0.1s;
+  min-width: 100px;
+  max-width: 180px;
+  flex-shrink: 0;
+}
+
+/* Color Accent Contrast compliance overrides */
+.theme-nord .tag-badge-custom {
+  color: var(--accent) !important;
+  border-color: var(--accent-border) !important;
 }
 
 /* =========================================
@@ -1025,80 +1101,92 @@ textarea:focus-visible {
 /* Mobile Responsive Media Queries */
 @media (max-width: 768px) {
   html, body {
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    height: auto !important;
-    min-height: 100% !important;
-    position: relative !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto;
+    min-height: 100%;
+    position: relative;
   }
 
   .mobile-app-layout {
-    height: auto !important;
-    min-height: 100vh !important;
-    overflow: visible !important;
-    display: flex !important;
-    flex-direction: column !important;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
   }
 
-  .mobile-app-layout > header {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: 48px !important;
-    width: 100vw !important;
-    z-index: 100 !important;
+  .mobile-app-layout header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    width: 100vw;
+    z-index: 100;
+    background-color: var(--bg-titlebar);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
   }
 
-  .mobile-app-layout > nav {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: 56px !important;
-    width: 100vw !important;
-    z-index: 100 !important;
+  .mobile-app-layout nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    width: 100vw;
+    z-index: 100;
+    background-color: var(--bg-sidebar);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 4px;
   }
 
   .mobile-main-content {
-    display: block !important;
-    height: auto !important;
-    overflow: visible !important;
-    padding-top: 48px !important;
-    padding-bottom: 56px !important;
-    min-height: calc(100vh - 104px) !important;
-    box-sizing: border-box !important;
-    flex: none !important;
+    display: block;
+    height: auto;
+    overflow: visible;
+    padding-top: 48px;
+    padding-bottom: 56px;
+    min-height: calc(100vh - 104px);
+    box-sizing: border-box;
+    flex: none;
   }
 
   .editor-area-container,
   .editor-viewport-container {
-    height: auto !important;
-    overflow: visible !important;
-    display: block !important;
-    flex: none !important;
+    height: auto;
+    overflow: visible;
+    display: block;
+    flex: none;
   }
 
   /* TitleBar Optimization */
   .titlebar-search {
-    display: none !important;
+    display: none;
   }
   
   .titlebar-breadcrumbs {
-    font-size: 10px !important;
-    max-width: 110px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    font-size: 10px;
+    max-width: 110px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .titlebar-share-text,
   .titlebar-divider {
-    display: none !important;
+    display: none;
   }
   
   .titlebar-collab {
-    gap: 4px !important;
+    gap: 4px;
   }
 
   /* Keyframe slide animations for absolute overlays */
@@ -1131,66 +1219,66 @@ textarea:focus-visible {
 
   /* Main Drawers as absolute overlays */
   .project-sidebar {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    height: 100% !important;
-    width: 240px !important;
-    z-index: 100 !important;
-    box-shadow: 6px 0 20px rgba(0, 0, 0, 0.4) !important;
-    border-right: 1px solid var(--border) !important;
-    animation: slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 240px;
+    z-index: 100;
+    box-shadow: 6px 0 20px rgba(0, 0, 0, 0.4);
+    border-right: 1px solid var(--border);
+    animation: slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   
   .assistant-dock-panel {
-    position: absolute !important;
-    right: 0 !important;
-    top: 0 !important;
-    height: 100% !important;
-    width: 100% !important;
-    max-width: 320px !important;
-    z-index: 100 !important;
-    box-shadow: -6px 0 20px rgba(0, 0, 0, 0.4) !important;
-    border-left: 1px solid var(--border) !important;
-    animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    max-width: 320px;
+    z-index: 100;
+    box-shadow: -6px 0 20px rgba(0, 0, 0, 0.4);
+    border-left: 1px solid var(--border);
+    animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   
   .terminal-dock-panel {
-    position: absolute !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: 60% !important;
-    width: 100vw !important;
-    z-index: 100 !important;
-    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.5) !important;
-    border-top: 1px solid var(--border) !important;
-    animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    width: 100vw;
+    z-index: 100;
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.5);
+    border-top: 1px solid var(--border);
+    animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   /* Hide tabs and gutters on mobile to maximize viewport content area */
   .editor-tabbar {
-    display: none !important;
+    display: none;
   }
 
   .editor-pane-header {
-    display: none !important;
+    display: none;
   }
 
   /* Command Palette Modal adjustment */
   .cmd-palette-wrapper {
-    width: 90vw !important;
-    max-width: 350px !important;
-    top: 50px !important;
+    width: 90vw;
+    max-width: 350px;
+    top: 50px;
   }
 
   /* PDF Fallback */
   .pdf-iframe {
-    display: none !important;
+    display: none;
   }
   
   .pdf-mobile-fallback {
-    display: flex !important;
+    display: flex;
   }
 
   /* StatusBar Optimization */
@@ -1199,126 +1287,141 @@ textarea:focus-visible {
   .statusbar-item-encoding,
   .statusbar-item-lang,
   .statusbar-divider {
-    display: none !important;
+    display: none;
   }
 
   /* Typography / Content responsive adjustments */
   .view-container h1 {
-    font-size: 26px !important;
-    line-height: 1.2 !important;
+    font-size: 26px;
+    line-height: 1.2;
   }
   
   .view-container {
-    padding: 24px 16px !important;
-    height: auto !important;
-    min-height: 100% !important;
-    overflow: visible !important;
-    display: block !important;
+    padding: 24px 16px;
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+    display: block;
   }
 
   .projects-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
-    gap: 16px !important;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
   }
 
   .contact-layout-grid {
-    grid-template-columns: 1fr !important;
-    gap: 24px !important;
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 
   /* Mobile Touch Targets & Scrolling */
   .toolBtn, .shareBtn, .tabClose {
-    min-width: 44px !important;
-    min-height: 44px !important;
-    padding: 10px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .editor-tab {
-    padding: 0 8px 0 12px !important;
-    min-width: 110px !important;
-    height: 38px !important;
+    padding: 0 8px 0 12px;
+    min-width: 110px;
+    height: 38px;
   }
 
   pre, code {
-    white-space: pre-wrap !important;
-    word-break: break-all !important;
-    max-width: 100% !important;
-    overflow-x: auto !important;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-width: 100%;
+    overflow-x: auto;
   }
 
   /* Terminal Font Enhancements */
   .terminal-dock-panel span,
   .terminal-dock-panel div {
-    font-size: 13.5px !important;
+    font-size: 13.5px;
   }
 
   /* Prevent Safari input auto-zoom on mobile across all inputs */
   input, textarea, select, .terminal-dock-panel input {
-    font-size: 16px !important;
+    font-size: 16px;
   }
 
   .terminal-dock-panel input {
-    height: 36px !important;
+    height: 36px;
   }
 
   /* Safe Area layout support */
   .mobile-app-layout header {
-    padding-top: env(safe-area-inset-top, 0px) !important;
-    padding-left: calc(12px + env(safe-area-inset-left, 0px)) !important;
-    padding-right: calc(12px + env(safe-area-inset-right, 0px)) !important;
-    height: calc(48px + env(safe-area-inset-top, 0px)) !important;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: calc(12px + env(safe-area-inset-left, 0px));
+    padding-right: calc(12px + env(safe-area-inset-right, 0px));
+    height: calc(48px + env(safe-area-inset-top, 0px));
   }
 
   .mobile-app-layout nav {
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
-    padding-left: calc(4px + env(safe-area-inset-left, 0px)) !important;
-    padding-right: calc(4px + env(safe-area-inset-right, 0px)) !important;
-    height: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: calc(4px + env(safe-area-inset-left, 0px));
+    padding-right: calc(4px + env(safe-area-inset-right, 0px));
+    height: calc(56px + env(safe-area-inset-bottom, 0px));
   }
 
   .mobile-app-layout main {
-    padding-left: env(safe-area-inset-left, 0px) !important;
-    padding-right: env(safe-area-inset-right, 0px) !important;
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
   }
 
   /* Scrollable subtabs with edge fade mask */
   .about-subtabs {
-    overflow-x: auto !important;
-    white-space: nowrap !important;
-    display: flex !important;
-    -webkit-overflow-scrolling: touch !important;
-    mask-image: linear-gradient(to right, black 82%, transparent 100%) !important;
-    -webkit-mask-image: linear-gradient(to right, black 82%, transparent 100%) !important;
-    padding-right: 28px !important;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(to right, black 82%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 82%, transparent 100%);
+    padding-right: 28px;
   }
   
   .about-subtabs::-webkit-scrollbar {
-    display: none !important;
+    display: none;
   }
 
   /* Low Height Landscape Mode Optimization */
   @media (max-height: 480px) and (orientation: landscape) {
     .mobile-app-layout header {
-      height: 38px !important;
+      height: 38px;
     }
     .mobile-app-layout nav {
-      height: 44px !important;
+      height: 44px;
     }
     .mobile-app-layout header span,
     .mobile-app-layout header button,
     .mobile-app-layout header a {
-      transform: scale(0.85) !important;
+      transform: scale(0.85);
     }
     .mobile-app-layout nav span {
-      display: none !important;
+      display: none;
     }
     .mobile-app-layout nav button {
-      gap: 0 !important;
+      gap: 0;
     }
   }
+}
+
+/* Card hover accent highlights */
+.experience-card,
+.featuredProjectCard,
+.project-card-item {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.experience-card:hover,
+.featuredProjectCard:hover,
+.project-card-item:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--accent-dim);
 }
 
 /* 5. Global focus-visible outlines */

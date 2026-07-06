@@ -361,9 +361,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     transition: 'color 0.15s',
   },
   excerpt: {
-    fontSize: '13.5px',
+    fontSize: '14px',
     lineHeight: '1.65',
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
     marginBottom: '20px',
   },
   footerRow: {
@@ -390,7 +390,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'inline-flex',
     alignItems: 'center',
     textDecoration: 'none',
-    fontSize: '12px',
+    fontSize: '13.5px',
     fontWeight: 600,
     color: 'var(--accent)',
     gap: '4px',

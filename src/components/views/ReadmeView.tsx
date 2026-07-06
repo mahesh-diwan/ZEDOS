@@ -134,7 +134,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   mdText: {
     fontSize: '14.5px',
     lineHeight: '1.75',
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
   },
   stackGrid: {
     display: 'flex',
@@ -150,7 +150,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: 600,
   },
   stackValues: {
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
   },
   warningCard: {
     backgroundColor: 'rgba(244, 71, 71, 0.03)',
@@ -166,9 +166,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: '12px',
   },
   warningText: {
-    fontSize: '13px',
+    fontSize: '13.5px',
     lineHeight: '1.65',
-    color: 'var(--text)',
+    color: 'var(--text-bright)',
     marginBottom: '12px',
   },
   warningLink: {

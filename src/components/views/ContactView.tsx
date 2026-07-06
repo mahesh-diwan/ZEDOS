@@ -289,6 +289,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: 'var(--text-bright)',
     marginBottom: '20px',
     fontWeight: 700,
+    borderLeft: '3px solid var(--accent)',
+    paddingLeft: '8px',
   },
   form: {
     display: 'flex',
@@ -302,7 +304,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   label: {
     fontFamily: 'var(--font-mono)',
-    fontSize: '11px',
+    fontSize: '12px',
     color: 'var(--text-dim)',
   },
   input: {
@@ -328,7 +330,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   submitBtn: {
     fontFamily: 'var(--font-mono)',
-    fontSize: '12px',
+    fontSize: '13px',
     border: '1px solid',
     borderRadius: '4px',
     padding: '10px 16px',
@@ -340,7 +342,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   formFooter: {
     fontFamily: 'var(--font-mono)',
-    fontSize: '11px',
+    fontSize: '12px',
     color: 'var(--syntax-comment)',
     marginTop: '16px',
     textAlign: 'center',
@@ -380,12 +382,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     overflow: 'hidden',
   },
   socialName: {
-    fontSize: '11.5px',
+    fontSize: '13px',
     color: 'var(--text-bright)',
     fontWeight: 600,
   },
   socialValue: {
-    fontSize: '11px',
+    fontSize: '12px',
     color: 'var(--text-dim)',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
