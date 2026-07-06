@@ -116,7 +116,7 @@ export const BlogView: React.FC = () => {
                 style={{
                   ...styles.tagFilterBtn,
                   backgroundColor: isSelected ? 'var(--accent)' : 'var(--bg-terminal)',
-                  color: isSelected ? '#ffffff' : 'var(--text-dim)',
+                  color: isSelected ? 'var(--btn-text)' : 'var(--text-dim)',
                   borderColor: isSelected ? 'var(--accent)' : 'var(--border)',
                 }}
                 onClick={() => setSelectedTag(isSelected ? null : tag)}
@@ -407,7 +407,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   resetSearchBtn: {
     backgroundColor: 'var(--accent)',
-    color: '#ffffff',
+    color: 'var(--btn-text)',
     border: 'none',
     borderRadius: '6px',
     padding: '8px 16px',

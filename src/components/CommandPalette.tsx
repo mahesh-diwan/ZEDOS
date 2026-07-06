@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Monitor, Terminal, ShieldAlert, MessageSquare } from 'lucide-react';
+import { Search, File, Monitor, Terminal, Sparkles, AlertTriangle } from 'lucide-react';
 import type { ThemeId } from '../hooks/useTheme';
 
 interface CommandPaletteProps {
@@ -15,9 +15,30 @@ interface CommandItem {
   id: string;
   category: 'file' | 'theme' | 'action';
   label: string;
+  description?: string;
   action: () => void;
   shortcut?: string;
+  accentColor?: string; // for theme previews
 }
+
+interface ThemePreview {
+  id: ThemeId;
+  name: string;
+  accent: string;
+  bg: string;
+}
+
+const THEME_PREVIEWS: ThemePreview[] = [
+  { id: 'tokyo-night',  name: 'Tokyo Night',        accent: '#bb9af3', bg: '#1a1b26' },
+  { id: 'catppuccin',   name: 'Catppuccin Macchiato', accent: '#c6a0f6', bg: '#24273a' },
+  { id: 'dracula',      name: 'Dracula',             accent: '#bd93f9', bg: '#282a36' },
+  { id: 'nord',         name: 'Nord Frost',          accent: '#88c0d0', bg: '#2e3440' },
+  { id: 'rose-pine',    name: 'Rosé Pine',           accent: '#ebbcba', bg: '#191724' },
+  { id: 'zed-dark',     name: 'Zed Dark',            accent: '#a78bfa', bg: '#18191b' },
+  { id: 'zed-light',    name: 'Zed Light',           accent: '#8839ef', bg: '#eff1f5' },
+  { id: 'one-dark',     name: 'One Dark',            accent: '#c678dd', bg: '#282c34' },
+  { id: 'gruvbox-dark', name: 'Gruvbox Dark',        accent: '#fe8019', bg: '#282828' },
+];
 
 export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onClose,
@@ -31,34 +52,33 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const selectedRef = useRef<HTMLDivElement>(null);
 
   const commandItems: CommandItem[] = [
     // Navigate to files
-    { id: 'f-readme',   category: 'file', label: 'open: README.md',                 action: () => onOpenFile('README.md') },
-    { id: 'f-about',    category: 'file', label: 'open: ABOUT.md',                  action: () => onOpenFile('ABOUT.md') },
-    { id: 'f-projects', category: 'file', label: 'open: PROJECTS.md',               action: () => onOpenFile('PROJECTS.md') },
-    { id: 'f-blogs',    category: 'file', label: 'open: BLOGS.md',                  action: () => onOpenFile('BLOGS.md') },
-    { id: 'f-contact',  category: 'file', label: 'open: CONTACT.md',                action: () => onOpenFile('CONTACT.md') },
-    { id: 'f-resume',   category: 'file', label: 'open: Mahesh_Diwan_Resume.pdf',   action: () => onOpenFile('RESUME.pdf') },
+    { id: 'f-readme',   category: 'file',   label: 'README.md',                     description: 'Home · Portfolio overview',          action: () => onOpenFile('README.md') },
+    { id: 'f-about',    category: 'file',   label: 'ABOUT.md',                      description: 'Bio · Skills · Experience',           action: () => onOpenFile('ABOUT.md') },
+    { id: 'f-projects', category: 'file',   label: 'PROJECTS.md',                   description: 'DevOps & Cloud projects',             action: () => onOpenFile('PROJECTS.md') },
+    { id: 'f-blogs',    category: 'file',   label: 'BLOGS.md',                      description: 'Articles & writing',                  action: () => onOpenFile('BLOGS.md') },
+    { id: 'f-contact',  category: 'file',   label: 'CONTACT.md',                    description: 'Get in touch',                        action: () => onOpenFile('CONTACT.md') },
+    { id: 'f-resume',   category: 'file',   label: 'Mahesh_Diwan_Resume.pdf',       description: 'Download resume',                     action: () => onOpenFile('RESUME.pdf') },
 
-    // Toggle panels
-    { id: 'a-term', category: 'action', label: 'terminal: Toggle Terminal Panel',       action: onToggleTerminal,  shortcut: 'Ctrl+`' },
-    { id: 'a-asst', category: 'action', label: 'assistant: Toggle AI Assistant Panel', action: onToggleAssistant, shortcut: 'Ctrl+Shift+C' },
+    // Actions
+    { id: 'a-term', category: 'action', label: 'Toggle Terminal',     description: 'Open/close terminal panel',  action: onToggleTerminal,  shortcut: 'Ctrl+`' },
+    { id: 'a-asst', category: 'action', label: 'Toggle AI Assistant', description: 'Open/close assistant dock', action: onToggleAssistant, shortcut: 'Ctrl+⇧C' },
 
-    // Themes
-    { id: 't-tokyo-night',  category: 'theme', label: 'theme: Tokyo Night (Default)',    action: () => onSelectTheme('tokyo-night') },
-    { id: 't-catppuccin',   category: 'theme', label: 'theme: Catppuccin Macchiato',     action: () => onSelectTheme('catppuccin') },
-    { id: 't-dracula',      category: 'theme', label: 'theme: Dracula',                  action: () => onSelectTheme('dracula') },
-    { id: 't-nord',         category: 'theme', label: 'theme: Nord Frost',               action: () => onSelectTheme('nord') },
-    { id: 't-rose-pine',    category: 'theme', label: 'theme: Rosé Pine',                action: () => onSelectTheme('rose-pine') },
-    { id: 't-zed-dark',     category: 'theme', label: 'theme: Zed Dark',                 action: () => onSelectTheme('zed-dark') },
-    { id: 't-zed-light',    category: 'theme', label: 'theme: Zed Light',                action: () => onSelectTheme('zed-light') },
-    { id: 't-one-dark',     category: 'theme', label: 'theme: One Dark',                 action: () => onSelectTheme('one-dark') },
-    { id: 't-gruvbox-dark', category: 'theme', label: 'theme: Gruvbox Dark',             action: () => onSelectTheme('gruvbox-dark') },
+    // Themes — matched via accentColor
+    ...THEME_PREVIEWS.map(t => ({
+      id: `t-${t.id}`,
+      category: 'theme' as const,
+      label: t.name,
+      description: 'Switch theme',
+      action: () => onSelectTheme(t.id),
+      accentColor: t.accent,
+    })),
   ];
 
   useEffect(() => {
-    // Focus without triggering visible ring — handled by .cmd-palette-input CSS override
     inputRef.current?.focus();
 
     const handleOutsideClick = (e: MouseEvent) => {
@@ -79,110 +99,220 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     };
   }, [onClose]);
 
-  const filteredItems = commandItems.filter((item) =>
-    item.label.toLowerCase().includes(query.toLowerCase())
-  );
+  const filteredItems = commandItems.filter((item) => {
+    const q = query.toLowerCase().trim();
+    if (!q) return true;
+    // Shorthand prefix filters
+    if (q.startsWith('theme:') || q.startsWith('theme ')) {
+      const sub = q.replace(/^theme[\s:]+/, '');
+      return item.category === 'theme' && item.label.toLowerCase().includes(sub);
+    }
+    if (q.startsWith('open:') || q.startsWith('open ')) {
+      const sub = q.replace(/^open[\s:]+/, '');
+      return item.category === 'file' && item.label.toLowerCase().includes(sub);
+    }
+    return (
+      item.label.toLowerCase().includes(q) ||
+      (item.description?.toLowerCase().includes(q) ?? false)
+    );
+  });
+
+  // Group results by category
+  const grouped: { [cat: string]: CommandItem[] } = {};
+  filteredItems.forEach(item => {
+    const cat = item.category;
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(item);
+  });
+
+  // Flatten for keyboard navigation
+  const flatItems: CommandItem[] = [
+    ...(grouped['file'] || []),
+    ...(grouped['action'] || []),
+    ...(grouped['theme'] || []),
+  ];
 
   useEffect(() => {
     setSelectedIndex(0);
   }, [query]);
 
+  useEffect(() => {
+    selectedRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [selectedIndex]);
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setSelectedIndex((prev) => (filteredItems.length ? (prev + 1) % filteredItems.length : 0));
+      setSelectedIndex((prev) => (flatItems.length ? (prev + 1) % flatItems.length : 0));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setSelectedIndex((prev) => (filteredItems.length ? (prev - 1 + filteredItems.length) % filteredItems.length : 0));
+      setSelectedIndex((prev) => (flatItems.length ? (prev - 1 + flatItems.length) % flatItems.length : 0));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (filteredItems[selectedIndex]) {
-        filteredItems[selectedIndex].action();
+      if (flatItems[selectedIndex]) {
+        flatItems[selectedIndex].action();
         onClose();
       }
     }
   };
 
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'file':   return <Search      size={13} style={{ color: 'var(--text-dim)' }} />;
-      case 'theme':  return <Monitor     size={13} style={{ color: 'var(--accent)' }} />;
-      case 'action': return <Terminal    size={13} style={{ color: 'var(--success)' }} />;
-      default:       return <Search      size={13} />;
-    }
+  const getCategoryLabel = (cat: string) => {
+    if (cat === 'file') return 'Navigate';
+    if (cat === 'action') return 'Actions';
+    if (cat === 'theme') return 'Themes';
+    return cat;
+  };
+
+  const getCategoryIcon = (cat: string) => {
+    if (cat === 'file')   return <File      size={12} style={{ color: 'var(--text-muted)' }} />;
+    if (cat === 'action') return <Terminal  size={12} style={{ color: 'var(--success)' }} />;
+    if (cat === 'theme')  return <Monitor   size={12} style={{ color: 'var(--accent)' }} />;
+    return null;
+  };
+
+  const renderGroup = (cat: string, items: CommandItem[]) => {
+    const categoryStart = cat === 'file' ? 0 :
+      cat === 'action' ? (grouped['file']?.length || 0) :
+      (grouped['file']?.length || 0) + (grouped['action']?.length || 0);
+
+    return (
+      <div key={cat}>
+        {/* Section header */}
+        <div style={paletteStyles.sectionHeader}>
+          {getCategoryIcon(cat)}
+          <span style={paletteStyles.sectionLabel}>{getCategoryLabel(cat)}</span>
+        </div>
+
+        {items.map((item, localIdx) => {
+          const globalIdx = categoryStart + localIdx;
+          const isSelected = globalIdx === selectedIndex;
+          return (
+            <div
+              key={item.id}
+              ref={isSelected ? selectedRef : undefined}
+              style={{
+                ...paletteStyles.listItem,
+                backgroundColor: isSelected ? 'var(--surface-hover)' : 'transparent',
+                borderLeft: isSelected
+                  ? '2px solid var(--accent)'
+                  : '2px solid transparent',
+              }}
+              onClick={() => { item.action(); onClose(); }}
+              onMouseEnter={() => setSelectedIndex(globalIdx)}
+            >
+              <div style={paletteStyles.itemLeft}>
+                {/* Theme preview swatch */}
+                {item.accentColor && (
+                  <span style={{
+                    ...paletteStyles.themeSwatch,
+                    backgroundColor: item.accentColor,
+                    boxShadow: isSelected ? `0 0 6px ${item.accentColor}` : 'none',
+                  }} />
+                )}
+                <div>
+                  <div style={{
+                    ...paletteStyles.itemLabel,
+                    color: isSelected ? 'var(--text-bright)' : 'var(--text)',
+                  }}>
+                    {item.label}
+                  </div>
+                  {item.description && (
+                    <div style={paletteStyles.itemDescription}>
+                      {item.description}
+                    </div>
+                  )}
+                </div>
+              </div>
+              {item.shortcut && (
+                <kbd style={paletteStyles.itemShortcut}>{item.shortcut}</kbd>
+              )}
+              {!item.shortcut && isSelected && (
+                <span style={paletteStyles.returnHint}>↵</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   return (
-    <div style={styles.overlay} className="no-select">
+    <div style={paletteStyles.overlay} className="no-select">
       <div
         ref={modalRef}
-        style={styles.palette}
+        style={paletteStyles.palette}
         onKeyDown={handleKeyDown}
         className="reveal glass-card cmd-palette-wrapper"
       >
         {/* Search input */}
-        <div style={styles.inputWrapper}>
-          <Search size={15} style={{ color: 'var(--text-dim)', flexShrink: 0 }} />
+        <div style={paletteStyles.inputWrapper}>
+          <Search size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type a command, file name, or theme..."
-            style={styles.input}
+            placeholder="Type a command, file, or theme…"
+            style={paletteStyles.input}
             className="cmd-palette-input"
           />
+          {query && (
+            <button
+              onClick={() => setQuery('')}
+              style={paletteStyles.clearBtn}
+              tabIndex={-1}
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
+        {/* Hint pills */}
+        <div style={paletteStyles.hintBar}>
+          {[
+            { label: 'theme:', prefix: 'theme: ' },
+            { label: 'open:', prefix: 'open: ' },
+          ].map(h => (
+            <button
+              key={h.label}
+              style={paletteStyles.hintPill}
+              onClick={() => { setQuery(h.prefix); inputRef.current?.focus(); }}
+            >
+              {h.label}
+            </button>
+          ))}
         </div>
 
         {/* Results list */}
-        <div style={styles.list}>
-          {filteredItems.length > 0 ? (
-            filteredItems.map((item, idx) => {
-              const isSelected = idx === selectedIndex;
-              return (
-                <div
-                  key={item.id}
-                  style={{
-                    ...styles.listItem,
-                    backgroundColor: isSelected ? 'var(--bg-hover)' : 'transparent',
-                    borderLeft: isSelected ? '2px solid var(--accent)' : '2px solid transparent',
-                  }}
-                  onClick={() => { item.action(); onClose(); }}
-                  onMouseEnter={() => setSelectedIndex(idx)}
-                >
-                  <div style={styles.itemLeft}>
-                    {getCategoryIcon(item.category)}
-                    <span style={{
-                      ...styles.itemLabel,
-                      color: isSelected ? 'var(--text-bright)' : 'var(--text)',
-                    }}>
-                      {item.label}
-                    </span>
-                  </div>
-                  {item.shortcut && (
-                    <span style={styles.itemShortcut}>{item.shortcut}</span>
-                  )}
-                </div>
-              );
-            })
+        <div style={paletteStyles.list}>
+          {flatItems.length > 0 ? (
+            <div>
+              {(['file', 'action', 'theme'] as const).map(cat =>
+                grouped[cat]?.length ? renderGroup(cat, grouped[cat]) : null
+              )}
+            </div>
           ) : (
-            <div style={styles.noResults}>
-              <ShieldAlert size={14} style={{ marginRight: '6px', color: 'var(--error)' }} />
-              <span>No matching commands found.</span>
+            <div style={paletteStyles.noResults}>
+              <AlertTriangle size={16} style={{ color: 'var(--error)', marginRight: '8px' }} />
+              <span>No commands match "{query}"</span>
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div style={styles.footer}>
-          <span>↑↓ navigate · ↵ select · esc close</span>
+        <div style={paletteStyles.footer}>
+          <span style={paletteStyles.footerHint}>↑↓ navigate</span>
+          <span style={paletteStyles.footerSep}>·</span>
+          <span style={paletteStyles.footerHint}>↵ select</span>
+          <span style={paletteStyles.footerSep}>·</span>
+          <span style={paletteStyles.footerHint}>esc close</span>
         </div>
       </div>
     </div>
   );
 };
 
-const styles: { [key: string]: React.CSSProperties } = {
+const paletteStyles: { [key: string]: React.CSSProperties } = {
   overlay: {
     position: 'fixed',
     top: 0,
@@ -195,13 +325,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     justifyContent: 'center',
     paddingTop: '80px',
-    zIndex: 200,
+    zIndex: 300,
   },
   palette: {
-    /* glass-card class handles glass bg/border/shadow */
-    borderRadius: '10px',
-    width: '520px',
-    maxHeight: '360px',
+    borderRadius: '12px',
+    width: '540px',
+    maxHeight: '440px',
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
@@ -213,7 +342,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     gap: '10px',
     padding: '14px 16px',
     borderBottom: '1px solid var(--glass-border)',
-    backgroundColor: 'rgba(0,0,0,0.1)',
+    background: 'var(--glass-bg)',
+    flexShrink: 0,
   },
   input: {
     flex: 1,
@@ -221,13 +351,58 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: 'none',
     outline: 'none',
     color: 'var(--text-bright)',
-    fontSize: '13px',
+    fontSize: '14px',
     fontFamily: 'var(--font-ui)',
+    caretColor: 'var(--accent)',
+  },
+  clearBtn: {
+    background: 'transparent',
+    border: 'none',
+    color: 'var(--text-muted)',
+    cursor: 'pointer',
+    fontSize: '12px',
+    padding: '2px 4px',
+    borderRadius: '4px',
+    flexShrink: 0,
+    lineHeight: 1,
+  },
+  hintBar: {
+    display: 'flex',
+    gap: '6px',
+    padding: '8px 16px',
+    borderBottom: '1px solid var(--glass-border)',
+    flexShrink: 0,
+    background: 'var(--glass-bg)',
+  },
+  hintPill: {
+    background: 'var(--accent-tint)',
+    border: '1px solid var(--accent-border)',
+    color: 'var(--accent)',
+    borderRadius: '5px',
+    padding: '2px 8px',
+    fontSize: '11px',
+    fontFamily: 'var(--font-mono)',
+    cursor: 'pointer',
+    transition: 'background 0.15s, box-shadow 0.15s',
   },
   list: {
     flex: 1,
     overflowY: 'auto',
-    padding: '6px 0',
+    padding: '4px 0',
+  },
+  sectionHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '8px 16px 4px',
+    marginTop: '4px',
+  },
+  sectionLabel: {
+    fontSize: '10px',
+    fontWeight: 700,
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em',
   },
   listItem: {
     display: 'flex',
@@ -235,42 +410,79 @@ const styles: { [key: string]: React.CSSProperties } = {
     justifyContent: 'space-between',
     padding: '9px 16px',
     cursor: 'pointer',
-    fontSize: '12.5px',
     transition: 'background-color 0.1s',
+    gap: '8px',
   },
   itemLeft: {
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
+    flex: 1,
+    minWidth: 0,
+  },
+  themeSwatch: {
+    width: '10px',
+    height: '10px',
+    borderRadius: '50%',
+    flexShrink: 0,
+    transition: 'box-shadow 0.15s',
   },
   itemLabel: {
+    fontSize: '13px',
+    fontFamily: 'var(--font-ui)',
+    fontWeight: 500,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  itemDescription: {
+    fontSize: '11px',
+    color: 'var(--text-muted)',
+    marginTop: '1px',
     fontFamily: 'var(--font-mono)',
-    fontSize: '12px',
   },
   itemShortcut: {
     fontSize: '10px',
-    color: 'var(--text-dim)',
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    color: 'var(--text-muted)',
+    backgroundColor: 'var(--glass-bg)',
     padding: '2px 6px',
     borderRadius: '4px',
     border: '1px solid var(--glass-border)',
+    fontFamily: 'var(--font-mono)',
+    whiteSpace: 'nowrap',
+    flexShrink: 0,
+  },
+  returnHint: {
+    fontSize: '11px',
+    color: 'var(--accent)',
+    flexShrink: 0,
+    opacity: 0.7,
   },
   noResults: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '28px',
-    color: 'var(--text-dim)',
-    fontSize: '12.5px',
+    padding: '32px 28px',
+    color: 'var(--text-muted)',
+    fontSize: '13px',
   },
   footer: {
     padding: '8px 16px',
     borderTop: '1px solid var(--glass-border)',
-    backgroundColor: 'rgba(0,0,0,0.15)',
-    color: 'var(--text-dim)',
-    fontSize: '10px',
-    textAlign: 'center',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
+    background: 'var(--glass-bg)',
+    color: 'var(--text-muted)',
+    fontSize: '11px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '6px',
+    flexShrink: 0,
+  },
+  footerHint: {
+    color: 'var(--text-muted)',
+    fontFamily: 'var(--font-mono)',
+  },
+  footerSep: {
+    color: 'var(--border)',
   },
 };

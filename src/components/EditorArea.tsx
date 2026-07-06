@@ -362,12 +362,12 @@ const styles: { [key: string]: React.CSSProperties } = {
   pdfDownloadBtn: {
     textDecoration: 'none',
     backgroundColor: 'var(--accent)',
-    color: '#ffffff',
+    color: 'var(--btn-text)',
     padding: '6px 12px',
     borderRadius: '4px',
     fontWeight: 600,
     fontSize: '11px',
-    boxShadow: '0 2px 8px rgba(167, 139, 250, 0.2)',
+    boxShadow: '0 2px 8px var(--accent-dim)',
     transition: 'opacity 0.2s',
   },
   pdfFrameContainer: {
@@ -389,7 +389,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   mobileDownloadBtn: {
     textDecoration: 'none',
     backgroundColor: 'var(--accent)',
-    color: '#ffffff',
+    color: 'var(--btn-text)',
     padding: '12px 24px',
     borderRadius: '6px',
     fontWeight: 600,

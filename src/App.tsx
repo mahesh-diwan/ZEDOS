@@ -397,7 +397,6 @@ export const App: React.FC = () => {
   );
 };
 
-/* ─── MOBILE STYLES ──────────────────────────────────── */
 const mobileStyles: { [key: string]: React.CSSProperties } = {
   brandChip: {
     display: 'inline-flex',
@@ -414,7 +413,7 @@ const mobileStyles: { [key: string]: React.CSSProperties } = {
     borderRadius: '50%',
     backgroundColor: 'var(--accent)',
     display: 'inline-block',
-    animation: 'pulseGreen 2s infinite ease-in-out',
+    animation: 'pulseSuccess 2s infinite ease-in-out',
   },
   brandTitle: {
     fontSize: '13px',
@@ -427,10 +426,12 @@ const mobileStyles: { [key: string]: React.CSSProperties } = {
     backdropFilter: 'blur(12px)',
     WebkitBackdropFilter: 'blur(12px)',
     border: '1px solid var(--glass-border)',
-    color: 'var(--text-dim)',
+    color: 'var(--text-muted)',
     borderRadius: '6px',
-    width: '34px',
-    height: '34px',
+    width: '36px',
+    height: '36px',
+    minWidth: '44px',
+    minHeight: '44px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -448,13 +449,15 @@ const mobileStyles: { [key: string]: React.CSSProperties } = {
     gap: '3px',
     flex: 1,
     height: '100%',
+    minHeight: '44px',
     cursor: 'pointer',
-    padding: 0,
+    padding: '4px 0',
     transition: 'color 0.15s',
   },
   navLabel: {
-    fontSize: '10px',
+    fontSize: '11px',
     letterSpacing: '0.01em',
+    fontWeight: 500,
   },
   overlayBackdrop: {
     position: 'fixed',

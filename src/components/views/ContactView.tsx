@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { portfolioConfig } from '../../portfolioConfig';
 import { Mail, BookOpen, Award, Send } from 'lucide-react';
 

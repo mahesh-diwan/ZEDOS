@@ -55,7 +55,7 @@ const renderMessageContent = (content: string, isUser: boolean) => {
     if (isBullet) {
       return (
         <div key={idx} style={{ display: 'flex', gap: '6px', margin: '3px 0', paddingLeft: '4px' }}>
-          <span style={{ color: isUser ? 'rgba(255,255,255,0.7)' : 'var(--accent)', fontSize: '10px', marginTop: '4px', flexShrink: 0 }}>•</span>
+          <span style={{ color: isUser ? 'var(--btn-text)' : 'var(--accent)', fontSize: '10px', marginTop: '4px', flexShrink: 0, opacity: isUser ? 0.75 : 1 }}>•</span>
           <span style={{ flex: 1 }}>{result}</span>
         </div>
       );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { portfolioConfig } from '../../portfolioConfig';
 import { ExternalLink, ChevronDown, ChevronUp, Cpu, Server, BarChart3, AlertCircle } from 'lucide-react';
 

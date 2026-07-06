@@ -38,9 +38,9 @@ export const TitleBar: React.FC<TitleBarProps> = ({
     >
       {/* 1. Window Controls (macOS dots) */}
       <div style={styles.windowControls}>
-        <div style={{ ...styles.dot, backgroundColor: '#ff5f56' }} />
-        <div style={{ ...styles.dot, backgroundColor: '#ffbd2e' }} />
-        <div style={{ ...styles.dot, backgroundColor: '#27c93f' }} />
+        <div style={{ ...styles.dot, backgroundColor: 'var(--dot-red)' }} />
+        <div style={{ ...styles.dot, backgroundColor: 'var(--dot-yellow)' }} />
+        <div style={{ ...styles.dot, backgroundColor: 'var(--dot-green)' }} />
       </div>
 
       {/* 2. Left Breadcrumbs */}
@@ -79,11 +79,11 @@ export const TitleBar: React.FC<TitleBarProps> = ({
         {/* Collaboration Area */}
         <div style={styles.collabGroup} className="titlebar-collab">
           <div style={styles.avatarWrapper} title="Mahesh Diwan (Online - Host)">
-            <div style={{ ...styles.avatar, backgroundColor: '#c678dd' }}>MD</div>
+            <div style={{ ...styles.avatar, backgroundColor: 'var(--accent)' }}>MD</div>
             <div style={styles.statusIndicator} />
           </div>
           <div style={styles.avatarWrapper} title="You (Guest)">
-            <div style={{ ...styles.avatar, backgroundColor: '#61afef' }}>G</div>
+            <div style={{ ...styles.avatar, backgroundColor: 'var(--blue)' }}>G</div>
           </div>
           <button
             style={{ ...styles.shareBtn, color: copiedShare ? 'var(--success)' : 'var(--text)' }}
@@ -234,7 +234,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     justifyContent: 'center',
     fontSize: '8px',
     fontWeight: 700,
-    color: '#ffffff',
+    color: 'var(--btn-text)',
     border: '1px solid rgba(255,255,255,0.15)',
   },
   statusIndicator: {
@@ -244,7 +244,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     width: '6px',
     height: '6px',
     borderRadius: '50%',
-    backgroundColor: '#27c93f',
+    backgroundColor: 'var(--dot-green)',
     border: '1.5px solid var(--bg-titlebar)',
   },
   shareBtn: {
