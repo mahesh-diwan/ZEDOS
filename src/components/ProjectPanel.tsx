@@ -94,55 +94,62 @@ export const ProjectPanel: React.FC<ProjectPanelProps> = ({
           <span style={styles.folderName}>mahesh-portfolio</span>
         </div>
 
-        {/* File items list */}
-        {isExpanded && (
-          <div style={styles.fileList}>
-            {files.map((file) => {
-              const isActive = activeFile === file.name;
-              const isOpen = openFiles.includes(file.name);
-              
-              return (
-                <div
-                  key={file.name}
+        {/* File items list with smooth collapse/expand transition */}
+        <div 
+          style={{
+            ...styles.fileList,
+            maxHeight: isExpanded ? '300px' : '0px',
+            opacity: isExpanded ? 1 : 0,
+            overflow: 'hidden',
+            transition: 'max-height 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease',
+          }}
+          className="file-tree-list"
+        >
+          {files.map((file) => {
+            const isActive = activeFile === file.name;
+            const isOpen = openFiles.includes(file.name);
+            
+            return (
+              <div
+                key={file.name}
+                style={{
+                  ...styles.fileRow,
+                  backgroundColor: isActive ? 'var(--bg-hover)' : 'transparent',
+                  borderLeft: isActive ? '2px solid var(--accent)' : '2px solid transparent',
+                }}
+                onClick={() => onFileSelect(file.name)}
+                className="file-tree-row"
+              >
+                <div style={styles.indent} />
+                {getFileIcon(file.type, file.color)}
+                <span 
                   style={{
-                    ...styles.fileRow,
-                    backgroundColor: isActive ? 'var(--bg-hover)' : 'transparent',
-                    borderLeft: isActive ? '2px solid var(--accent)' : '2px solid transparent',
+                    ...styles.fileName,
+                    color: isActive ? 'var(--text-bright)' : isOpen ? 'var(--text)' : 'var(--text-dim)',
+                    fontWeight: isActive ? 500 : 400,
+                    flexGrow: 1,
                   }}
-                  onClick={() => onFileSelect(file.name)}
-                  className="file-tree-row"
                 >
-                  <div style={styles.indent} />
-                  {getFileIcon(file.type, file.color)}
+                  {file.name}
+                </span>
+                {file.gitStatus && (
                   <span 
                     style={{
-                      ...styles.fileName,
-                      color: isActive ? 'var(--text-bright)' : isOpen ? 'var(--text)' : 'var(--text-dim)',
-                      fontWeight: isActive ? 500 : 400,
-                      flexGrow: 1,
+                      fontSize: '9px',
+                      fontWeight: 700,
+                      color: file.gitStatus === 'M' ? '#d19a66' : file.gitStatus === 'A' ? '#98c379' : '#56b6c2',
+                      paddingRight: '6px',
+                      fontFamily: 'var(--font-mono)',
                     }}
+                    title={file.gitStatus === 'M' ? 'Modified' : file.gitStatus === 'A' ? 'Added' : 'Untracked'}
                   >
-                    {file.name}
+                    {file.gitStatus}
                   </span>
-                  {file.gitStatus && (
-                    <span 
-                      style={{
-                        fontSize: '9px',
-                        fontWeight: 700,
-                        color: file.gitStatus === 'M' ? '#d19a66' : file.gitStatus === 'A' ? '#98c379' : '#56b6c2',
-                        paddingRight: '6px',
-                        fontFamily: 'var(--font-mono)',
-                      }}
-                      title={file.gitStatus === 'M' ? 'Modified' : file.gitStatus === 'A' ? 'Added' : 'Untracked'}
-                    >
-                      {file.gitStatus}
-                    </span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Sidebar Footer / Settings Gear */}

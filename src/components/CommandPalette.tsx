@@ -79,6 +79,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        inputRef.current?.focus();
       }
     };
 
