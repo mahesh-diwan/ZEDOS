@@ -19,7 +19,7 @@ interface Toast {
 }
 
 export const App: React.FC = () => {
-  const { setThemeId, themes } = useTheme();
+  const { themeId, setThemeId, themes } = useTheme();
   const { setFontId, fonts } = useFont();
 
   // Layout States
@@ -38,6 +38,10 @@ export const App: React.FC = () => {
   const [openFiles, setOpenFiles] = useState<string[]>([
     'README.md',
     'ABOUT.md',
+    'PROJECTS.md',
+    'BLOGS.md',
+    'RESUME.pdf',
+    'CONTACT.md',
   ]);
   const [activeFile, setActiveFile] = useState<string>('README.md');
 
@@ -184,7 +188,7 @@ export const App: React.FC = () => {
   if (isMobile) {
     return (
       <div 
-        className="app-container mobile-app-layout"
+        className={`app-container mobile-app-layout theme-${themeId}`}
         style={{ 
           cursor: 'auto',
           display: 'flex',
@@ -334,7 +338,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="app-container">
+    <div className={`app-container theme-${themeId}`}>
       {/* 1. Title bar */}
       <TitleBar
         activeFile={activeFile}
