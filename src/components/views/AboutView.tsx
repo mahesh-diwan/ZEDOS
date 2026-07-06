@@ -49,204 +49,351 @@ const SkillBar: React.FC<SkillBarProps> = ({ name, pct, color }) => {
 
 export const AboutView: React.FC = () => {
   const [activeSubTab, setActiveSubTab] = useState<'bio' | 'skills' | 'experience'>('bio');
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+  const [activeSection, setActiveSection] = useState<'bio' | 'skills' | 'experience'>('bio');
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Intersection Observer for scroll tracking on mobile
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const sections = ['sec-bio', 'sec-skills', 'sec-experience'];
+    const observerOptions = {
+      root: null,
+      rootMargin: '-80px 0px -50% 0px',
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          if (id === 'sec-bio') setActiveSection('bio');
+          if (id === 'sec-skills') setActiveSection('skills');
+          if (id === 'sec-experience') setActiveSection('experience');
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) observer.unobserve(el);
+      });
+    };
+  }, [isMobile]);
+
+  const handleScrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      // Offset for header (48px) + sticky mini-nav (approx 44px) + margin
+      const offset = 100;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+
+      if (id === 'sec-bio') setActiveSection('bio');
+      if (id === 'sec-skills') setActiveSection('skills');
+      if (id === 'sec-experience') setActiveSection('experience');
+    }
+  };
+
+  const renderBio = () => (
+    <div style={styles.bioContainer}>
+      <div style={styles.bioBlock}>
+        <h2 style={styles.sectionHeading}>
+          <Compass size={15} style={styles.sectionIcon} />
+          Biography
+        </h2>
+        <p style={styles.paragraph}>{portfolioConfig.bioLong}</p>
+      </div>
+
+      <div style={styles.qaGrid}>
+        <div style={styles.qaCard} className="glass-card">
+          <h3 style={styles.qaQuestion}>Why DevOps?</h3>
+          <p style={styles.qaAnswer}>
+            I am fascinated by automation. Speeding up build distributions, orchestrating containers, 
+            and seeing services scale dynamically under load is incredibly satisfying. DevOps represents the 
+            feedback loop that ensures production environment reliability and developer happiness.
+          </p>
+        </div>
+
+        <div style={styles.qaCard} className="glass-card">
+          <h3 style={styles.qaQuestion}>Current Focus</h3>
+          <p style={styles.qaAnswer}>
+            Currently mastering Kubernetes configurations, writing robust GitOps pipelines with ArgoCD, 
+            and exploring cloud cost efficiency benchmarks on AWS container clusters.
+          </p>
+        </div>
+      </div>
+
+      <hr style={styles.divider} />
+
+      <div style={styles.bioBlock}>
+        <h2 style={styles.sectionHeading}>
+          <GraduationCap size={16} style={styles.sectionIcon} />
+          Education
+        </h2>
+        <div style={styles.timeline}>
+          {portfolioConfig.education.map((edu) => (
+            <div key={edu.id} style={styles.eduCard} className="edu-card-custom">
+              <div style={styles.eduHeader}>
+                <h3 style={styles.eduInstitution}>{edu.institution}</h3>
+                <span style={styles.eduPeriod}>
+                  <Calendar size={11} style={{ marginRight: '4px' }} />
+                  {edu.period}
+                </span>
+              </div>
+              <p style={styles.eduDegree}>{edu.degree}</p>
+              {edu.minor && <p style={styles.eduMinor}>{edu.minor}</p>}
+              {edu.gpa && <p style={styles.eduGpa}>{edu.gpa}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderSkills = () => (
+    <div style={styles.skillsContainer}>
+      {/* DevOps Evidence Section */}
+      <div style={styles.evidenceSection}>
+        <h2 style={styles.sectionHeading}>
+          <ShieldCheck size={16} style={styles.sectionIcon} />
+          DevOps Evidence & Capabilities
+        </h2>
+        <div style={styles.evidenceGrid}>
+          {[
+            { title: "Built CI/CD Pipelines", desc: "Configured automated GitHub Actions workflows for Docker build, test verification, and rolling AWS ECS updates." },
+            { title: "Automated Deployments", desc: "Integrated secure deployment runners to execute zero-friction scripts on staging/production environments." },
+            { title: "Dockerized Applications", desc: "Crafted multi-stage Dockerfiles optimizing image size, caching layers, and caching node dependencies." },
+            { title: "Kubernetes Deployments", desc: "Authored K8s Deployments, ClusterIP Services, persistent volumes, and HPA configs." },
+            { title: "Infrastructure as Code", desc: "Provisioned target groups, ECS tasks, and EKS credentials via basic Terraform configurations." },
+            { title: "Linux Administration", desc: "Wrote background cron tasks auditing running cloud resources via AWS CLI and reporting metrics." }
+          ].map((item) => (
+            <div key={item.title} style={styles.evidenceCard} className="glass-card">
+              <div style={styles.evidenceHeader}>
+                <CheckSquare size={13} style={{ color: 'var(--success)', marginRight: '6px' }} />
+                <strong style={styles.evidenceTitle}>{item.title}</strong>
+              </div>
+              <p style={styles.evidenceDesc}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <hr style={styles.divider} />
+
+      {/* Core Skills Progress Bars */}
+      <div>
+        <h2 style={styles.sectionHeading}>
+          <Wrench size={15} style={styles.sectionIcon} />
+          Technical Competence Index
+        </h2>
+        <div style={styles.skillsGrid}>
+          {portfolioConfig.skills.map((category) => (
+            <div key={category.group} style={styles.categoryCard}>
+              <h3 style={styles.categoryTitle}>
+                {getCategoryIcon(category.group)}
+                <span style={{ verticalAlign: 'middle' }}>{category.group}</span>
+              </h3>
+              <div style={styles.categoryItems}>
+                {category.items.map((skill) => (
+                  <SkillBar 
+                    key={skill.name} 
+                    name={skill.name} 
+                    pct={skill.pct} 
+                    color={skill.color} 
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderExperience = () => (
+    <div style={styles.experienceTimeline}>
+      {portfolioConfig.experience.map((exp) => (
+        <div key={exp.id} style={styles.expCard} className="glass-card">
+          <div style={styles.expHeader}>
+            <div>
+              <h3 style={styles.expCompany}>{exp.company}</h3>
+              <p style={styles.expRole}>{exp.role}</p>
+            </div>
+            <span style={styles.expDate}>
+              <Calendar size={11} style={{ marginRight: '4px' }} />
+              {exp.date}
+            </span>
+          </div>
+          <p style={styles.expDesc}>{exp.desc}</p>
+          <div style={styles.expTags}>
+            {exp.tags.map((tag) => (
+              <span key={tag} style={styles.expTagBadge}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
-    <div style={styles.container} className="view-container animate-slide-up">
+    <div 
+      style={{
+        ...styles.container,
+        ['--edu-minor-size' as any]: isMobile ? '14px' : '13px',
+        ['--evidence-title-size' as any]: isMobile ? '14px' : '13px',
+        ['--evidence-desc-size' as any]: isMobile ? '14px' : '13.5px',
+        ['--category-title-size' as any]: isMobile ? '14px' : '12px',
+        ['--role-font-size' as any]: isMobile ? '14px' : '13px',
+      }} 
+      className="view-container animate-slide-up"
+    >
       <span style={styles.comment}>{"# profile.yaml — biography, skills matrix & career Dockerfile"}</span>
       
       <h1 style={styles.heading}>Profile & Qualifications</h1>
 
-      {/* Sub tabs navigation */}
-      <div style={styles.tabHeader} className="no-select about-subtabs" role="tablist" aria-label="About subtabs">
-        <button 
-          id="tab-bio"
-          role="tab"
-          aria-selected={activeSubTab === 'bio'}
-          aria-controls="panel-bio"
-          style={{ 
-            ...styles.tabBtn, 
-            borderBottom: activeSubTab === 'bio' ? '2px solid var(--accent)' : '2px solid transparent',
-            color: activeSubTab === 'bio' ? 'var(--text-bright)' : 'var(--text-dim)' 
-          }}
-          onClick={() => setActiveSubTab('bio')}
-        >
-          Bio & Objectives
-        </button>
-        <button 
-          id="tab-skills"
-          role="tab"
-          aria-selected={activeSubTab === 'skills'}
-          aria-controls="panel-skills"
-          style={{ 
-            ...styles.tabBtn, 
-            borderBottom: activeSubTab === 'skills' ? '2px solid var(--accent)' : '2px solid transparent',
-            color: activeSubTab === 'skills' ? 'var(--text-bright)' : 'var(--text-dim)' 
-          }}
-          onClick={() => setActiveSubTab('skills')}
-        >
-          Skills & Evidence
-        </button>
-        <button 
-          id="tab-experience"
-          role="tab"
-          aria-selected={activeSubTab === 'experience'}
-          aria-controls="panel-experience"
-          style={{ 
-            ...styles.tabBtn, 
-            borderBottom: activeSubTab === 'experience' ? '2px solid var(--accent)' : '2px solid transparent',
-            color: activeSubTab === 'experience' ? 'var(--text-bright)' : 'var(--text-dim)' 
-          }}
-          onClick={() => setActiveSubTab('experience')}
-        >
-          Career Experience
-        </button>
-      </div>
+      {isMobile ? (
+        /* Mobile Sticky mini-nav pills */
+        <div style={styles.stickyMiniNav} className="no-select">
+          <button 
+            style={{
+              ...styles.miniNavPill,
+              borderColor: activeSection === 'bio' ? 'var(--accent)' : 'var(--border)',
+              color: activeSection === 'bio' ? 'var(--accent)' : 'var(--text-dim)',
+              backgroundColor: activeSection === 'bio' ? 'var(--accent-dim)' : 'transparent',
+            }}
+            onClick={() => handleScrollToSection('sec-bio')}
+          >
+            Bio
+          </button>
+          <button 
+            style={{
+              ...styles.miniNavPill,
+              borderColor: activeSection === 'skills' ? 'var(--accent)' : 'var(--border)',
+              color: activeSection === 'skills' ? 'var(--accent)' : 'var(--text-dim)',
+              backgroundColor: activeSection === 'skills' ? 'var(--accent-dim)' : 'transparent',
+            }}
+            onClick={() => handleScrollToSection('sec-skills')}
+          >
+            Skills
+          </button>
+          <button 
+            style={{
+              ...styles.miniNavPill,
+              borderColor: activeSection === 'experience' ? 'var(--accent)' : 'var(--border)',
+              color: activeSection === 'experience' ? 'var(--accent)' : 'var(--text-dim)',
+              backgroundColor: activeSection === 'experience' ? 'var(--accent-dim)' : 'transparent',
+            }}
+            onClick={() => handleScrollToSection('sec-experience')}
+          >
+            Experience
+          </button>
+        </div>
+      ) : (
+        /* Desktop Sub tabs navigation */
+        <div style={styles.tabHeader} className="no-select about-subtabs" role="tablist" aria-label="About subtabs">
+          <button 
+            id="tab-bio"
+            role="tab"
+            aria-selected={activeSubTab === 'bio'}
+            aria-controls="panel-bio"
+            style={{ 
+              ...styles.tabBtn, 
+              borderBottom: activeSubTab === 'bio' ? '2px solid var(--accent)' : '2px solid transparent',
+              color: activeSubTab === 'bio' ? 'var(--text-bright)' : 'var(--text-dim)' 
+            }}
+            onClick={() => setActiveSubTab('bio')}
+          >
+            Bio & Objectives
+          </button>
+          <button 
+            id="tab-skills"
+            role="tab"
+            aria-selected={activeSubTab === 'skills'}
+            aria-controls="panel-skills"
+            style={{ 
+              ...styles.tabBtn, 
+              borderBottom: activeSubTab === 'skills' ? '2px solid var(--accent)' : '2px solid transparent',
+              color: activeSubTab === 'skills' ? 'var(--text-bright)' : 'var(--text-dim)' 
+            }}
+            onClick={() => setActiveSubTab('skills')}
+          >
+            Skills & Evidence
+          </button>
+          <button 
+            id="tab-experience"
+            role="tab"
+            aria-selected={activeSubTab === 'experience'}
+            aria-controls="panel-experience"
+            style={{ 
+              ...styles.tabBtn, 
+              borderBottom: activeSubTab === 'experience' ? '2px solid var(--accent)' : '2px solid transparent',
+              color: activeSubTab === 'experience' ? 'var(--text-bright)' : 'var(--text-dim)' 
+            }}
+            onClick={() => setActiveSubTab('experience')}
+          >
+            Career Experience
+          </button>
+        </div>
+      )}
 
       {/* View Content */}
       <div style={styles.tabBody}>
-        {activeSubTab === 'bio' && (
-          <div className="reveal animate-fade-in" style={styles.contentSection} role="tabpanel" id="panel-bio" aria-labelledby="tab-bio">
-            <div style={styles.bioBlock}>
+        {isMobile ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
+            <div id="sec-bio">
+              {renderBio()}
+            </div>
+            <hr style={styles.divider} />
+            <div id="sec-skills">
+              {renderSkills()}
+            </div>
+            <hr style={styles.divider} />
+            <div id="sec-experience">
               <h2 style={styles.sectionHeading}>
                 <Compass size={15} style={styles.sectionIcon} />
-                Biography
+                Career Experience
               </h2>
-              <p style={styles.paragraph}>{portfolioConfig.bioLong}</p>
-            </div>
-
-            <div style={styles.qaGrid}>
-              <div style={styles.qaCard} className="glass-card">
-                <h3 style={styles.qaQuestion}>Why DevOps?</h3>
-                <p style={styles.qaAnswer}>
-                  I am fascinated by automation. Speeding up build distributions, orchestrating containers, 
-                  and seeing services scale dynamically under load is incredibly satisfying. DevOps represents the 
-                  feedback loop that ensures production environment reliability and developer happiness.
-                </p>
-              </div>
-
-              <div style={styles.qaCard} className="glass-card">
-                <h3 style={styles.qaQuestion}>Current Focus</h3>
-                <p style={styles.qaAnswer}>
-                  Currently mastering Kubernetes configurations, writing robust GitOps pipelines with ArgoCD, 
-                  and exploring cloud cost efficiency benchmarks on AWS container clusters.
-                </p>
-              </div>
-            </div>
-
-            <hr style={styles.divider} />
-
-            <div style={styles.bioBlock}>
-              <h2 style={styles.sectionHeading}>
-                <GraduationCap size={16} style={styles.sectionIcon} />
-                Education
-              </h2>
-              <div style={styles.timeline}>
-                {portfolioConfig.education.map((edu) => (
-                  <div key={edu.id} style={styles.eduCard} className="edu-card-custom">
-                    <div style={styles.eduHeader}>
-                      <h3 style={styles.eduInstitution}>{edu.institution}</h3>
-                      <span style={styles.eduPeriod}>
-                        <Calendar size={11} style={{ marginRight: '4px' }} />
-                        {edu.period}
-                      </span>
-                    </div>
-                    <p style={styles.eduDegree}>{edu.degree}</p>
-                    {edu.minor && <p style={styles.eduMinor}>{edu.minor}</p>}
-                    {edu.gpa && <p style={styles.eduGpa}>{edu.gpa}</p>}
-                  </div>
-                ))}
-              </div>
+              {renderExperience()}
             </div>
           </div>
-        )}
-
-        {activeSubTab === 'skills' && (
-          <div className="reveal animate-fade-in" style={styles.contentSection} role="tabpanel" id="panel-skills" aria-labelledby="tab-skills">
-            {/* DevOps Evidence Section (チェックマーク list) */}
-            <div style={styles.evidenceSection}>
-              <h2 style={styles.sectionHeading}>
-                <ShieldCheck size={16} style={styles.sectionIcon} />
-                DevOps Evidence & Capabilities
-              </h2>
-              <div style={styles.evidenceGrid}>
-                {[
-                  { title: "Built CI/CD Pipelines", desc: "Configured automated GitHub Actions workflows for Docker build, test verification, and rolling AWS ECS updates." },
-                  { title: "Automated Deployments", desc: "Integrated secure deployment runners to execute zero-friction scripts on staging/production environments." },
-                  { title: "Dockerized Applications", desc: "Crafted multi-stage Dockerfiles optimizing image size, caching layers, and caching node dependencies." },
-                  { title: "Kubernetes Deployments", desc: "Authored K8s Deployments, ClusterIP Services, persistent volumes, and HPA configs." },
-                  { title: "Infrastructure as Code", desc: "Provisioned target groups, ECS tasks, and EKS credentials via basic Terraform configurations." },
-                  { title: "Linux Administration", desc: "Wrote background cron tasks auditing running cloud resources via AWS CLI and reporting metrics." }
-                ].map((item) => (
-                  <div key={item.title} style={styles.evidenceCard} className="glass-card">
-                    <div style={styles.evidenceHeader}>
-                      <CheckSquare size={13} style={{ color: 'var(--success)', marginRight: '6px' }} />
-                      <strong style={styles.evidenceTitle}>{item.title}</strong>
-                    </div>
-                    <p style={styles.evidenceDesc}>{item.desc}</p>
-                  </div>
-                ))}
+        ) : (
+          <>
+            {activeSubTab === 'bio' && (
+              <div className="reveal animate-fade-in" role="tabpanel" id="panel-bio" aria-labelledby="tab-bio">
+                {renderBio()}
               </div>
-            </div>
-
-            <hr style={styles.divider} />
-
-            {/* Core Skills Progress Bars */}
-            <div>
-              <h2 style={styles.sectionHeading}>
-                <Wrench size={15} style={styles.sectionIcon} />
-                Technical Competence Index
-              </h2>
-              <div style={styles.skillsGrid}>
-                {portfolioConfig.skills.map((category) => (
-                  <div key={category.group} style={styles.categoryCard}>
-                    <h3 style={styles.categoryTitle}>
-                      {getCategoryIcon(category.group)}
-                      <span style={{ verticalAlign: 'middle' }}>{category.group}</span>
-                    </h3>
-                    <div style={styles.categoryItems}>
-                      {category.items.map((skill) => (
-                        <SkillBar 
-                          key={skill.name} 
-                          name={skill.name} 
-                          pct={skill.pct} 
-                          color={skill.color} 
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))}
+            )}
+            {activeSubTab === 'skills' && (
+              <div className="reveal animate-fade-in" role="tabpanel" id="panel-skills" aria-labelledby="tab-skills">
+                {renderSkills()}
               </div>
-            </div>
-          </div>
-        )}
-
-        {activeSubTab === 'experience' && (
-          <div className="reveal animate-fade-in" style={styles.contentSection} role="tabpanel" id="panel-experience" aria-labelledby="tab-experience">
-            <div style={styles.experienceTimeline}>
-              {portfolioConfig.experience.map((exp) => (
-                <div key={exp.id} style={styles.expCard} className="glass-card">
-                  <div style={styles.expHeader}>
-                    <div>
-                      <h3 style={styles.expCompany}>{exp.company}</h3>
-                      <p style={styles.expRole}>{exp.role}</p>
-                    </div>
-                    <span style={styles.expDate}>
-                      <Calendar size={11} style={{ marginRight: '4px' }} />
-                      {exp.date}
-                    </span>
-                  </div>
-                  <p style={styles.expDesc}>{exp.desc}</p>
-                  <div style={styles.expTags}>
-                    {exp.tags.map((tag) => (
-                      <span key={tag} style={styles.expTagBadge}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+            )}
+            {activeSubTab === 'experience' && (
+              <div className="reveal animate-fade-in" role="tabpanel" id="panel-experience" aria-labelledby="tab-experience">
+                {renderExperience()}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -292,6 +439,16 @@ const styles: { [key: string]: React.CSSProperties } = {
     minHeight: '300px',
   },
   contentSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+  },
+  bioContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+  },
+  skillsContainer: {
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
@@ -390,7 +547,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     margin: '0 0 4px 0',
   },
   eduMinor: {
-    fontSize: '13px',
+    fontSize: 'var(--edu-minor-size, 13px)',
     color: 'var(--text-bright)',
     margin: 0,
     fontFamily: 'var(--font-mono)',
@@ -422,11 +579,11 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: '6px',
   },
   evidenceTitle: {
-    fontSize: '13px',
+    fontSize: 'var(--evidence-title-size, 13px)',
     color: 'var(--text-bright)',
   },
   evidenceDesc: {
-    fontSize: '13.5px',
+    fontSize: 'var(--evidence-desc-size, 13.5px)',
     lineHeight: '1.5',
     color: 'var(--text-bright)',
     margin: 0,
@@ -441,7 +598,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: 'column',
   },
   categoryTitle: {
-    fontSize: '12px',
+    fontSize: 'var(--category-title-size, 12px)',
     textTransform: 'uppercase',
     letterSpacing: '0.12em',
     color: 'var(--syntax-keyword)',
@@ -515,7 +672,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     margin: 0,
   },
   expRole: {
-    fontSize: '13px',
+    fontSize: 'var(--role-font-size, 13px)',
     color: 'var(--accent)',
     fontWeight: 500,
     margin: '2px 0 0 0',
@@ -549,5 +706,31 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: 'var(--text-dim)',
     borderRadius: '4px',
     padding: '2px 6px',
+  },
+  stickyMiniNav: {
+    position: 'sticky',
+    top: '52px',
+    zIndex: 10,
+    background: 'var(--glass-bg)',
+    backdropFilter: 'blur(16px) saturate(150%)',
+    WebkitBackdropFilter: 'blur(16px) saturate(150%)',
+    display: 'flex',
+    gap: '8px',
+    padding: '10px 16px',
+    borderBottom: '1px solid var(--glass-border)',
+    margin: '0 -16px 24px -16px',
+    overflowX: 'auto',
+  },
+  miniNavPill: {
+    padding: '6px 14px',
+    borderRadius: '20px',
+    border: '1px solid var(--border)',
+    fontSize: '12px',
+    fontFamily: 'var(--font-mono)',
+    fontWeight: 600,
+    cursor: 'pointer',
+    whiteSpace: 'nowrap',
+    transition: 'all 0.15s ease',
+    background: 'transparent',
   },
 };

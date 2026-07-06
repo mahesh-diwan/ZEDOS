@@ -49,8 +49,22 @@ const SkillBar: React.FC<SkillBarProps> = ({ name, pct, color }) => {
 };
 
 export const SkillsView: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div style={styles.container} className="view-container animate-slide-up">
+    <div 
+      style={{
+        ...styles.container,
+        ['--other-tag-size' as any]: isMobile ? '14px' : '13.5px',
+      }} 
+      className="view-container animate-slide-up"
+    >
       <span style={styles.comment}>{"#!/bin/bash — skills.sh — technical capabilities & tool stack"}</span>
       
       <h1 style={styles.heading}>Skills</h1>
@@ -195,7 +209,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     gap: '8px',
   },
   otherTag: {
-    fontSize: '13.5px',
+    fontSize: 'var(--other-tag-size, 13.5px)',
     color: 'var(--text-bright)',
     backgroundColor: 'var(--bg-sidebar)',
     border: '1px solid var(--border)',

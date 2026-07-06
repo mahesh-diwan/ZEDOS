@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTheme } from './hooks/useTheme';
 import type { ThemeId } from './hooks/useTheme';
-import { useFont } from './hooks/useFont';
-import type { FontId } from './hooks/useFont';
 import { TitleBar } from './components/TitleBar';
 import { ProjectPanel } from './components/ProjectPanel';
 import { EditorArea } from './components/EditorArea';
@@ -10,7 +8,17 @@ import { TerminalDock } from './components/TerminalDock';
 import { AssistantDock } from './components/AssistantDock';
 import { CommandPalette } from './components/CommandPalette';
 import { StatusBar } from './components/StatusBar';
-import { Menu, Download, Mail, Home, User, Folder, Award, Terminal as TerminalIcon } from 'lucide-react';
+import {
+  Download,
+  Home,
+  User,
+  Folder,
+  BookOpen,
+  Mail,
+  Palette,
+  Sparkles,
+  X,
+} from 'lucide-react';
 
 interface Toast {
   id: string;
@@ -20,7 +28,6 @@ interface Toast {
 
 export const App: React.FC = () => {
   const { themeId, setThemeId, themes } = useTheme();
-  const { setFontId, fonts } = useFont();
 
   // Layout States
   const [projectPanelOpen, setProjectPanelOpen] = useState(true);
@@ -34,7 +41,7 @@ export const App: React.FC = () => {
     setCmdPaletteOpen(true);
   };
 
-  // File States
+  // File States — all tabs open by default
   const [openFiles, setOpenFiles] = useState<string[]>([
     'README.md',
     'ABOUT.md',
@@ -45,41 +52,34 @@ export const App: React.FC = () => {
   ]);
   const [activeFile, setActiveFile] = useState<string>('README.md');
 
-  // Custom Toast State
+  // Toast State
   const [toasts, setToasts] = useState<Toast[]>([]);
 
+  // isMobile — viewport width only, no maxTouchPoints
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window === 'undefined') return false;
-    const isTabletLandscape = window.innerWidth <= 1024 && window.innerHeight < window.innerWidth && window.innerHeight <= 768;
-    return window.innerWidth <= 768 || isTabletLandscape;
+    return window.innerWidth <= 768;
   });
 
-  // Check mobile device
   useEffect(() => {
-    const checkMobile = () => {
-      const isTabletLandscape = window.innerWidth <= 1024 && window.innerHeight < window.innerWidth && window.innerHeight <= 768;
-      setIsMobile(window.innerWidth <= 768 || isTabletLandscape);
-    };
-    checkMobile();
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Lock body scroll only when mobile drawers are open to prevent background scrolling
+  // On mobile, lock body scroll only when assistant is open
   useEffect(() => {
-    if (isMobile) {
-      if (projectPanelOpen || terminalOpen || assistantOpen) {
-        document.body.style.setProperty('overflow', 'hidden', 'important');
-      } else {
-        document.body.style.removeProperty('overflow');
-      }
+    if (isMobile && assistantOpen) {
+      document.body.style.setProperty('overflow', 'hidden', 'important');
+    } else {
+      document.body.style.removeProperty('overflow');
     }
     return () => {
       document.body.style.removeProperty('overflow');
     };
-  }, [isMobile, projectPanelOpen, terminalOpen, assistantOpen]);
+  }, [isMobile, assistantOpen]);
 
-  // Panel toggle handlers with mobile overlay constraints
+  // Panel toggles
   const handleToggleProject = useCallback((val?: boolean | ((prev: boolean) => boolean)) => {
     setProjectPanelOpen((prev) => {
       const next = typeof val === 'function' ? val(prev) : val !== undefined ? val : !prev;
@@ -113,43 +113,29 @@ export const App: React.FC = () => {
     });
   }, [isMobile]);
 
-  // Global Keyboard Shortcuts
+  // Global Keyboard Shortcuts (desktop)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // 1. Toggle Project Panel (Ctrl + B)
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
-        e.preventDefault();
-        handleToggleProject();
+        e.preventDefault(); handleToggleProject();
       }
-      
-      // 2. Toggle Terminal (Ctrl + `)
       if ((e.ctrlKey || e.metaKey) && e.key === '`') {
-        e.preventDefault();
-        handleToggleTerminal();
+        e.preventDefault(); handleToggleTerminal();
       }
-
-      // 3. Toggle Assistant (Ctrl + Shift + C)
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'c') {
-        e.preventDefault();
-        handleToggleAssistant();
+        e.preventDefault(); handleToggleAssistant();
       }
-
-      // 4. Open Command Palette (Ctrl + P)
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
-        e.preventDefault();
-        handleOpenCmdPalette('all');
+        e.preventDefault(); handleOpenCmdPalette('all');
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isMobile, handleToggleProject, handleToggleTerminal, handleToggleAssistant]);
+  }, [handleToggleProject, handleToggleTerminal, handleToggleAssistant]);
 
   const addToast = (icon: string, msg: string) => {
     const id = `toast-${Date.now()}`;
     setToasts((prev) => [...prev, { id, icon, msg }]);
-    
-    // Auto remove
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 3000);
@@ -160,16 +146,12 @@ export const App: React.FC = () => {
       setOpenFiles((prev) => [...prev, fileName]);
     }
     setActiveFile(fileName);
-    if (isMobile) {
-      setProjectPanelOpen(false);
-    }
+    if (isMobile) setProjectPanelOpen(false);
   };
 
   const handleCloseFile = (fileName: string) => {
     const remaining = openFiles.filter((f) => f !== fileName);
     setOpenFiles(remaining);
-
-    // If active file is closed, select another one
     if (activeFile === fileName && remaining.length > 0) {
       setActiveFile(remaining[remaining.length - 1]);
     }
@@ -181,49 +163,57 @@ export const App: React.FC = () => {
     addToast('🎨', `Theme switched to ${themeName}`);
   };
 
-  const handleFontSelect = (font: FontId) => {
-    setFontId(font);
-    const fontName = fonts.find((f) => f.id === font)?.name || font;
-    addToast('🔤', `Typography switched to ${fontName}`);
-  };
-
+  /* ─── MOBILE LAYOUT ─────────────────────────────────── */
   if (isMobile) {
     return (
       <div className={`app-container mobile-app-layout theme-${themeId}`}>
-        {/* Mobile Header Bar */}
+
+        {/* Mobile Header — glass surface applied via CSS */}
         <header className="no-select" role="banner">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <button 
-              style={mobileStyles.menuBtn} 
-              onClick={() => setProjectPanelOpen(true)}
-              title="Open Navigation Explorer"
-            >
-              <Menu size={20} />
-            </button>
-            <span style={mobileStyles.headerTitle}>ZEDOS</span>
+          {/* Left: ZEDOS branding */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={mobileStyles.brandChip}>
+              <span style={mobileStyles.brandDot} />
+              <span style={mobileStyles.brandTitle}>ZEDOS</span>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <a 
-              href="./Mahesh_Diwan_Resume.pdf" 
+          {/* Right: Resume, Palette, AI Assistant */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <a
+              href="./Mahesh_Diwan_Resume.pdf"
               download="Mahesh_Diwan_Resume.pdf"
-              style={mobileStyles.headerDownloadBtn}
-              title="Download Resume (1-click)"
+              className="btn-primary"
+              style={{ fontSize: '11px', padding: '6px 12px', borderRadius: '5px' }}
+              title="Download Resume"
             >
-              <Download size={13} style={{ marginRight: '4px' }} />
-              <span>Resume</span>
+              <Download size={11} />
+              Resume
             </a>
-            <button 
-              onClick={() => handleOpenFile('CONTACT.md')}
-              style={mobileStyles.headerMailBtn}
-              title="Contact Me"
+            <button
+              onClick={() => handleOpenCmdPalette('theme')}
+              style={mobileStyles.iconBtn}
+              title="Themes"
+              aria-label="Open theme switcher"
             >
-              <Mail size={15} />
+              <Palette size={16} />
+            </button>
+            <button
+              onClick={() => setAssistantOpen(!assistantOpen)}
+              style={{
+                ...mobileStyles.iconBtn,
+                color: assistantOpen ? 'var(--accent)' : 'var(--text-dim)',
+                borderColor: assistantOpen ? 'var(--accent-border)' : 'var(--glass-border)',
+              }}
+              title="AI Assistant"
+              aria-label="Toggle AI Assistant"
+            >
+              <Sparkles size={16} />
             </button>
           </div>
         </header>
 
-        {/* Content Body viewport (Full width content, single main scroll container) */}
+        {/* Main Content */}
         <main className="mobile-main-content">
           <EditorArea
             activeFile={activeFile}
@@ -234,95 +224,71 @@ export const App: React.FC = () => {
           />
         </main>
 
-        {/* Bottom Tab Navigation Bar */}
-        <nav className="no-select" role="navigation">
-          <button 
-            style={{ 
-              ...mobileStyles.navBtn, 
-              color: activeFile === 'README.md' ? 'var(--accent)' : 'var(--text-dim)' 
-            }}
-            onClick={() => handleOpenFile('README.md')}
-          >
-            <Home size={18} />
-            <span style={mobileStyles.navLabel}>Home</span>
-          </button>
-          <button 
-            style={{ 
-              ...mobileStyles.navBtn, 
-              color: activeFile === 'ABOUT.md' ? 'var(--accent)' : 'var(--text-dim)' 
-            }}
-            onClick={() => handleOpenFile('ABOUT.md')}
-          >
-            <User size={18} />
-            <span style={mobileStyles.navLabel}>About</span>
-          </button>
-          <button 
-            style={{ 
-              ...mobileStyles.navBtn, 
-              color: activeFile === 'PROJECTS.md' ? 'var(--accent)' : 'var(--text-dim)' 
-            }}
-            onClick={() => handleOpenFile('PROJECTS.md')}
-          >
-            <Folder size={18} />
-            <span style={mobileStyles.navLabel}>Projects</span>
-          </button>
-
-          <button 
-            style={{ 
-              ...mobileStyles.navBtn, 
-              color: terminalOpen ? 'var(--accent)' : 'var(--text-dim)' 
-            }}
-            onClick={() => {
-              setTerminalOpen(!terminalOpen);
-            }}
-          >
-            <TerminalIcon size={18} />
-            <span style={mobileStyles.navLabel}>Terminal</span>
-          </button>
+        {/* Bottom Nav — 5 direct destinations — glass applied via CSS */}
+        <nav className="no-select" role="navigation" aria-label="Main navigation">
+          {[
+            { file: 'README.md',  icon: <Home size={19} />,     label: 'Home' },
+            { file: 'ABOUT.md',   icon: <User size={19} />,     label: 'About' },
+            { file: 'PROJECTS.md', icon: <Folder size={19} />,  label: 'Projects' },
+            { file: 'BLOGS.md',   icon: <BookOpen size={19} />, label: 'Blog' },
+            { file: 'CONTACT.md', icon: <Mail size={19} />,     label: 'Contact' },
+          ].map(({ file, icon, label }) => (
+            <button
+              key={file}
+              style={{
+                ...mobileStyles.navBtn,
+                color: activeFile === file ? 'var(--accent)' : 'var(--text-dim)',
+              }}
+              onClick={() => handleOpenFile(file)}
+              aria-current={activeFile === file ? 'page' : undefined}
+              aria-label={label}
+            >
+              {icon}
+              <span style={{
+                ...mobileStyles.navLabel,
+                fontWeight: activeFile === file ? 700 : 500,
+              }}>
+                {label}
+              </span>
+            </button>
+          ))}
         </nav>
 
-        {/* Sliding Explorer Drawer */}
-        {projectPanelOpen && (
-          <div style={mobileStyles.overlayContainer} className="drawer-overlay">
-            <div 
-              style={mobileStyles.drawerBackdrop} 
-              onClick={() => setProjectPanelOpen(false)}
-            />
-            <div className="project-sidebar">
-              <ProjectPanel
-                activeFile={activeFile}
-                onFileSelect={handleOpenFile}
-                openFiles={openFiles}
-                onClose={() => setProjectPanelOpen(false)}
+        {/* AI Assistant Slide-up Bottom Sheet */}
+        {assistantOpen && (
+          <div style={mobileStyles.overlayBackdrop} onClick={() => setAssistantOpen(false)}>
+            <div
+              className="assistant-sheet-panel"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <AssistantDock
+                onClose={() => setAssistantOpen(false)}
+                onNavigate={handleOpenFile}
               />
             </div>
           </div>
         )}
 
-        {/* Slide-up Terminal Bottom Sheet */}
-        {terminalOpen && (
-          <div style={mobileStyles.overlayContainer} className="terminal-overlay">
-            <div 
-              style={mobileStyles.drawerBackdrop} 
-              onClick={() => setTerminalOpen(false)}
-            />
-            <div className="terminal-dock-panel animate-slide-up">
-              <TerminalDock
-                onClose={() => setTerminalOpen(false)}
-                onOpenFile={handleOpenFile}
-              />
-            </div>
-          </div>
+        {/* Command Palette */}
+        {cmdPaletteOpen && (
+          <CommandPalette
+            onClose={() => setCmdPaletteOpen(false)}
+            onOpenFile={handleOpenFile}
+            onSelectTheme={handleThemeSelect}
+            onToggleTerminal={() => handleToggleTerminal()}
+            onToggleAssistant={() => handleToggleAssistant()}
+            initialCategory={cmdPaletteCategory}
+          />
         )}
 
-        {/* Global Toast System */}
-        <div 
+        {/* Toast — above bottom nav */}
+        <div
           style={{
             ...styles.toastContainer,
-            bottom: isMobile ? 'calc(56px + env(safe-area-inset-bottom, 0px) + 12px)' : '24px',
-            left: isMobile ? '12px' : 'auto',
-            right: isMobile ? '12px' : '24px',
-          }} 
+            bottom: 'calc(60px + env(safe-area-inset-bottom, 0px) + 12px)',
+            left: '12px',
+            right: '12px',
+          }}
           className="no-select"
         >
           {toasts.map((toast) => (
@@ -336,9 +302,10 @@ export const App: React.FC = () => {
     );
   }
 
+  /* ─── DESKTOP LAYOUT ─────────────────────────────────── */
   return (
     <div className={`app-container theme-${themeId}`}>
-      {/* 1. Title bar */}
+      {/* Title bar */}
       <TitleBar
         activeFile={activeFile}
         projectPanelOpen={projectPanelOpen}
@@ -350,28 +317,21 @@ export const App: React.FC = () => {
         onOpenCmdPalette={handleOpenCmdPalette}
       />
 
-      {/* 2. Workspace Content Layout */}
+      {/* Workspace */}
       <div className="main-layout" style={{ position: 'relative' }}>
-        {/* Mobile drawer backdrop overlay */}
+        {/* Drawer backdrop */}
         {isMobile && (projectPanelOpen || assistantOpen) && (
-          <div 
-            onClick={() => {
-              setProjectPanelOpen(false);
-              setAssistantOpen(false);
-            }}
+          <div
+            onClick={() => { setProjectPanelOpen(false); setAssistantOpen(false); }}
             style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              width: '100vw',
-              height: '100vh',
-              backgroundColor: 'rgba(0, 0, 0, 0.4)',
-              zIndex: 99,
+              position: 'fixed', top: 0, left: 0,
+              width: '100vw', height: '100vh',
+              backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 99,
             }}
           />
         )}
 
-        {/* Left Side File Tree */}
+        {/* Left File Tree */}
         {projectPanelOpen && (
           <aside role="complementary" aria-label="Project Explorer" style={{ width: '210px', flexShrink: 0, height: '100%' }}>
             <ProjectPanel
@@ -383,7 +343,7 @@ export const App: React.FC = () => {
           </aside>
         )}
 
-        {/* Center / Editor + Terminal Area */}
+        {/* Editor + Terminal */}
         <main role="main" className="editor-terminal-container">
           <EditorArea
             activeFile={activeFile}
@@ -409,32 +369,23 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* 3. Status Bar */}
+      {/* Status Bar */}
       <StatusBar activeFile={activeFile} />
 
-      {/* 4. Command Palette Dialog */}
+      {/* Command Palette */}
       {cmdPaletteOpen && (
         <CommandPalette
           onClose={() => setCmdPaletteOpen(false)}
           onOpenFile={handleOpenFile}
           onSelectTheme={handleThemeSelect}
-          onSelectFont={handleFontSelect}
           onToggleTerminal={() => handleToggleTerminal()}
           onToggleAssistant={() => handleToggleAssistant()}
           initialCategory={cmdPaletteCategory}
         />
       )}
 
-      {/* 4. Global Toast System */}
-      <div 
-        style={{
-          ...styles.toastContainer,
-          bottom: isMobile ? 'calc(56px + env(safe-area-inset-bottom, 0px) + 12px)' : '24px',
-          left: isMobile ? '12px' : 'auto',
-          right: isMobile ? '12px' : '24px',
-        }} 
-        className="no-select"
-      >
+      {/* Toast */}
+      <div style={styles.toastContainer} className="no-select">
         {toasts.map((toast) => (
           <div key={toast.id} style={styles.toastCard} className="animate-slide-up">
             <span style={styles.toastIcon}>{toast.icon}</span>
@@ -442,84 +393,50 @@ export const App: React.FC = () => {
           </div>
         ))}
       </div>
-
-      {/* Custom cursor overlay removed to optimize frame rendering rates */}
     </div>
   );
 };
 
+/* ─── MOBILE STYLES ──────────────────────────────────── */
 const mobileStyles: { [key: string]: React.CSSProperties } = {
-  header: {
-    height: '48px',
-    backgroundColor: 'var(--bg-titlebar)',
-    borderBottom: '1px solid var(--border)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '0 12px',
-    zIndex: 50,
-    flexShrink: 0,
-  },
-  menuBtn: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: 'var(--text-bright)',
-    cursor: 'pointer',
-    width: '40px',
-    height: '40px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-  },
-  headerTitle: {
-    fontSize: '15px',
-    fontWeight: 700,
-    color: 'var(--text-bright)',
-    letterSpacing: '0.05em',
-  },
-  headerDownloadBtn: {
+  brandChip: {
     display: 'inline-flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'var(--accent)',
-    color: '#ffffff',
-    padding: '6px 12px',
-    borderRadius: '4px',
-    fontSize: '11px',
-    fontWeight: 600,
-    textDecoration: 'none',
-    boxShadow: '0 2px 8px rgba(167, 139, 250, 0.2)',
+    gap: '6px',
+    background: 'var(--accent-dim)',
+    border: '1px solid var(--accent-border)',
+    borderRadius: '6px',
+    padding: '3px 10px 3px 8px',
   },
-  headerMailBtn: {
-    backgroundColor: 'transparent',
-    border: '1px solid var(--border)',
+  brandDot: {
+    width: '7px',
+    height: '7px',
+    borderRadius: '50%',
+    backgroundColor: 'var(--accent)',
+    display: 'inline-block',
+    animation: 'pulseGreen 2s infinite ease-in-out',
+  },
+  brandTitle: {
+    fontSize: '13px',
+    fontWeight: 800,
     color: 'var(--text-bright)',
-    borderRadius: '4px',
-    width: '28px',
-    height: '28px',
+    letterSpacing: '0.08em',
+  },
+  iconBtn: {
+    background: 'var(--glass-bg)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    border: '1px solid var(--glass-border)',
+    color: 'var(--text-dim)',
+    borderRadius: '6px',
+    width: '34px',
+    height: '34px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
     padding: 0,
-  },
-  contentBody: {
-    flex: 1,
-    width: '100%',
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  bottomNav: {
-    height: '56px',
-    backgroundColor: 'var(--bg-sidebar)',
-    borderTop: '1px solid var(--border)',
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: '0 4px',
-    zIndex: 50,
-    flexShrink: 0,
+    transition: 'color 0.2s, border-color 0.2s',
   },
   navBtn: {
     backgroundColor: 'transparent',
@@ -533,56 +450,27 @@ const mobileStyles: { [key: string]: React.CSSProperties } = {
     height: '100%',
     cursor: 'pointer',
     padding: 0,
+    transition: 'color 0.15s',
   },
   navLabel: {
-    fontSize: '9.5px',
-    fontWeight: 600,
+    fontSize: '10px',
+    letterSpacing: '0.01em',
   },
-  overlayContainer: {
+  overlayBackdrop: {
     position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 99,
-    display: 'flex',
-  },
-  drawerBackdrop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-  },
-  drawer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    width: '240px',
-    backgroundColor: 'var(--bg-sidebar)',
-    boxShadow: '4px 0 20px rgba(0, 0, 0, 0.5)',
-    zIndex: 100,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 150,
     display: 'flex',
     flexDirection: 'column',
-  },
-  terminalSheet: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: '60%',
-    backgroundColor: 'var(--bg-terminal)',
-    boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.5)',
-    zIndex: 100,
-    borderTop: '1px solid var(--border)',
-    borderTopLeftRadius: '12px',
-    borderTopRightRadius: '12px',
-    overflow: 'hidden',
+    justifyContent: 'flex-end',
   },
 };
 
+/* ─── SHARED STYLES ──────────────────────────────────── */
 const styles: { [key: string]: React.CSSProperties } = {
   toastContainer: {
     position: 'fixed',
@@ -597,42 +485,22 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
-    backgroundColor: 'var(--bg-sidebar)',
-    border: '1px solid var(--border)',
-    borderRadius: '6px',
-    padding: '8px 16px',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.4)',
+    background: 'var(--glass-bg)',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
+    border: '1px solid var(--glass-border)',
+    borderLeft: '3px solid var(--accent)',
+    borderRadius: '8px',
+    padding: '10px 16px',
+    boxShadow: 'var(--glass-shadow)',
     minWidth: '220px',
   },
   toastIcon: {
     fontSize: '14px',
   },
   toastMsg: {
-    fontSize: '12px',
+    fontSize: '13px',
     color: 'var(--text-bright)',
     fontWeight: 500,
   },
-  customCursorRing: {
-    position: 'fixed',
-    width: '24px',
-    height: '24px',
-    border: '1.5px solid var(--text-bright)',
-    borderRadius: '50%',
-    pointerEvents: 'none',
-    zIndex: 99999,
-    boxSizing: 'border-box',
-    transition: 'transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.15s, background-color 0.15s, box-shadow 0.15s',
-  },
-  customCursorDot: {
-    position: 'fixed',
-    width: '6px',
-    height: '6px',
-    backgroundColor: 'var(--text-bright)',
-    borderRadius: '50%',
-    pointerEvents: 'none',
-    zIndex: 99999,
-    boxSizing: 'border-box',
-    transition: 'transform 0.1s ease, background-color 0.15s ease',
-  },
 };
-

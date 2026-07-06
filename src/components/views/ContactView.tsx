@@ -47,7 +47,14 @@ const socialBrandColors: { [key: string]: { color: string; bg: string } } = {
 
 export const ContactView: React.FC<ContactViewProps> = ({ onToast }) => {
   const [formState, setFormState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const getSocialIcon = (label: string) => {
     switch (label) {
@@ -126,7 +133,14 @@ export const ContactView: React.FC<ContactViewProps> = ({ onToast }) => {
   };
 
   return (
-    <div style={styles.container} className="view-container animate-slide-up">
+    <div 
+      style={{
+        ...styles.container,
+        ['--social-name-size' as any]: isMobile ? '14px' : '13px',
+        ['--social-value-size' as any]: isMobile ? '14px' : '12px',
+      }} 
+      className="view-container animate-slide-up"
+    >
       <span style={styles.comment}>{"# contact.yaml — get in touch & online coordinates"}</span>
       
       <h1 style={styles.heading}>Contact Coordinates</h1>
@@ -382,12 +396,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     overflow: 'hidden',
   },
   socialName: {
-    fontSize: '13px',
+    fontSize: 'var(--social-name-size, 13px)',
     color: 'var(--text-bright)',
     fontWeight: 600,
   },
   socialValue: {
-    fontSize: '12px',
+    fontSize: 'var(--social-value-size, 12px)',
     color: 'var(--text-dim)',
     overflow: 'hidden',
     textOverflow: 'ellipsis',

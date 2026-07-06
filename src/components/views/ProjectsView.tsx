@@ -12,6 +12,13 @@ const GithubIcon: React.FC<{ size?: number; style?: React.CSSProperties }> = ({ 
 export const ProjectsView: React.FC = () => {
   // First project expanded by default
   const [expandedId, setExpandedId] = useState<string | null>(portfolioConfig.projects[0].id);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const renderArchitecture = (id: string) => {
     if (id === 'proj-1') {
@@ -142,7 +149,14 @@ export const ProjectsView: React.FC = () => {
   };
 
   return (
-    <div style={styles.container} className="view-container animate-slide-up">
+    <div 
+      style={{
+        ...styles.container,
+        ['--detail-text-small-size' as any]: isMobile ? '14px' : '13.5px',
+        ['--metric-text-val-size' as any]: isMobile ? '14px' : '13.5px',
+      }} 
+      className="view-container animate-slide-up"
+    >
       <span style={styles.comment}>{"# projects.tf — detailed infrastructure declarations & deployments"}</span>
       
       <h1 style={styles.heading}>Projects & Architectures</h1>
@@ -461,7 +475,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     margin: 0,
   },
   detailTextSmall: {
-    fontSize: '13.5px',
+    fontSize: 'var(--detail-text-small-size, 13.5px)',
     lineHeight: '1.5',
     color: 'var(--text-bright)',
     margin: '4px 0 0 0',
@@ -507,7 +521,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: 'bold',
   },
   metricTextVal: {
-    fontSize: '13.5px',
+    fontSize: 'var(--metric-text-val-size, 13.5px)',
     color: 'var(--text-bright)',
   },
 };

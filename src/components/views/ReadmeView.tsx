@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { portfolioConfig } from '../../portfolioConfig';
 import { Shield, Sparkles, Terminal } from 'lucide-react';
 
 export const ReadmeView: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div style={styles.container} className="view-container animate-slide-up">
+    <div 
+      style={{
+        ...styles.container,
+        ['--warning-text-size' as any]: isMobile ? '14px' : '13.5px',
+      }} 
+      className="view-container animate-slide-up"
+    >
       {/* Readme Title */}
       <h1 style={styles.title}>{portfolioConfig.name}</h1>
       <p style={styles.tagline}>{portfolioConfig.role}</p>
@@ -166,7 +180,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: '12px',
   },
   warningText: {
-    fontSize: '13.5px',
+    fontSize: 'var(--warning-text-size, 13.5px)',
     lineHeight: '1.65',
     color: 'var(--text-bright)',
     marginBottom: '12px',

@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Monitor, Terminal, ShieldAlert, Type } from 'lucide-react';
+import { Search, Monitor, Terminal, ShieldAlert, MessageSquare } from 'lucide-react';
 import type { ThemeId } from '../hooks/useTheme';
-import type { FontId } from '../hooks/useFont';
 
 interface CommandPaletteProps {
   onClose: () => void;
   onOpenFile: (fileName: string) => void;
   onSelectTheme: (themeId: ThemeId) => void;
-  onSelectFont: (fontId: FontId) => void;
   onToggleTerminal: () => void;
   onToggleAssistant: () => void;
   initialCategory?: 'all' | 'theme';
@@ -15,7 +13,7 @@ interface CommandPaletteProps {
 
 interface CommandItem {
   id: string;
-  category: 'file' | 'theme' | 'font' | 'action';
+  category: 'file' | 'theme' | 'action';
   label: string;
   action: () => void;
   shortcut?: string;
@@ -25,7 +23,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onClose,
   onOpenFile,
   onSelectTheme,
-  onSelectFont,
   onToggleTerminal,
   onToggleAssistant,
   initialCategory = 'all',
@@ -36,40 +33,32 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
 
   const commandItems: CommandItem[] = [
-    // Open files
-    { id: 'f-home', category: 'file', label: 'open: home.tsx', action: () => onOpenFile('home.tsx') },
-    { id: 'f-about', category: 'file', label: 'open: profile.yaml', action: () => onOpenFile('profile.yaml') },
-    { id: 'f-projects', category: 'file', label: 'open: projects.tf', action: () => onOpenFile('projects.tf') },
-    { id: 'f-skills', category: 'file', label: 'open: skills.sh', action: () => onOpenFile('skills.sh') },
-    { id: 'f-experience', category: 'file', label: 'open: experience.dockerfile', action: () => onOpenFile('experience.dockerfile') },
-    { id: 'f-contact', category: 'file', label: 'open: contact.yaml', action: () => onOpenFile('contact.yaml') },
-    { id: 'f-blog', category: 'file', label: 'open: blog.md', action: () => onOpenFile('blog.md') },
-    { id: 'f-readme', category: 'file', label: 'open: README.md', action: () => onOpenFile('README.md') },
-    { id: 'f-resume', category: 'file', label: 'open: Mahesh_Diwan_Resume.pdf', action: () => onOpenFile('Mahesh_Diwan_Resume.pdf') },
-    
-    // Toggle panels
-    { id: 'a-term', category: 'action', label: 'terminal: Toggle Terminal Panel', action: onToggleTerminal, shortcut: 'Ctrl+`' },
-    { id: 'a-asst', category: 'action', label: 'assistant: Toggle AI Assistant Panel', action: onToggleAssistant, shortcut: 'Ctrl+Shift+C' },
-    
-    // Themes switching
-    { id: 't-tokyo-night', category: 'theme', label: 'theme: Tokyo Night (Default)', action: () => onSelectTheme('tokyo-night') },
-    { id: 't-catppuccin', category: 'theme', label: 'theme: Catppuccin Macchiato', action: () => onSelectTheme('catppuccin') },
-    { id: 't-dracula', category: 'theme', label: 'theme: Dracula', action: () => onSelectTheme('dracula') },
-    { id: 't-nord', category: 'theme', label: 'theme: Nord Frost', action: () => onSelectTheme('nord') },
-    { id: 't-rose-pine', category: 'theme', label: 'theme: Rosé Pine', action: () => onSelectTheme('rose-pine') },
-    { id: 't-zed-dark', category: 'theme', label: 'theme: Zed Dark', action: () => onSelectTheme('zed-dark') },
-    { id: 't-zed-light', category: 'theme', label: 'theme: Zed Light', action: () => onSelectTheme('zed-light') },
-    { id: 't-one-dark', category: 'theme', label: 'theme: One Dark', action: () => onSelectTheme('one-dark') },
-    { id: 't-gruvbox-dark', category: 'theme', label: 'theme: Gruvbox Dark', action: () => onSelectTheme('gruvbox-dark') },
+    // Navigate to files
+    { id: 'f-readme',   category: 'file', label: 'open: README.md',                 action: () => onOpenFile('README.md') },
+    { id: 'f-about',    category: 'file', label: 'open: ABOUT.md',                  action: () => onOpenFile('ABOUT.md') },
+    { id: 'f-projects', category: 'file', label: 'open: PROJECTS.md',               action: () => onOpenFile('PROJECTS.md') },
+    { id: 'f-blogs',    category: 'file', label: 'open: BLOGS.md',                  action: () => onOpenFile('BLOGS.md') },
+    { id: 'f-contact',  category: 'file', label: 'open: CONTACT.md',                action: () => onOpenFile('CONTACT.md') },
+    { id: 'f-resume',   category: 'file', label: 'open: Mahesh_Diwan_Resume.pdf',   action: () => onOpenFile('RESUME.pdf') },
 
-    // Font switching
-    { id: 'font-space-jetbrains', category: 'font', label: 'font: Space Grotesk + JetBrains Mono', action: () => onSelectFont('space-jetbrains') },
-    { id: 'font-plus-geist', category: 'font', label: 'font: Plus Jakarta Sans + Geist Mono', action: () => onSelectFont('plus-geist') },
-    { id: 'font-outfit-fira', category: 'font', label: 'font: Outfit + Fira Code', action: () => onSelectFont('outfit-fira') },
-    { id: 'font-bricolage-azeret', category: 'font', label: 'font: Bricolage Grotesque + Azeret Mono', action: () => onSelectFont('bricolage-azeret') },
+    // Toggle panels
+    { id: 'a-term', category: 'action', label: 'terminal: Toggle Terminal Panel',       action: onToggleTerminal,  shortcut: 'Ctrl+`' },
+    { id: 'a-asst', category: 'action', label: 'assistant: Toggle AI Assistant Panel', action: onToggleAssistant, shortcut: 'Ctrl+Shift+C' },
+
+    // Themes
+    { id: 't-tokyo-night',  category: 'theme', label: 'theme: Tokyo Night (Default)',    action: () => onSelectTheme('tokyo-night') },
+    { id: 't-catppuccin',   category: 'theme', label: 'theme: Catppuccin Macchiato',     action: () => onSelectTheme('catppuccin') },
+    { id: 't-dracula',      category: 'theme', label: 'theme: Dracula',                  action: () => onSelectTheme('dracula') },
+    { id: 't-nord',         category: 'theme', label: 'theme: Nord Frost',               action: () => onSelectTheme('nord') },
+    { id: 't-rose-pine',    category: 'theme', label: 'theme: Rosé Pine',                action: () => onSelectTheme('rose-pine') },
+    { id: 't-zed-dark',     category: 'theme', label: 'theme: Zed Dark',                 action: () => onSelectTheme('zed-dark') },
+    { id: 't-zed-light',    category: 'theme', label: 'theme: Zed Light',                action: () => onSelectTheme('zed-light') },
+    { id: 't-one-dark',     category: 'theme', label: 'theme: One Dark',                 action: () => onSelectTheme('one-dark') },
+    { id: 't-gruvbox-dark', category: 'theme', label: 'theme: Gruvbox Dark',             action: () => onSelectTheme('gruvbox-dark') },
   ];
 
   useEffect(() => {
+    // Focus without triggering visible ring — handled by .cmd-palette-input CSS override
     inputRef.current?.focus();
 
     const handleOutsideClick = (e: MouseEvent) => {
@@ -79,17 +68,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      } else if (e.key === 'Tab') {
-        e.preventDefault();
-        inputRef.current?.focus();
-      }
+      if (e.key === 'Escape') onClose();
     };
 
     document.addEventListener('mousedown', handleOutsideClick);
     window.addEventListener('keydown', handleKeyDown);
-
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
       window.removeEventListener('keydown', handleKeyDown);
@@ -122,36 +105,36 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'file':
-        return <Search size={13} style={{ color: 'var(--text-dim)' }} />;
-      case 'theme':
-        return <Monitor size={13} style={{ color: 'var(--accent)' }} />;
-      case 'font':
-        return <Type size={13} style={{ color: 'var(--blue)' }} />;
-      case 'action':
-        return <Terminal size={13} style={{ color: 'var(--success)' }} />;
-      default:
-        return <Search size={13} />;
+      case 'file':   return <Search      size={13} style={{ color: 'var(--text-dim)' }} />;
+      case 'theme':  return <Monitor     size={13} style={{ color: 'var(--accent)' }} />;
+      case 'action': return <Terminal    size={13} style={{ color: 'var(--success)' }} />;
+      default:       return <Search      size={13} />;
     }
   };
 
   return (
     <div style={styles.overlay} className="no-select">
-      <div ref={modalRef} style={styles.palette} onKeyDown={handleKeyDown} className="reveal glass-card cmd-palette-wrapper">
-        {/* Input area */}
+      <div
+        ref={modalRef}
+        style={styles.palette}
+        onKeyDown={handleKeyDown}
+        className="reveal glass-card cmd-palette-wrapper"
+      >
+        {/* Search input */}
         <div style={styles.inputWrapper}>
-          <Search size={16} style={{ color: 'var(--text-dim)', marginRight: '10px' }} />
+          <Search size={15} style={{ color: 'var(--text-dim)', flexShrink: 0 }} />
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type a command or file name..."
+            placeholder="Type a command, file name, or theme..."
             style={styles.input}
+            className="cmd-palette-input"
           />
         </div>
 
-        {/* Matches list */}
+        {/* Results list */}
         <div style={styles.list}>
           {filteredItems.length > 0 ? (
             filteredItems.map((item, idx) => {
@@ -164,20 +147,15 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                     backgroundColor: isSelected ? 'var(--bg-hover)' : 'transparent',
                     borderLeft: isSelected ? '2px solid var(--accent)' : '2px solid transparent',
                   }}
-                  onClick={() => {
-                    item.action();
-                    onClose();
-                  }}
+                  onClick={() => { item.action(); onClose(); }}
                   onMouseEnter={() => setSelectedIndex(idx)}
                 >
                   <div style={styles.itemLeft}>
                     {getCategoryIcon(item.category)}
-                    <span 
-                      style={{ 
-                        ...styles.itemLabel,
-                        color: isSelected ? 'var(--text-bright)' : 'var(--text)',
-                      }}
-                    >
+                    <span style={{
+                      ...styles.itemLabel,
+                      color: isSelected ? 'var(--text-bright)' : 'var(--text)',
+                    }}>
                       {item.label}
                     </span>
                   </div>
@@ -195,9 +173,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           )}
         </div>
 
-        {/* Footer shortcuts helper */}
+        {/* Footer */}
         <div style={styles.footer}>
-          <span>↑↓ to navigate · ↵ to select · esc to close</span>
+          <span>↑↓ navigate · ↵ select · esc close</span>
         </div>
       </div>
     </div>
@@ -211,30 +189,31 @@ const styles: { [key: string]: React.CSSProperties } = {
     left: 0,
     width: '100vw',
     height: '100vh',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    backdropFilter: 'blur(8px)',
+    backgroundColor: 'rgba(0, 0, 0, 0.55)',
+    backdropFilter: 'blur(10px)',
+    WebkitBackdropFilter: 'blur(10px)',
     display: 'flex',
     justifyContent: 'center',
     paddingTop: '80px',
-    zIndex: 100,
+    zIndex: 200,
   },
   palette: {
-    backgroundColor: 'var(--bg-sidebar)',
-    border: '1px solid var(--border)',
-    borderRadius: '8px',
-    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.5)',
-    width: '500px',
-    maxHeight: '330px',
+    /* glass-card class handles glass bg/border/shadow */
+    borderRadius: '10px',
+    width: '520px',
+    maxHeight: '360px',
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
+    alignSelf: 'flex-start',
   },
   inputWrapper: {
     display: 'flex',
     alignItems: 'center',
-    padding: '12px 16px',
-    borderBottom: '1px solid var(--border)',
-    backgroundColor: 'var(--bg)',
+    gap: '10px',
+    padding: '14px 16px',
+    borderBottom: '1px solid var(--glass-border)',
+    backgroundColor: 'rgba(0,0,0,0.1)',
   },
   input: {
     flex: 1,
@@ -243,6 +222,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     outline: 'none',
     color: 'var(--text-bright)',
     fontSize: '13px',
+    fontFamily: 'var(--font-ui)',
   },
   list: {
     flex: 1,
@@ -253,7 +233,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '8px 16px',
+    padding: '9px 16px',
     cursor: 'pointer',
     fontSize: '12.5px',
     transition: 'background-color 0.1s',
@@ -270,23 +250,23 @@ const styles: { [key: string]: React.CSSProperties } = {
   itemShortcut: {
     fontSize: '10px',
     color: 'var(--text-dim)',
-    backgroundColor: 'var(--bg-terminal)',
+    backgroundColor: 'rgba(0,0,0,0.2)',
     padding: '2px 6px',
     borderRadius: '4px',
-    border: '1px solid var(--border)',
+    border: '1px solid var(--glass-border)',
   },
   noResults: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '24px',
+    padding: '28px',
     color: 'var(--text-dim)',
     fontSize: '12.5px',
   },
   footer: {
     padding: '8px 16px',
-    borderTop: '1px solid var(--border)',
-    backgroundColor: 'var(--bg-terminal)',
+    borderTop: '1px solid var(--glass-border)',
+    backgroundColor: 'rgba(0,0,0,0.15)',
     color: 'var(--text-dim)',
     fontSize: '10px',
     textAlign: 'center',
