@@ -9,7 +9,7 @@ interface TitleBarProps {
   setTerminalOpen: (open: boolean) => void;
   assistantOpen: boolean;
   setAssistantOpen: (open: boolean) => void;
-  onOpenCmdPalette: () => void;
+  onOpenCmdPalette: (category?: 'all' | 'theme') => void;
 }
 
 export const TitleBar: React.FC<TitleBarProps> = ({
@@ -47,7 +47,7 @@ export const TitleBar: React.FC<TitleBarProps> = ({
         <span style={styles.fileName}>{activeFile}</span>
       </div>
 
-      <div style={styles.searchBar} className="titlebar-search" onClick={onOpenCmdPalette}>
+      <div style={styles.searchBar} className="titlebar-search" onClick={() => onOpenCmdPalette('all')}>
         <Search size={12} style={{ color: 'var(--text-dim)' }} />
         <span style={styles.searchPlaceholder}>
           maheshdiwan.com — <GitBranch size={11} style={{ verticalAlign: 'middle', marginRight: '3px' }} /> main
@@ -117,7 +117,7 @@ export const TitleBar: React.FC<TitleBarProps> = ({
         <div style={styles.layoutControls}>
           <button
             style={{ ...styles.toolBtn, color: 'var(--accent)' }}
-            onClick={onOpenCmdPalette}
+            onClick={() => onOpenCmdPalette('theme')}
             title="Switch Theme / Fonts (Ctrl+P)"
           >
             <Palette size={14} />

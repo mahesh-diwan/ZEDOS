@@ -10,6 +10,7 @@ interface CommandPaletteProps {
   onSelectFont: (fontId: FontId) => void;
   onToggleTerminal: () => void;
   onToggleAssistant: () => void;
+  initialCategory?: 'all' | 'theme';
 }
 
 interface CommandItem {
@@ -27,8 +28,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onSelectFont,
   onToggleTerminal,
   onToggleAssistant,
+  initialCategory = 'all',
 }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialCategory === 'theme' ? 'theme: ' : '');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);

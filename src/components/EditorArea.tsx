@@ -127,6 +127,38 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
     return [root, folder, activeFile];
   };
 
+  if (openFiles.length === 0) {
+    return (
+      <div style={styles.emptyContainer} className="editor-empty-state reveal animate-fade-in">
+        <div style={styles.emptyLogo}>{"{ Z }"}</div>
+        <h3 style={styles.emptyHeading}>No Editors Open</h3>
+        <p style={styles.emptySub}>Select a file from the explorer sidebar or use the search shortcuts below.</p>
+        
+        <div style={styles.shortcutList}>
+          <div style={styles.shortcutItem}>
+            <span style={styles.shortcutLabel}>Search Files</span>
+            <span style={styles.shortcutKey}>Ctrl + P</span>
+          </div>
+          <div style={styles.shortcutItem}>
+            <span style={styles.shortcutLabel}>Toggle Sidebar</span>
+            <span style={styles.shortcutKey}>Ctrl + B</span>
+          </div>
+          <div style={styles.shortcutItem}>
+            <span style={styles.shortcutLabel}>Toggle Terminal</span>
+            <span style={styles.shortcutKey}>Ctrl + `</span>
+          </div>
+        </div>
+
+        <button 
+          onClick={() => setActiveFile('README.md')}
+          style={styles.emptyCta}
+        >
+          Open README.md
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div style={styles.editorArea} className="editor-area-container">
       {/* 1. Tab Bar */}
@@ -364,6 +396,82 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: 600,
     fontSize: '13px',
     boxShadow: '0 4px 15px var(--accent-dim)',
+    transition: 'opacity 0.2s',
+  },
+  emptyContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    height: '100%',
+    backgroundColor: 'var(--bg)',
+    color: 'var(--text-dim)',
+    padding: '32px 16px',
+    boxSizing: 'border-box',
+    textAlign: 'center',
+    fontFamily: 'var(--font-ui)',
+  },
+  emptyLogo: {
+    fontSize: '48px',
+    fontWeight: 800,
+    color: 'var(--border)',
+    fontFamily: 'var(--font-mono)',
+    marginBottom: '16px',
+    letterSpacing: '-0.05em',
+  },
+  emptyHeading: {
+    fontSize: '18px',
+    fontWeight: 700,
+    color: 'var(--text-bright)',
+    marginBottom: '8px',
+    margin: 0,
+  },
+  emptySub: {
+    fontSize: '13px',
+    color: 'var(--text)',
+    maxWidth: '320px',
+    lineHeight: '1.5',
+    margin: '0 0 24px 0',
+  },
+  shortcutList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+    width: '100%',
+    maxWidth: '280px',
+    marginBottom: '28px',
+  },
+  shortcutItem: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    fontSize: '12px',
+    color: 'var(--text)',
+    padding: '4px 0',
+  },
+  shortcutLabel: {
+    fontWeight: 400,
+  },
+  shortcutKey: {
+    fontFamily: 'var(--font-mono)',
+    fontSize: '11px',
+    color: 'var(--text-bright)',
+    backgroundColor: 'var(--bg-terminal)',
+    border: '1px solid var(--border)',
+    padding: '2px 8px',
+    borderRadius: '4px',
+  },
+  emptyCta: {
+    border: 'none',
+    backgroundColor: 'var(--accent)',
+    color: '#ffffff',
+    padding: '10px 20px',
+    borderRadius: '6px',
+    fontSize: '13px',
+    fontWeight: 600,
+    cursor: 'pointer',
+    boxShadow: '0 4px 12px var(--accent-dim)',
     transition: 'opacity 0.2s',
   },
 };

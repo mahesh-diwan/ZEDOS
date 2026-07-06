@@ -168,13 +168,27 @@ export const AssistantDock: React.FC<AssistantDockProps> = ({ onClose, onNavigat
     window.addEventListener('keydown', handleKeyDown);
     canvas.addEventListener('mousedown', handleCanvasClick);
 
+    const getThemeColor = (varName: string, fallback: string) => {
+      try {
+        const val = window.getComputedStyle(document.body).getPropertyValue(varName).trim();
+        return val || fallback;
+      } catch (err) {
+        return fallback;
+      }
+    };
+
+    const textColor = getThemeColor('--text-bright', '#cdd6f4');
+    const accentColor = getThemeColor('--accent', '#cba6f7');
+    const borderColor = getThemeColor('--border', '#313244');
+    const textDimColor = getThemeColor('--text-dim', '#6c7086');
+
     const drawRect = (x: number, y: number, w: number, height: number, color: string) => {
       ctx.fillStyle = color;
       ctx.fillRect(x, y, w, height);
     };
 
     const drawDino = (x: number, y: number, frame: number) => {
-      const color = 'var(--text-bright)';
+      const color = textColor;
       const isLegUp = frame % 2 === 0;
 
       // Simple pixel block Dino
@@ -195,7 +209,7 @@ export const AssistantDock: React.FC<AssistantDockProps> = ({ onClose, onNavigat
     };
 
     const drawCactus = (x: number, y: number, w: number, height: number) => {
-      const color = 'var(--accent)';
+      const color = accentColor;
       drawRect(x + w / 2 - 2, y, 4, height, color); // Stem
       drawRect(x, y + height * 0.3, w, 4, color); // Arms
     };
@@ -206,11 +220,11 @@ export const AssistantDock: React.FC<AssistantDockProps> = ({ onClose, onNavigat
       ctx.clearRect(0, 0, k, C);
 
       // Draw ground line
-      ctx.fillStyle = 'var(--border)';
+      ctx.fillStyle = borderColor;
       ctx.fillRect(0, C - h.groundY, k, 2);
 
       // Draw clouds (tiny stars)
-      ctx.fillStyle = 'var(--text-dim)';
+      ctx.fillStyle = textDimColor;
       [[30, 15], [90, 8], [150, 20], [210, 5], [280, 18]].forEach(([cx, cy]) => {
         ctx.fillRect(cx, cy, 2, 2);
       });

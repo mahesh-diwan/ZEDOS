@@ -27,6 +27,12 @@ export const App: React.FC = () => {
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
+  const [cmdPaletteCategory, setCmdPaletteCategory] = useState<'all' | 'theme'>('all');
+
+  const handleOpenCmdPalette = (category: 'all' | 'theme' = 'all') => {
+    setCmdPaletteCategory(category);
+    setCmdPaletteOpen(true);
+  };
 
   // File States
   const [openFiles, setOpenFiles] = useState<string[]>([
@@ -125,7 +131,7 @@ export const App: React.FC = () => {
       // 4. Open Command Palette (Ctrl + P)
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
         e.preventDefault();
-        setCmdPaletteOpen(true);
+        handleOpenCmdPalette('all');
       }
     };
 
@@ -226,7 +232,7 @@ export const App: React.FC = () => {
         <main style={mobileStyles.contentBody} className="mobile-main-content">
           <EditorArea
             activeFile={activeFile}
-            setActiveFile={setActiveFile}
+            setActiveFile={handleOpenFile}
             openFiles={openFiles}
             closeFile={handleCloseFile}
             onToast={addToast}
@@ -338,7 +344,7 @@ export const App: React.FC = () => {
         setTerminalOpen={handleToggleTerminal}
         assistantOpen={assistantOpen}
         setAssistantOpen={handleToggleAssistant}
-        onOpenCmdPalette={() => setCmdPaletteOpen(true)}
+        onOpenCmdPalette={handleOpenCmdPalette}
       />
 
       {/* 2. Workspace Content Layout */}
@@ -378,7 +384,7 @@ export const App: React.FC = () => {
         <main role="main" className="editor-terminal-container" style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
           <EditorArea
             activeFile={activeFile}
-            setActiveFile={setActiveFile}
+            setActiveFile={handleOpenFile}
             openFiles={openFiles}
             closeFile={handleCloseFile}
             onToast={addToast}
@@ -412,6 +418,7 @@ export const App: React.FC = () => {
           onSelectFont={handleFontSelect}
           onToggleTerminal={() => handleToggleTerminal()}
           onToggleAssistant={() => handleToggleAssistant()}
+          initialCategory={cmdPaletteCategory}
         />
       )}
 
