@@ -45,8 +45,12 @@ export const AboutView: React.FC = () => {
       <h1 style={styles.heading}>Profile & Qualifications</h1>
 
       {/* Sub tabs navigation */}
-      <div style={styles.tabHeader} className="no-select about-subtabs">
+      <div style={styles.tabHeader} className="no-select about-subtabs" role="tablist" aria-label="About subtabs">
         <button 
+          id="tab-bio"
+          role="tab"
+          aria-selected={activeSubTab === 'bio'}
+          aria-controls="panel-bio"
           style={{ 
             ...styles.tabBtn, 
             borderBottom: activeSubTab === 'bio' ? '2px solid var(--accent)' : '2px solid transparent',
@@ -57,6 +61,10 @@ export const AboutView: React.FC = () => {
           Bio & Objectives
         </button>
         <button 
+          id="tab-skills"
+          role="tab"
+          aria-selected={activeSubTab === 'skills'}
+          aria-controls="panel-skills"
           style={{ 
             ...styles.tabBtn, 
             borderBottom: activeSubTab === 'skills' ? '2px solid var(--accent)' : '2px solid transparent',
@@ -67,6 +75,10 @@ export const AboutView: React.FC = () => {
           Skills & Evidence
         </button>
         <button 
+          id="tab-experience"
+          role="tab"
+          aria-selected={activeSubTab === 'experience'}
+          aria-controls="panel-experience"
           style={{ 
             ...styles.tabBtn, 
             borderBottom: activeSubTab === 'experience' ? '2px solid var(--accent)' : '2px solid transparent',
@@ -81,7 +93,7 @@ export const AboutView: React.FC = () => {
       {/* View Content */}
       <div style={styles.tabBody}>
         {activeSubTab === 'bio' && (
-          <div className="reveal animate-fade-in" style={styles.contentSection}>
+          <div className="reveal animate-fade-in" style={styles.contentSection} role="tabpanel" id="panel-bio" aria-labelledby="tab-bio">
             <div style={styles.bioBlock}>
               <h2 style={styles.sectionHeading}>
                 <Compass size={15} style={styles.sectionIcon} />
@@ -137,7 +149,7 @@ export const AboutView: React.FC = () => {
         )}
 
         {activeSubTab === 'skills' && (
-          <div className="reveal animate-fade-in" style={styles.contentSection}>
+          <div className="reveal animate-fade-in" style={styles.contentSection} role="tabpanel" id="panel-skills" aria-labelledby="tab-skills">
             {/* DevOps Evidence Section (チェックマーク list) */}
             <div style={styles.evidenceSection}>
               <h2 style={styles.sectionHeading}>
@@ -194,7 +206,7 @@ export const AboutView: React.FC = () => {
         )}
 
         {activeSubTab === 'experience' && (
-          <div className="reveal animate-fade-in" style={styles.contentSection}>
+          <div className="reveal animate-fade-in" style={styles.contentSection} role="tabpanel" id="panel-experience" aria-labelledby="tab-experience">
             <div style={styles.experienceTimeline}>
               {portfolioConfig.experience.map((exp) => (
                 <div key={exp.id} style={styles.expCard} className="glass-card">

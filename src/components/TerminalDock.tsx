@@ -121,25 +121,26 @@ Date:   Mon Jun 2 11:34:52 2026 +0530
         break;
 
       case 'neofetch':
-        output = `     /\\_/\\      mahesh@ZEDOS
-    ( o.o )     ------------
-     > ^ <      OS: ZEDOS v1.0.0 (Custom Portfolio Shell)
-    /     \\     Host: Web-Vite-SPA Engine
-   (  | |  )    Kernel: React 19.2.7 + TypeScript
-    (__|__)     Uptime: 3 hours, 12 mins
-                Shell: Bash interactive-shell.sh
-                Themes: Tokyo Night, Catppuccin, Nord, Dracula, Rosé Pine
-                Monospace Font: Geist Mono / Fira Code / JetBrains Mono
-                Career Path: Cloud & DevOps Engineer
-                Stack: Kubernetes, Terraform, Docker, AWS (ECS/EKS)`;
+        output = `   .──────────────────────────.     mahesh@ZEDOS
+  /  (o.o)                     \\    ------------
+ /    > ^ <                     \\   OS: ZEDOS v1.1.0 (Custom Portfolio Shell)
+|     /     \\                    |  Kernel: React 19.2.7 + TypeScript
+|    (  | |  )                   |  Shell: bash 5.2.15 (interactive)
+ \\    (__|__)                   /   Uptime: 4 hours, 18 mins
+  \\                            /    Package Manager: npm + Vite
+   '──────────────────────────'     DevOps Stack: AWS EKS, K8s, Terraform, Docker
+                                    Career Target: Cloud & DevOps Engineer`;
         break;
 
       case 'docker':
         if (args[0] === 'ps') {
-          output = `CONTAINER ID   IMAGE                 COMMAND                  CREATED        STATUS        PORTS
-f9a2e31bc439   nginx:alpine          "/docker-entrypoint.…"   2 hours ago    Up 2 hours    0.0.0.0:80->80/tcp
-8d2a1c4e9b92   node:20-alpine        "docker-entrypoint.s…"   2 hours ago    Up 2 hours    0.0.0.0:3000->3000/tcp
-a1b2c3d4e5f6   mongo:latest          "docker-entrypoint.s…"   2 hours ago    Up 2 hours    27017/tcp`;
+          output = `+--------------+-----------------+-----------------------+-------------+-------------+------------------------+
+| CONTAINER ID | IMAGE           | COMMAND               | CREATED     | STATUS      | PORTS                  |
++--------------+-----------------+-----------------------+-------------+-------------+------------------------+
+| f9a2e31bc439 | nginx:alpine    | "/docker-entrypoint…" | 2 hours ago | Up 2 hours  | 0.0.0.0:80->80/tcp     |
+| 8d2a1c4e9b92 | node:20-alpine  | "docker-entrypoint.s…"| 2 hours ago | Up 2 hours  | 0.0.0.0:3000->3000/tcp |
+| a1b2c3d4e5f6 | mongo:latest    | "docker-entrypoint.s…"| 2 hours ago | Up 2 hours  | 27017/tcp              |
++--------------+-----------------+-----------------------+-------------+-------------+------------------------+`;
         } else {
           output = `docker: support command option 'ps' to view container tasks.`;
         }
@@ -147,11 +148,15 @@ a1b2c3d4e5f6   mongo:latest          "docker-entrypoint.s…"   2 hours ago    U
 
       case 'kubectl':
         if (args.join(' ') === 'get pods') {
-          output = `NAME                               READY   STATUS    RESTARTS   AGE
-linkedin-mern-web-7fd89c56-abcde   1/1     Running   0          5d
-voting-app-worker-c4d92a18-xyz12   1/1     Running   1          2d
-redis-cache-77c858546b-pqrst       1/1     Running   0          12d
-postgres-db-0                      1/1     Running   0          12d`;
+          output = `AWS EKS ACTIVE WORKLOAD TELEMETRY:
++------------------------------------+---------+---------+------------+-----+
+| NAME                               | READY   | STATUS  | RESTARTS   | AGE |
++------------------------------------+---------+---------+------------+-----+
+| linkedin-mern-web-7fd89c56-abcde   | 1/1     | Running | 0          | 5d  |
+| voting-app-worker-c4d92a18-xyz12   | 1/1     | Running | 1          | 2d  |
+| redis-cache-77c858546b-pqrst       | 1/1     | Running | 0          | 12d |
+| postgres-db-0                      | 1/1     | Running | 0          | 12d |
++------------------------------------+---------+---------+------------+-----+`;
         } else {
           output = `kubectl: support options 'get pods' to query cluster workload statuses.`;
         }
@@ -159,25 +164,17 @@ postgres-db-0                      1/1     Running   0          12d`;
 
       case 'terraform':
         if (args[0] === 'plan') {
-          output = `Terraform used the selected providers to generate the following execution plan:
+          output = `Terraform execution plan: 2 to add, 0 to change, 0 to destroy.
 
-# aws_s3_bucket.portfolio_assets will be created
-+ resource "aws_s3_bucket" "portfolio_assets" {
-    + arn                         = (known after apply)
-    + bucket                      = "mahesh-portfolio-static-assets"
-    + force_destroy               = false
-    + id                          = (known after apply)
-  }
+[+] aws_s3_bucket.portfolio_assets
+    ├── arn: (known after apply)
+    ├── bucket: "mahesh-portfolio-static-assets"
+    └── force_destroy: false
 
-# github_repository_deploy_key.pages_key will be created
-+ resource "github_repository_deploy_key" "pages_key" {
-    + id         = (known after apply)
-    + key        = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQ..."
-    + repository = "ZEDOS"
-    + title      = "GitHub Pages Deployment Key"
-  }
-
-Plan: 2 to add, 0 to change, 0 to destroy.`;
+[+] github_repository_deploy_key.pages_key
+    ├── id: (known after apply)
+    ├── key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQ..."
+    └── repository: "ZEDOS"`;
         } else {
           output = `terraform: support 'plan' command to audit state adjustments.`;
         }

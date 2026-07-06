@@ -13,6 +13,130 @@ export const ProjectsView: React.FC = () => {
   // First project expanded by default
   const [expandedId, setExpandedId] = useState<string | null>(portfolioConfig.projects[0].id);
 
+  const renderArchitecture = (id: string) => {
+    if (id === 'proj-1') {
+      return (
+        <svg viewBox="0 0 800 160" width="100%" height="100%" style={{ background: 'var(--bg-terminal)', borderRadius: '6px', padding: '16px', border: '1px solid var(--border)', display: 'block' }}>
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)" />
+            </marker>
+          </defs>
+          <rect x="10" y="50" width="100" height="40" rx="4" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="60" y="74" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" textAnchor="middle">Dev Push</text>
+          
+          <path d="M 110 70 L 150 70" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="160" y="40" width="120" height="60" rx="4" fill="var(--accent-dim)" stroke="var(--accent)" strokeWidth="1" />
+          <text x="220" y="68" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" textAnchor="middle" fontWeight="bold">GH Actions</text>
+          <text x="220" y="85" fill="var(--text-dim)" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">CI/CD Pipeline</text>
+          
+          <path d="M 280 70 L 320 70" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="330" y="50" width="100" height="40" rx="4" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="380" y="74" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" textAnchor="middle">AWS ECR</text>
+          
+          <path d="M 430 70 L 470 70" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="480" y="50" width="80" height="40" rx="4" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="520" y="74" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" textAnchor="middle">AWS ALB</text>
+          
+          <path d="M 560 70 L 600 70" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="610" y="10" width="170" height="130" rx="6" fill="rgba(137, 180, 250, 0.03)" stroke="var(--blue)" strokeDasharray="3,3" strokeWidth="1" />
+          <text x="695" y="28" fill="var(--blue)" fontSize="10" fontFamily="var(--font-mono)" textAnchor="middle" fontWeight="bold">AWS EKS Cluster</text>
+          
+          <rect x="625" y="42" width="140" height="22" rx="3" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="695" y="56" fill="var(--text)" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">web-api pod</text>
+          
+          <rect x="625" y="70" width="140" height="22" rx="3" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="695" y="84" fill="var(--text)" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">auth-service pod</text>
+          
+          <rect x="625" y="98" width="140" height="22" rx="3" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="695" y="112" fill="var(--text)" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">mongodb pod</text>
+        </svg>
+      );
+    }
+    if (id === 'proj-2') {
+      return (
+        <svg viewBox="0 0 800 160" width="100%" height="100%" style={{ background: 'var(--bg-terminal)', borderRadius: '6px', padding: '16px', border: '1px solid var(--border)', display: 'block' }}>
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)" />
+            </marker>
+          </defs>
+          <rect x="10" y="60" width="100" height="40" rx="4" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="60" y="84" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" textAnchor="middle">Vote Cast</text>
+          
+          <path d="M 110 80 L 140 80" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="150" y="50" width="110" height="60" rx="4" fill="rgba(166, 227, 161, 0.08)" stroke="var(--success)" strokeWidth="1" />
+          <text x="205" y="78" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" textAnchor="middle" fontWeight="bold">Python UI</text>
+          <text x="205" y="95" fill="var(--text-dim)" fontSize="9" fontFamily="var(--font-mono)" text-anchor="middle">Frontend pod</text>
+          
+          <path d="M 260 80 L 290 80" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="300" y="50" width="110" height="60" rx="4" fill="rgba(243, 139, 168, 0.08)" stroke="var(--error)" strokeWidth="1" />
+          <text x="355" y="78" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" textAnchor="middle" fontWeight="bold">Redis</text>
+          <text x="355" y="95" fill="var(--text-dim)" fontSize="9" fontFamily="var(--font-mono)" text-anchor="middle">In-memory Queue</text>
+          
+          <path d="M 410 80 L 440 80" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="450" y="50" width="110" height="60" rx="4" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="505" y="78" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" textAnchor="middle" fontWeight="bold">C# Worker</text>
+          <text x="505" y="95" fill="var(--text-dim)" fontSize="9" fontFamily="var(--font-mono)" text-anchor="middle">Process Service</text>
+          
+          <path d="M 560 80 L 590 80" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="600" y="50" width="110" height="60" rx="4" fill="rgba(137, 180, 250, 0.08)" stroke="var(--blue)" strokeWidth="1" />
+          <text x="655" y="78" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" textAnchor="middle" fontWeight="bold">PostgreSQL</text>
+          <text x="655" y="95" fill="var(--text-dim)" fontSize="9" fontFamily="var(--font-mono)" text-anchor="middle">Persistent DB</text>
+          
+          <path d="M 655 110 L 655 140 L 205 140 L 205 110" fill="none" stroke="var(--accent)" strokeDasharray="3,3" strokeWidth="1" markerEnd="url(#arrow)" />
+          <text x="430" y="135" fill="var(--accent)" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">Live updates loop via Node.js API</text>
+        </svg>
+      );
+    }
+    if (id === 'proj-3') {
+      return (
+        <svg viewBox="0 0 800 160" width="100%" height="100%" style={{ background: 'var(--bg-terminal)', borderRadius: '6px', padding: '16px', border: '1px solid var(--border)', display: 'block' }}>
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)" />
+            </marker>
+          </defs>
+          <rect x="10" y="55" width="100" height="40" rx="4" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="60" y="79" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" textAnchor="middle">Git Commit</text>
+          
+          <path d="M 110 75 L 150 75" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="160" y="35" width="140" height="80" rx="4" fill="rgba(203, 166, 247, 0.08)" stroke="var(--accent)" strokeWidth="1" />
+          <text x="230" y="60" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" text-anchor="middle" fontWeight="bold">GH Actions Runner</text>
+          <text x="230" y="77" fill="var(--success)" fontSize="9" fontFamily="var(--font-mono)" text-anchor="middle">1. Run pytest suite</text>
+          <text x="230" y="94" fill="var(--success)" fontSize="9" fontFamily="var(--font-mono)" text-anchor="middle">2. Docker image build</text>
+          
+          <path d="M 300 75 L 340 75" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="350" y="55" width="110" height="40" rx="4" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="405" y="79" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" text-anchor="middle">Docker Hub Registry</text>
+          
+          <path d="M 460 75 L 500 75" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="510" y="55" width="100" height="40" rx="4" fill="rgba(137, 180, 250, 0.08)" stroke="var(--blue)" strokeWidth="1" />
+          <text x="560" y="79" fill="var(--blue)" fontSize="10" fontFamily="var(--font-mono)" text-anchor="middle" fontWeight="bold">Secure SSH deploy</text>
+          
+          <path d="M 610 75 L 650 75" stroke="var(--accent)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+          
+          <rect x="660" y="35" width="120" height="80" rx="6" fill="var(--bg-sidebar)" stroke="var(--border)" strokeWidth="1" />
+          <text x="720" y="58" fill="var(--text-bright)" fontSize="11" fontFamily="var(--font-mono)" text-anchor="middle" fontWeight="bold">AWS EC2</text>
+          <text x="720" y="78" fill="var(--text-dim)" fontSize="9" fontFamily="var(--font-mono)" text-anchor="middle">Nginx Reverse Proxy</text>
+          <text x="720" y="95" fill="var(--text-dim)" fontSize="9" fontFamily="var(--font-mono)" text-anchor="middle">Docker container</text>
+        </svg>
+      );
+    }
+    return null;
+  };
+
   const toggleExpand = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
   };
@@ -136,9 +260,11 @@ export const ProjectsView: React.FC = () => {
                         <Cpu size={13} style={{ marginRight: '6px', color: 'var(--blue)' }} />
                         System Architecture Flow
                       </h4>
-                      <pre style={styles.architectureCode} className="no-select">
-                        {proj.architecture}
-                      </pre>
+                      <div style={{ overflowX: 'auto', width: '100%', marginBottom: '16px' }} className="architecture-svg-wrapper">
+                        <div style={{ minWidth: '640px' }}>
+                          {renderArchitecture(proj.id)}
+                        </div>
+                      </div>
                     </div>
                   )}
 
