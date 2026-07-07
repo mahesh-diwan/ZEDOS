@@ -92,40 +92,40 @@
    2. WARM PAPER (Handcrafted Light Parchment)
    ===================================================== */
 .theme-warm-paper {
-  --bg:              #f4e8d4; /* rich warm parchment cream */
-  --bg-sidebar:      #ebd9bf; /* slightly deeper tan/warm sepia */
-  --bg-titlebar:     #decfa7; /* warm tannish title bar */
-  --bg-terminal:     #d4c0a1; /* terminal card bg */
-  --bg-active-tab:   #f4e8d4;
-  --bg-inactive-tab: #decfa7;
-  --bg-hover:        rgba(160, 82, 45, 0.08);
-  --border:          #cfbfa2; /* soft tannish border */
-  --text:            #3d2f23; /* deep warm sepia/charcoal text */
-  --text-bright:     #261a0f; /* rich dark sepia/charcoal text */
-  --text-dim:        #6e5d4f; /* faded sepia gray */
-  --accent:          #a0522d; /* sienna/terracotta */
-  --accent-dim:      rgba(160, 82, 45, 0.12);
-  --accent-border:   rgba(160, 82, 45, 0.3);
-  --accent-tint:     rgba(160, 82, 45, 0.04);
-  --success:         #496d47; /* forest green */
-  --warning:         #b38b2d; /* warm mustard yellow */
-  --error:           #9c3a3a; /* crimson red */
-  --blue:            #385a8a; /* slate blue */
+  --bg:              #eddcb9; /* ancient scripture papyrus cream */
+  --bg-sidebar:      #e1ceaa; /* slightly aged darker sepia tan */
+  --bg-titlebar:     #d5c09a; /* aged scripture title bar */
+  --bg-terminal:     #c7b18b; /* cardboard folder terminal bg */
+  --bg-active-tab:   #eddcb9;
+  --bg-inactive-tab: #d5c09a;
+  --bg-hover:        rgba(139, 69, 19, 0.08);
+  --border:          #bda67b; /* soft aged sepia border */
+  --text:            #2e2114; /* deep burnt charcoal brown text */
+  --text-bright:     #191008; /* rich dark sepia/almost black text */
+  --text-dim:        #5c4c3d; /* faded sepia gray */
+  --accent:          #8b4513; /* saddle brown/leather accent */
+  --accent-dim:      rgba(139, 69, 19, 0.12);
+  --accent-border:   rgba(139, 69, 19, 0.3);
+  --accent-tint:     rgba(139, 69, 19, 0.04);
+  --success:         #3b5c39; /* deep forest sage */
+  --warning:         #a1791d; /* aged gold yellow */
+  --error:           #8c2e2e; /* dried blood crimson red */
+  --blue:            #2f4f75; /* vintage ink blue */
   --syntax-keyword:  #8b4513; /* saddle brown */
-  --syntax-string:   #496d47; /* forest green */
-  --syntax-comment:  #8a7a6c; /* parchment comment */
+  --syntax-string:   #3b5c39; /* deep forest sage */
+  --syntax-comment:  #756555; /* aged comment */
   --syntax-number:   #a0522d; /* sienna */
-  --syntax-function: #385a8a; /* slate blue */
-  --syntax-tag:      #9c3a3a; /* crimson */
+  --syntax-function: #2f4f75; /* vintage ink blue */
+  --syntax-tag:      #8c2e2e; /* crimson */
   /* Glass system */
-  --glass-bg:        rgba(235, 217, 191, 0.75);
-  --glass-border:    rgba(160, 82, 45, 0.15);
-  --glass-shadow:    0 8px 32px rgba(90, 70, 50, 0.12);
+  --glass-bg:        rgba(225, 206, 170, 0.75);
+  --glass-border:    rgba(139, 69, 19, 0.15);
+  --glass-shadow:    0 8px 32px rgba(60, 45, 30, 0.12);
   --surface:         var(--bg-sidebar);
   --surface-hover:   var(--bg-hover);
   --surface-active:  var(--bg-active-tab);
   --text-muted:      var(--text-dim);
-  --btn-text:        #f4e8d4;
+  --btn-text:        #eddcb9;
 }
 
 /* =====================================================
@@ -1104,6 +1104,11 @@ textarea:focus-visible {
   .view-container select,
   .terminal-dock-panel input {
     font-size: 16px;
+  }
+  .terminal-dock-panel input:focus,
+  .terminal-dock-panel input:focus-visible {
+    box-shadow: none !important;
+    outline: none !important;
   }
 
   /* Code line wrap */
