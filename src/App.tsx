@@ -163,146 +163,7 @@ export const App: React.FC = () => {
     addToast('🎨', `Theme switched to ${themeName}`);
   };
 
-  /* ─── MOBILE LAYOUT ─────────────────────────────────── */
-  if (isMobile) {
-    return (
-      <div className={`app-container mobile-app-layout theme-${themeId}`}>
-
-        {/* Mobile Header — glass surface applied via CSS */}
-        <header className="no-select" role="banner">
-          {/* Left: ZEDOS branding */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={mobileStyles.brandChip}>
-              <span style={mobileStyles.brandDot} />
-              <span style={mobileStyles.brandTitle}>ZEDOS</span>
-            </div>
-          </div>
-
-          {/* Right: Resume, Palette, AI Assistant */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <a
-              href="./Mahesh_Diwan_Resume.pdf"
-              download="Mahesh_Diwan_Resume.pdf"
-              className="btn-primary"
-              style={{ fontSize: '11px', padding: '6px 12px', borderRadius: '5px' }}
-              title="Download Resume"
-            >
-              <Download size={11} />
-              Resume
-            </a>
-            <button
-              onClick={() => handleOpenCmdPalette('theme')}
-              style={mobileStyles.iconBtn}
-              title="Themes"
-              aria-label="Open theme switcher"
-            >
-              <Palette size={16} />
-            </button>
-            <button
-              onClick={() => setAssistantOpen(!assistantOpen)}
-              style={{
-                ...mobileStyles.iconBtn,
-                color: assistantOpen ? 'var(--accent)' : 'var(--text-dim)',
-                borderColor: assistantOpen ? 'var(--accent-border)' : 'var(--glass-border)',
-              }}
-              title="AI Assistant"
-              aria-label="Toggle AI Assistant"
-            >
-              <Sparkles size={16} />
-            </button>
-          </div>
-        </header>
-
-        {/* Main Content */}
-        <main className="mobile-main-content">
-          <EditorArea
-            activeFile={activeFile}
-            setActiveFile={handleOpenFile}
-            openFiles={openFiles}
-            closeFile={handleCloseFile}
-            onToast={addToast}
-          />
-        </main>
-
-        {/* Bottom Nav — 5 direct destinations — glass applied via CSS */}
-        <nav className="no-select" role="navigation" aria-label="Main navigation">
-          {[
-            { file: 'README.md',  icon: <Home size={19} />,     label: 'Home' },
-            { file: 'ABOUT.md',   icon: <User size={19} />,     label: 'About' },
-            { file: 'PROJECTS.md', icon: <Folder size={19} />,  label: 'Projects' },
-            { file: 'BLOGS.md',   icon: <BookOpen size={19} />, label: 'Blog' },
-            { file: 'CONTACT.md', icon: <Mail size={19} />,     label: 'Contact' },
-          ].map(({ file, icon, label }) => (
-            <button
-              key={file}
-              style={{
-                ...mobileStyles.navBtn,
-                color: activeFile === file ? 'var(--accent)' : 'var(--text-dim)',
-              }}
-              onClick={() => handleOpenFile(file)}
-              aria-current={activeFile === file ? 'page' : undefined}
-              aria-label={label}
-            >
-              {icon}
-              <span style={{
-                ...mobileStyles.navLabel,
-                fontWeight: activeFile === file ? 700 : 500,
-              }}>
-                {label}
-              </span>
-            </button>
-          ))}
-        </nav>
-
-        {/* AI Assistant Slide-up Bottom Sheet */}
-        {assistantOpen && (
-          <div style={mobileStyles.overlayBackdrop} onClick={() => setAssistantOpen(false)}>
-            <div
-              className="assistant-sheet-panel"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <AssistantDock
-                onClose={() => setAssistantOpen(false)}
-                onNavigate={handleOpenFile}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Command Palette */}
-        {cmdPaletteOpen && (
-          <CommandPalette
-            onClose={() => setCmdPaletteOpen(false)}
-            onOpenFile={handleOpenFile}
-            onSelectTheme={handleThemeSelect}
-            onToggleTerminal={() => handleToggleTerminal()}
-            onToggleAssistant={() => handleToggleAssistant()}
-            initialCategory={cmdPaletteCategory}
-          />
-        )}
-
-        {/* Toast — above bottom nav */}
-        <div
-          style={{
-            ...styles.toastContainer,
-            bottom: 'calc(60px + env(safe-area-inset-bottom, 0px) + 12px)',
-            left: '12px',
-            right: '12px',
-          }}
-          className="no-select"
-        >
-          {toasts.map((toast) => (
-            <div key={toast.id} style={styles.toastCard} className="animate-slide-up">
-              <span style={styles.toastIcon}>{toast.icon}</span>
-              <span style={styles.toastMsg}>{toast.msg}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  /* ─── DESKTOP LAYOUT ─────────────────────────────────── */
+  /* ─── UNIFIED LAYOUT (DESKTOP + MOBILE) ──────────────── */
   return (
     <div className={`app-container theme-${themeId}`}>
       {/* Title bar */}
@@ -319,21 +180,35 @@ export const App: React.FC = () => {
 
       {/* Workspace */}
       <div className="main-layout" style={{ position: 'relative' }}>
-        {/* Drawer backdrop */}
-        {isMobile && (projectPanelOpen || assistantOpen) && (
+        {/* Drawer backdrop (mobile only) */}
+        {isMobile && (projectPanelOpen || assistantOpen || terminalOpen) && (
           <div
-            onClick={() => { setProjectPanelOpen(false); setAssistantOpen(false); }}
+            onClick={() => {
+              setProjectPanelOpen(false);
+              setAssistantOpen(false);
+              setTerminalOpen(false);
+            }}
             style={{
-              position: 'fixed', top: 0, left: 0,
-              width: '100vw', height: '100vh',
-              backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 99,
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
+              zIndex: 140,
             }}
           />
         )}
 
         {/* Left File Tree */}
         {projectPanelOpen && (
-          <aside role="complementary" aria-label="Project Explorer" style={{ width: '210px', flexShrink: 0, height: '100%' }}>
+          <aside
+            role="complementary"
+            aria-label="Project Explorer"
+            className="project-explorer-aside"
+          >
             <ProjectPanel
               activeFile={activeFile}
               onFileSelect={handleOpenFile}
@@ -353,19 +228,27 @@ export const App: React.FC = () => {
             onToast={addToast}
           />
           {terminalOpen && (
-            <TerminalDock
-              onClose={() => handleToggleTerminal(false)}
-              onOpenFile={handleOpenFile}
-            />
+            <div className="terminal-dock-container">
+              <TerminalDock
+                onClose={() => handleToggleTerminal(false)}
+                onOpenFile={handleOpenFile}
+              />
+            </div>
           )}
         </main>
 
         {/* Right AI Assistant Dock */}
         {assistantOpen && (
-          <AssistantDock
-            onClose={() => handleToggleAssistant(false)}
-            onNavigate={handleOpenFile}
-          />
+          <aside
+            role="complementary"
+            aria-label="AI Assistant"
+            className="assistant-dock-aside"
+          >
+            <AssistantDock
+              onClose={() => handleToggleAssistant(false)}
+              onNavigate={handleOpenFile}
+            />
+          </aside>
         )}
       </div>
 
@@ -384,8 +267,14 @@ export const App: React.FC = () => {
         />
       )}
 
-      {/* Toast */}
-      <div style={styles.toastContainer} className="no-select">
+      {/* Toast Container */}
+      <div
+        style={{
+          ...styles.toastContainer,
+          bottom: isMobile ? 'calc(24px + env(safe-area-inset-bottom, 0px) + 12px)' : '24px',
+        }}
+        className="no-select"
+      >
         {toasts.map((toast) => (
           <div key={toast.id} style={styles.toastCard} className="animate-slide-up">
             <span style={styles.toastIcon}>{toast.icon}</span>
@@ -397,87 +286,10 @@ export const App: React.FC = () => {
   );
 };
 
-const mobileStyles: { [key: string]: React.CSSProperties } = {
-  brandChip: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '6px',
-    background: 'var(--accent-dim)',
-    border: '1px solid var(--accent-border)',
-    borderRadius: '6px',
-    padding: '3px 10px 3px 8px',
-  },
-  brandDot: {
-    width: '7px',
-    height: '7px',
-    borderRadius: '50%',
-    backgroundColor: 'var(--accent)',
-    display: 'inline-block',
-    animation: 'pulseSuccess 2s infinite ease-in-out',
-  },
-  brandTitle: {
-    fontSize: '13px',
-    fontWeight: 800,
-    color: 'var(--text-bright)',
-    letterSpacing: '0.08em',
-  },
-  iconBtn: {
-    background: 'var(--glass-bg)',
-    backdropFilter: 'blur(12px)',
-    WebkitBackdropFilter: 'blur(12px)',
-    border: '1px solid var(--glass-border)',
-    color: 'var(--text-muted)',
-    borderRadius: '6px',
-    width: '36px',
-    height: '36px',
-    minWidth: '44px',
-    minHeight: '44px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    padding: 0,
-    transition: 'color 0.2s, border-color 0.2s',
-  },
-  navBtn: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '3px',
-    flex: 1,
-    height: '100%',
-    minHeight: '44px',
-    cursor: 'pointer',
-    padding: '4px 0',
-    transition: 'color 0.15s',
-  },
-  navLabel: {
-    fontSize: '11px',
-    letterSpacing: '0.01em',
-    fontWeight: 500,
-  },
-  overlayBackdrop: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: 150,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-  },
-};
-
 /* ─── SHARED STYLES ──────────────────────────────────── */
 const styles: { [key: string]: React.CSSProperties } = {
   toastContainer: {
     position: 'fixed',
-    bottom: '24px',
     right: '24px',
     display: 'flex',
     flexDirection: 'column',

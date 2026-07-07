@@ -429,14 +429,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--transition-std), color var(--transition-std);
-}
-
-@media (min-width: 769px) {
-  body {
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
-  }
+  overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
 }
 
 button, input, textarea, select {
@@ -1259,153 +1255,107 @@ textarea:focus-visible {
    MOBILE RESPONSIVE — max-width: 768px
    ===================================================== */
 @media (max-width: 768px) {
-  html, body {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: auto;
-    min-height: 100%;
-    position: relative;
-  }
-
-  .mobile-app-layout {
-    height: auto;
-    min-height: 100dvh;
-    overflow: visible;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* Mobile Header — glass surface */
-  .mobile-app-layout header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 52px;
-    width: 100vw;
-    z-index: var(--z-overlay);
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(20px) saturate(160%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
-    border-bottom: 1px solid var(--glass-border) !important;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.25) !important;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 14px;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-left: calc(14px + env(safe-area-inset-left, 0px));
-    padding-right: calc(14px + env(safe-area-inset-right, 0px));
-  }
-
-  /* Mobile Bottom Nav — glass surface */
-  .mobile-app-layout nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 64px;
-    width: 100vw;
-    z-index: var(--z-overlay);
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(20px) saturate(160%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
-    border-top: 1px solid var(--glass-border) !important;
-    box-shadow: 0 -2px 20px rgba(0,0,0,0.2) !important;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0 4px;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    padding-left: calc(4px + env(safe-area-inset-left, 0px));
-    padding-right: calc(4px + env(safe-area-inset-right, 0px));
-  }
-
-  .mobile-main-content {
-    display: block;
-    height: auto;
-    overflow: visible;
-    overflow-x: hidden;
-    padding-top: 52px;
-    padding-bottom: 64px;
-    min-height: calc(100dvh - 116px);
-    box-sizing: border-box;
-    flex: none;
-  }
-
-  .editor-area-container,
-  .editor-viewport-container {
-    height: auto;
-    overflow: visible;
-    display: block;
-    flex: none;
-  }
-
-  /* Assistant slide-up bottom sheet (glass) */
-  .assistant-sheet-panel {
-    position: fixed;
-    bottom: 64px;
-    left: 0;
-    right: 0;
-    height: 72vh;
-    max-height: calc(100dvh - 120px);
-    z-index: var(--z-sheet);
+  /* Left Explorer overlay drawer on mobile */
+  .project-explorer-aside {
+    position: fixed !important;
+    top: 38px !important;
+    left: 0 !important;
+    bottom: 24px !important;
+    width: 230px !important;
+    height: auto !important;
+    z-index: 150 !important;
+    box-shadow: var(--glass-shadow) !important;
+    border-right: 1px solid var(--glass-border) !important;
     background: var(--glass-bg) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    animation: slideRight 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Right Assistant overlay drawer on mobile */
+  .assistant-dock-aside {
+    position: fixed !important;
+    top: 38px !important;
+    right: 0 !important;
+    bottom: 24px !important;
+    width: 290px !important;
+    height: auto !important;
+    z-index: 150 !important;
+    box-shadow: var(--glass-shadow) !important;
+    border-left: 1px solid var(--glass-border) !important;
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    animation: slideLeft 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Bottom Terminal overlay drawer on mobile */
+  .terminal-dock-container {
+    position: fixed !important;
+    bottom: 24px !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 250px !important;
+    z-index: 150 !important;
+    box-shadow: var(--glass-shadow) !important;
     border-top: 1px solid var(--glass-border) !important;
-    border-top-left-radius: var(--radius-xl);
-    border-top-right-radius: var(--radius-xl);
-    box-shadow: 0 -8px 40px rgba(0,0,0,0.35) !important;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    animation: slideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   /* View container on mobile */
   .view-container {
-    padding: 1.5rem 1rem;
-    height: auto;
-    min-height: 100%;
-    overflow: visible;
-    display: block;
+    padding: 1.25rem 1rem;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 
   .view-container h1 {
-    font-size: clamp(22px, 6vw, 28px);
+    font-size: clamp(20px, 6vw, 24px);
     line-height: 1.2;
   }
 
-  /* TitleBar hidden on mobile */
+  /* TitleBar details on mobile */
   .titlebar-search { display: none; }
   .titlebar-share-text, .titlebar-divider { display: none; }
   .titlebar-breadcrumbs {
     font-size: 10px;
-    max-width: 110px;
+    max-width: 100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .titlebar-collab { gap: 4px; }
+  .titlebar-collab { display: none !important; }
 
-  /* Editor tabbar hidden on mobile */
-  .editor-tabbar { display: none; }
-  .editor-pane-header { display: none; }
+  /* Editor tabbar details on mobile */
+  .editor-tabbar {
+    height: 34px;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .editor-tab {
+    padding: 0 8px 0 12px;
+    height: 34px;
+    font-size: 11px;
+    min-width: 80px;
+  }
 
   /* Command Palette Modal adjustment */
   .cmd-palette-wrapper {
-    width: 90vw;
+    width: 92vw;
     max-width: 360px;
-    top: 60px;
+    top: 50px;
   }
 
   /* PDF Fallback */
   .pdf-iframe { display: none; }
   .pdf-mobile-fallback { display: flex; }
 
-  /* StatusBar */
+  /* StatusBar details on mobile */
   .statusbar-item-lncol,
   .statusbar-item-spaces,
   .statusbar-item-encoding,
@@ -1414,19 +1364,18 @@ textarea:focus-visible {
 
   /* Grids */
   .projects-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: 1fr;
     gap: 16px;
   }
   .contact-layout-grid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 20px;
   }
 
-  /* Terminal */
+  /* Terminal inputs size */
   .terminal-dock-panel span,
-  .terminal-dock-panel div { font-size: 13.5px; }
+  .terminal-dock-panel div { font-size: 12.5px; }
 
-  /* Safari input zoom prevention — scoped to view-container inputs only */
   .view-container input,
   .view-container textarea,
   .view-container select,
@@ -1434,33 +1383,26 @@ textarea:focus-visible {
     font-size: 16px;
   }
 
-  /* Fix terminal input height */
-  .terminal-dock-panel input { height: 36px; }
-
-  /* code wrapping */
+  /* Code line wrap */
   pre, code {
     white-space: pre-wrap;
     word-break: break-all;
     max-width: 100%;
     overflow-x: auto;
   }
+}
 
-  /* Mobile page transition */
-  .mobile-main-content .editor-area-container {
-    animation: fadeIn 0.2s ease-out;
-  }
+/* =====================================================
+   ADDITIONAL ANIMATIONS
+   ===================================================== */
+@keyframes slideRight {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
 
-  /* Landscape mode */
-  @media (max-height: 480px) and (orientation: landscape) {
-    .mobile-app-layout header { height: 40px; }
-    .mobile-app-layout nav { height: 50px; }
-    .mobile-app-layout nav span { display: none; }
-    .mobile-app-layout nav button { gap: 0; }
-    .mobile-main-content {
-      padding-top: 40px;
-      padding-bottom: 50px;
-    }
-  }
+@keyframes slideLeft {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
 }
 
 /* =====================================================
