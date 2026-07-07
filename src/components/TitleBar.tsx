@@ -37,7 +37,7 @@ export const TitleBar: React.FC<TitleBarProps> = ({
       role="banner"
     >
       {/* 1. Window Controls (macOS dots) */}
-      <div style={styles.windowControls}>
+      <div style={styles.windowControls} className="titlebar-window-controls">
         <div style={{ ...styles.dot, backgroundColor: 'var(--dot-red)' }} />
         <div style={{ ...styles.dot, backgroundColor: 'var(--dot-yellow)' }} />
         <div style={{ ...styles.dot, backgroundColor: 'var(--dot-green)' }} />

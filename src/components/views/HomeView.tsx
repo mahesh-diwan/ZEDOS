@@ -37,7 +37,7 @@ const ClusterMonitor: React.FC = () => {
   }, []);
 
   return (
-    <div style={monitorStyles.container} className="reveal animate-fade-in">
+    <div style={monitorStyles.container} className="reveal animate-fade-in cluster-monitor-container">
       <div style={monitorStyles.header}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <span style={monitorStyles.statusPulse} />
@@ -46,8 +46,8 @@ const ClusterMonitor: React.FC = () => {
         <span style={monitorStyles.hostLabel}>eks-ap-south-1.amazonaws.com</span>
       </div>
 
-      <div style={monitorStyles.body}>
-        <div style={monitorStyles.statsPanel}>
+      <div style={monitorStyles.body} className="cluster-monitor-body">
+        <div style={monitorStyles.statsPanel} className="cluster-monitor-stats">
           <div style={monitorStyles.metricRow}>
             <div style={monitorStyles.metricText}>
               <span>CPU Load</span>
@@ -68,7 +68,7 @@ const ClusterMonitor: React.FC = () => {
             </div>
           </div>
 
-          <div style={monitorStyles.podGrid}>
+          <div style={monitorStyles.podGrid} className="cluster-monitor-pod-grid">
             <div style={monitorStyles.podCard} className="pod-card-custom">
               <span style={{ ...monitorStyles.podDot, backgroundColor: 'var(--success)' }} />
               <span style={monitorStyles.podName}>web-api-fargate</span>
@@ -88,7 +88,7 @@ const ClusterMonitor: React.FC = () => {
           </div>
         </div>
 
-        <div style={monitorStyles.logsPanel}>
+        <div style={monitorStyles.logsPanel} className="cluster-monitor-logs">
           <div style={monitorStyles.logsTitle}>CONTAINER LOGS (STDOUT)</div>
           <div style={monitorStyles.logsContainer}>
             {logs.map((log, idx) => (

@@ -122,7 +122,7 @@ export const portfolioConfig = {
       name: "LinkedIn Clone MERN",
       desc: "Full-stack social platform containerized with Docker Compose. Deployed to AWS ECS Fargate behind an ALB and migrated to EKS with horizontal pod autoscaling. CI/CD automated via GitHub Actions building and pushing to ECR with Prometheus logging and Terraform HCL definitions.",
       type: "DevOps · Cloud · MERN",
-      tags: ["Docker", "AWS ECS/EKS", "ECR", "Terraform", "Prometheus", "GitHub Actions", "React", "Node.js", "MongoDB"],
+      tags: ["Docker", "AWS ECS/EKS", "ECR", "GitHub Actions", "React", "Node.js", "MongoDB"],
       link: "https://github.com/mahesh-diwan/LinkedIn-Clone-EKS",
       accent: "#61afef",
       icon: "🐳",
