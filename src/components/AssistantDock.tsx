@@ -74,7 +74,7 @@ export const AssistantDock: React.FC<AssistantDockProps> = ({ onClose, onNavigat
     {
       id: 'msg-1',
       role: 'assistant',
-      content: "Hey there! I'm Mahesh's portfolio assistant. Ask me anything about his DevOps work, tech stack, or projects.\n\n*Tip: Type 'play dino' if you need a break. 🦖*",
+      content: "Hey there! I'm Mahesh's portfolio assistant. Ask me anything about his DevOps work, tech stack, or projects.\n\n⚡ *Model Context Protocol (MCP) active: playwright, context7, github. Ask me to run browser audits, query docs, or fetch repo details!*",
     },
   ]);
   const [inputVal, setInputVal] = useState('');

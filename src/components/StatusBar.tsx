@@ -53,6 +53,13 @@ export const StatusBar: React.FC<StatusBarProps> = ({ activeFile }) => {
           <AlertCircle size={12} style={{ marginRight: '4px' }} />
           <span>0 warnings</span>
         </div>
+
+        <div style={styles.divider} className="statusbar-divider" />
+
+        <div style={{ ...styles.item, color: 'var(--accent)' }} className="statusbar-item-mcp" title="Active Model Context Protocol servers">
+          <span style={styles.pulseDot} />
+          <span style={{ fontWeight: 600 }}>MCP: 3 Active</span>
+        </div>
       </div>
 
       {/* Right Section */}
@@ -128,5 +135,14 @@ const styles: { [key: string]: React.CSSProperties } = {
     width: '1px',
     height: '12px',
     backgroundColor: 'var(--border)',
+  },
+  pulseDot: {
+    width: '6px',
+    height: '6px',
+    borderRadius: '50%',
+    backgroundColor: 'var(--success)',
+    boxShadow: '0 0 0 0 var(--accent-dim)',
+    animation: 'pulseSuccess 2s infinite ease-in-out',
+    display: 'inline-block',
   },
 };

@@ -1,15 +1,8 @@
 import { useState, useEffect } from 'react';
 
 export type ThemeId = 
-  | 'zed-dark' 
-  | 'zed-light' 
-  | 'one-dark' 
-  | 'gruvbox-dark' 
-  | 'tokyo-night'
   | 'catppuccin'
-  | 'dracula'
-  | 'nord'
-  | 'rose-pine';
+  | 'warm-paper';
 
 export interface ThemeConfig {
   id: ThemeId;
@@ -18,27 +11,17 @@ export interface ThemeConfig {
 }
 
 export const themes: ThemeConfig[] = [
-  { id: 'tokyo-night', name: 'Tokyo Night', isDark: true },
-  { id: 'catppuccin', name: 'Catppuccin Macchiato', isDark: true },
-  { id: 'dracula', name: 'Dracula', isDark: true },
-  { id: 'nord', name: 'Nord Frost', isDark: true },
-  { id: 'rose-pine', name: 'Rosé Pine', isDark: true },
-  { id: 'zed-dark', name: 'Zed Dark', isDark: true },
-  { id: 'zed-light', name: 'Zed Light', isDark: false },
-  { id: 'one-dark', name: 'One Dark', isDark: true },
-  { id: 'gruvbox-dark', name: 'Gruvbox Dark', isDark: true },
+  { id: 'catppuccin', name: 'Catppuccin Mocha', isDark: true },
+  { id: 'warm-paper', name: 'Warm Paper', isDark: false },
 ];
 
 export function useTheme() {
   const [themeId, setThemeIdState] = useState<ThemeId>(() => {
     const saved = localStorage.getItem('zed-portfolio-theme') as ThemeId;
-    if (saved && [
-      'zed-dark', 'zed-light', 'one-dark', 'gruvbox-dark', 'tokyo-night',
-      'catppuccin', 'dracula', 'nord', 'rose-pine'
-    ].includes(saved)) {
+    if (saved && ['catppuccin', 'warm-paper'].includes(saved)) {
       return saved;
     }
-    return 'tokyo-night';
+    return 'catppuccin';
   });
 
   useEffect(() => {
@@ -47,6 +30,13 @@ export function useTheme() {
     themes.forEach((t) => {
       body.classList.remove(`theme-${t.id}`);
     });
+    // Remove any leftover legacy themes
+    const legacyThemes = [
+      'tokyo-night', 'dracula', 'nord', 'rose-pine',
+      'zed-dark', 'zed-light', 'one-dark', 'gruvbox-dark'
+    ];
+    legacyThemes.forEach((t) => body.classList.remove(`theme-${t}`));
+
     body.classList.add(`theme-${themeId}`);
     
     // Set storage

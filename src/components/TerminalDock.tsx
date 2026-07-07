@@ -73,6 +73,8 @@ export const TerminalDock: React.FC<TerminalDockProps> = ({ onClose, onOpenFile 
   contact          — open contact details (CONTACT.md)
   github           — open GitHub profile in a new tab
   linkedin         — open LinkedIn profile in a new tab
+  mcp status       — list active Model Context Protocol servers
+  mcp run <name>   — execute simulated tool calls (playwright|context7|github)
   neofetch         — display ZEDOS system diagnostics
   docker ps        — check running container tasks (DevOps)
   kubectl get pods — fetch active Kubernetes pods status (K8s)
@@ -81,6 +83,50 @@ export const TerminalDock: React.FC<TerminalDockProps> = ({ onClose, onOpenFile 
   date             — show current date and time
   git log          — show simulated commits
   clear            — clear terminal output history`;
+        break;
+
+      case 'mcp':
+        if (args[0] === 'status' || args.length === 0) {
+          output = `⚡ CONNECTED MODEL CONTEXT PROTOCOL (MCP) SERVERS:
+┌─────────────────┬──────────┬─────────────────────────────────────────────────┐
+│ Server Name     │ Status   │ Exposed Tools / Functions                       │
+├─────────────────┼──────────┼─────────────────────────────────────────────────┤
+│ playwright      │ ACTIVE   │ browser_navigate, browser_click, browser_type   │
+│                 │          │ browser_evaluate, browser_take_screenshot       │
+├─────────────────┼──────────┼─────────────────────────────────────────────────┤
+│ context7        │ ACTIVE   │ query-docs, resolve-library-id                  │
+├─────────────────┼──────────┼─────────────────────────────────────────────────┤
+│ github          │ ACTIVE   │ list_repos, get_commits, open_pull_request      │
+└─────────────────┴──────────┴─────────────────────────────────────────────────┘
+Type 'mcp run <name>' (playwright | context7 | github) to trigger a simulated tool run!`;
+        } else if (args[0] === 'run') {
+          const service = args[1]?.toLowerCase();
+          if (service === 'playwright') {
+            output = `🤖 [playwright] Executing simulated layout validation tests...
+🔍 Navigating to http://localhost:5173/ZEDOS/ ...
+📱 Emulating device: iPhone 14 Pro (390x844)
+📸 Captured mobile screenshot: 'simulated_mobile_editor_only.png'
+✅ Verified: 0 layout overlaps detected, touch target sizes meet >48px WCAG AA specifications.
+🎉 Layout verification passed successfully!`;
+          } else if (service === 'context7') {
+            output = `📚 [context7] Running mock semantic documentation fetcher...
+🔍 Querying documentation database for: "Vite + React 18 styling rules"...
+Resolved library ID: "react-18-hooks-css-modules"
+📝 Fetched: "Vite handles CSS Modules by default; ensure all styles are scoped. Avoid wildcard '*' transitions to eliminate repaint stutters."`;
+          } else if (service === 'github') {
+            output = `🐙 [github] Connecting to GitHub API...
+👤 Authenticated as: mahesh-diwan
+📊 Repository statistics for 'mahesh-diwan/ZEDOS':
+   ├── Commits: 47 total, 8 commits in last 48 hours
+   ├── Open PRs: 0 (clean trunk development)
+   ├── Branches: 2 (main, dev)
+✅ Successfully synced GitHub repository state.`;
+          } else {
+            output = `mcp: server not found: ${args[1]}. Available options: playwright, context7, github.`;
+          }
+        } else {
+          output = `mcp: unknown command: ${args[0]}. Try 'mcp status' or 'mcp run <name>'.`;
+        }
         break;
 
       case 'ls':
@@ -343,7 +389,8 @@ Loading gravity bypass module...
           <div key={idx} style={styles.historyLine}>
             {item.type === 'input' ? (
               <div style={styles.inputPromptRow}>
-                <span style={styles.prompt}>mahesh@zedos:~$</span>
+                <span style={styles.promptUser}>zedos</span>
+                <span style={styles.promptArrow}>➜</span>
                 <span style={styles.inputText}>{item.text}</span>
               </div>
             ) : (
@@ -351,9 +398,10 @@ Loading gravity bypass module...
             )}
           </div>
         ))}
-        {/* Active input line */}
-        <div style={styles.inputPromptRow}>
-          <span style={styles.prompt}>mahesh@zedos:~$</span>
+        {/* Active input line with active focus card style */}
+        <div style={styles.inputPromptRowActive}>
+          <span style={styles.promptUser}>zedos</span>
+          <span style={styles.promptArrow}>➜</span>
           <input
             ref={inputRef}
             type="text"
@@ -365,6 +413,7 @@ Loading gravity bypass module...
             autoCorrect="off"
             autoCapitalize="off"
             spellCheck="false"
+            placeholder="Type 'help'..."
           />
         </div>
         <div ref={bottomRef} />
@@ -429,24 +478,41 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   termContainer: {
     flex: 1,
-    padding: '12px 16px',
+    padding: '14px 16px',
     overflowY: 'auto',
     fontFamily: 'var(--font-mono)',
-    fontSize: '11.5px',
-    lineHeight: '1.65',
+    fontSize: '12px',
+    lineHeight: '1.7',
     color: 'var(--text-bright)',
   },
   historyLine: {
-    marginBottom: '4px',
+    marginBottom: '6px',
   },
   inputPromptRow: {
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: '6px',
   },
-  prompt: {
-    color: 'var(--success)',
+  inputPromptRowActive: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    background: 'var(--accent-tint)',
+    border: '1px solid var(--accent-border)',
+    borderRadius: '6px',
+    padding: '6px 12px',
+    marginTop: '8px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+  },
+  promptUser: {
+    color: 'var(--accent)',
     fontWeight: 700,
+    flexShrink: 0,
+    letterSpacing: '0.02em',
+  },
+  promptArrow: {
+    color: 'var(--success)',
+    fontWeight: 900,
     flexShrink: 0,
   },
   inputText: {
@@ -456,6 +522,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: 'var(--text)',
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-all',
+    paddingLeft: '4px',
+    margin: '4px 0 10px 0',
+    borderLeft: '2px solid var(--border)',
   },
   termInput: {
     flex: 1,
@@ -464,7 +533,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     outline: 'none',
     color: 'var(--text-bright)',
     fontFamily: 'var(--font-mono)',
-    fontSize: '11.5px',
+    fontSize: '12px',
     padding: 0,
     caretColor: 'var(--accent)',
   },

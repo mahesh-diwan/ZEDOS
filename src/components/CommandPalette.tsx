@@ -29,15 +29,8 @@ interface ThemePreview {
 }
 
 const THEME_PREVIEWS: ThemePreview[] = [
-  { id: 'tokyo-night',  name: 'Tokyo Night',        accent: '#bb9af3', bg: '#1a1b26' },
-  { id: 'catppuccin',   name: 'Catppuccin Macchiato', accent: '#c6a0f6', bg: '#24273a' },
-  { id: 'dracula',      name: 'Dracula',             accent: '#bd93f9', bg: '#282a36' },
-  { id: 'nord',         name: 'Nord Frost',          accent: '#88c0d0', bg: '#2e3440' },
-  { id: 'rose-pine',    name: 'Rosé Pine',           accent: '#ebbcba', bg: '#191724' },
-  { id: 'zed-dark',     name: 'Zed Dark',            accent: '#a78bfa', bg: '#18191b' },
-  { id: 'zed-light',    name: 'Zed Light',           accent: '#8839ef', bg: '#eff1f5' },
-  { id: 'one-dark',     name: 'One Dark',            accent: '#c678dd', bg: '#282c34' },
-  { id: 'gruvbox-dark', name: 'Gruvbox Dark',        accent: '#fe8019', bg: '#282828' },
+  { id: 'catppuccin', name: 'Catppuccin Mocha', accent: '#cba6f7', bg: '#1e1e2e' },
+  { id: 'warm-paper', name: 'Warm Paper',       accent: '#a0522d', bg: '#fbf0e3' },
 ];
 
 export const CommandPalette: React.FC<CommandPaletteProps> = ({
