@@ -77,15 +77,23 @@ export const portfolioConfig = {
     hashnode: "https://mahesh1215.hashnode.dev/",
     twitter: "https://x.com/mahesh_diwan1",
   },
+  formspreeId: "mnjgjpnk", // Enter your personal Formspree Form ID here to receive emails
   education: [
     {
       id: "edu-1",
       institution: "Marathwada Mitra Mandal’s Institute of Technology (MMIT)",
       degree: "Bachelor of Engineering in Computer Science",
-      minor: "Relevant: Cloud Architectures, Operating Systems, Computer Networks",
       period: "2023 — 2026",
       gpa: "CGPA: 8.7 / 10",
       details: "DevOps tools research, containerized application orchestration experiments."
+    },
+    {
+      id: "edu-3",
+      institution: "Shri Saraswati Bhuvan Prashala",
+      degree: "Secondary School Certificate (SSC)",
+      period: "2020",
+      gpa: "Score: 91%",
+      details: "Chhatrapati Sambhajinagar"
     },
     {
       id: "edu-2",

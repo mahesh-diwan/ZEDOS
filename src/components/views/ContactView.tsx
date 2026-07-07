@@ -101,8 +101,8 @@ export const ContactView: React.FC<ContactViewProps> = ({ onToast }) => {
 
     setFormState('sending');
 
-    // Use Formspree IDs from original code
-    const formspreeIds = ['mnjgjpnk', 'xgolpogy'];
+    // Use Formspree ID from configuration
+    const formspreeIds = [portfolioConfig.formspreeId || 'mnjgjpnk', 'xgolpogy'];
     let success = false;
 
     for (const id of formspreeIds) {

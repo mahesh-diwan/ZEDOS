@@ -271,44 +271,7 @@ export const AboutView: React.FC = () => {
       
       <h1 style={styles.heading}>Profile & Qualifications</h1>
 
-      {isMobile ? (
-        /* Mobile Sticky mini-nav pills */
-        <div style={styles.stickyMiniNav} className="no-select">
-          <button 
-            style={{
-              ...styles.miniNavPill,
-              borderColor: activeSection === 'bio' ? 'var(--accent)' : 'var(--border)',
-              color: activeSection === 'bio' ? 'var(--accent)' : 'var(--text-dim)',
-              backgroundColor: activeSection === 'bio' ? 'var(--accent-dim)' : 'transparent',
-            }}
-            onClick={() => handleScrollToSection('sec-bio')}
-          >
-            Bio
-          </button>
-          <button 
-            style={{
-              ...styles.miniNavPill,
-              borderColor: activeSection === 'skills' ? 'var(--accent)' : 'var(--border)',
-              color: activeSection === 'skills' ? 'var(--accent)' : 'var(--text-dim)',
-              backgroundColor: activeSection === 'skills' ? 'var(--accent-dim)' : 'transparent',
-            }}
-            onClick={() => handleScrollToSection('sec-skills')}
-          >
-            Skills
-          </button>
-          <button 
-            style={{
-              ...styles.miniNavPill,
-              borderColor: activeSection === 'experience' ? 'var(--accent)' : 'var(--border)',
-              color: activeSection === 'experience' ? 'var(--accent)' : 'var(--text-dim)',
-              backgroundColor: activeSection === 'experience' ? 'var(--accent-dim)' : 'transparent',
-            }}
-            onClick={() => handleScrollToSection('sec-experience')}
-          >
-            Experience
-          </button>
-        </div>
-      ) : (
+      {!isMobile && (
         /* Desktop Sub tabs navigation */
         <div style={styles.tabHeader} className="no-select about-subtabs" role="tablist" aria-label="About subtabs">
           <button 
