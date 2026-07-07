@@ -92,25 +92,25 @@
    2. WARM PAPER (Handcrafted Light Parchment)
    ===================================================== */
 .theme-warm-paper {
-  --bg:              #fbf0e3; /* warm parchment white */
-  --bg-sidebar:      #f4e7d3; /* slightly darker warm tan */
-  --bg-titlebar:     #eddcc4; /* darker accent title bar */
-  --bg-terminal:     #e4d2b9; /* terminal card bg */
-  --bg-active-tab:   #fbf0e3;
-  --bg-inactive-tab: #e8d7be;
+  --bg:              #f4e8d4; /* rich warm parchment cream */
+  --bg-sidebar:      #ebd9bf; /* slightly deeper tan/warm sepia */
+  --bg-titlebar:     #decfa7; /* warm tannish title bar */
+  --bg-terminal:     #d4c0a1; /* terminal card bg */
+  --bg-active-tab:   #f4e8d4;
+  --bg-inactive-tab: #decfa7;
   --bg-hover:        rgba(160, 82, 45, 0.08);
-  --border:          #d8c3a5; /* soft tannish border */
-  --text:            #4a3f35; /* charcoal brown/charcoal text */
-  --text-bright:     #2c221a; /* deep dark brown/charcoal text */
-  --text-dim:        #7d6b5c; /* muted brown-gray */
-  --accent:          #a0522d; /* warm sienna/terracotta accent */
+  --border:          #cfbfa2; /* soft tannish border */
+  --text:            #3d2f23; /* deep warm sepia/charcoal text */
+  --text-bright:     #261a0f; /* rich dark sepia/charcoal text */
+  --text-dim:        #6e5d4f; /* faded sepia gray */
+  --accent:          #a0522d; /* sienna/terracotta */
   --accent-dim:      rgba(160, 82, 45, 0.12);
   --accent-border:   rgba(160, 82, 45, 0.3);
   --accent-tint:     rgba(160, 82, 45, 0.04);
   --success:         #496d47; /* forest green */
   --warning:         #b38b2d; /* warm mustard yellow */
   --error:           #9c3a3a; /* crimson red */
-  --blue:            #385a8a; /* deep slate blue */
+  --blue:            #385a8a; /* slate blue */
   --syntax-keyword:  #8b4513; /* saddle brown */
   --syntax-string:   #496d47; /* forest green */
   --syntax-comment:  #8a7a6c; /* parchment comment */
@@ -118,14 +118,14 @@
   --syntax-function: #385a8a; /* slate blue */
   --syntax-tag:      #9c3a3a; /* crimson */
   /* Glass system */
-  --glass-bg:        rgba(244, 231, 211, 0.75);
+  --glass-bg:        rgba(235, 217, 191, 0.75);
   --glass-border:    rgba(160, 82, 45, 0.15);
-  --glass-shadow:    0 8px 32px rgba(90, 70, 50, 0.15);
+  --glass-shadow:    0 8px 32px rgba(90, 70, 50, 0.12);
   --surface:         var(--bg-sidebar);
   --surface-hover:   var(--bg-hover);
   --surface-active:  var(--bg-active-tab);
   --text-muted:      var(--text-dim);
-  --btn-text:        #fbf0e3;
+  --btn-text:        #f4e8d4;
 }
 
 /* =====================================================

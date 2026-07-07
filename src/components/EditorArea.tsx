@@ -51,8 +51,18 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
     const mode = getActiveViewMode();
 
     if (mode === 'code') {
-      const codeString = fileRawContents[activeFile as keyof typeof fileRawContents] || '';
-      return <CodeView fileName={activeFile} code={codeString} />;
+      let fileKey = activeFile;
+      if (activeFile === 'ABOUT.md') {
+        fileKey = 'profile.yaml';
+      } else if (activeFile === 'PROJECTS.md') {
+        fileKey = 'projects.tf';
+      } else if (activeFile === 'BLOGS.md') {
+        fileKey = 'blog.md';
+      } else if (activeFile === 'CONTACT.md') {
+        fileKey = 'contact.yaml';
+      }
+      const codeString = fileRawContents[fileKey as keyof typeof fileRawContents] || '';
+      return <CodeView fileName={fileKey} code={codeString} />;
     }
 
     if (activeFile === 'RESUME.pdf') {
