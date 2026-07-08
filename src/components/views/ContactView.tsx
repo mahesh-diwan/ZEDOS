@@ -80,11 +80,11 @@ export const ContactView: React.FC<ContactViewProps> = ({ onToast }) => {
     { label: 'github', value: 'github.com/mahesh-diwan', href: portfolioConfig.links.github },
     { label: 'hashnode', value: 'mahesh1215.hashnode.dev', href: portfolioConfig.links.hashnode },
     { label: 'twitter', value: 'x.com/mahesh_diwan1', href: portfolioConfig.links.twitter },
-    { label: 'leetcode', value: 'leetcode.com/mahesh-diwan', href: portfolioConfig.links.leetcode },
+    { label: 'leetcode', value: 'leetcode.com/mahesh_diwan', href: portfolioConfig.links.leetcode },
     { label: 'instagram', value: 'instagram.com/mahesh_diwan1', href: portfolioConfig.links.instagram },
   ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const form = formRef.current;
     if (!form) return;
@@ -101,33 +101,26 @@ export const ContactView: React.FC<ContactViewProps> = ({ onToast }) => {
 
     setFormState('sending');
 
-    // Use Formspree ID from configuration
-    const formspreeIds = [portfolioConfig.formspreeId || 'mnjgjpnk', 'xgolpogy'];
-    let success = false;
-
-    for (const id of formspreeIds) {
-      try {
-        const response = await fetch(`https://formspree.io/f/${id}`, {
-          method: 'POST',
-          headers: { Accept: 'application/json' },
-          body: formData,
-        });
-        if (response.ok) {
-          success = true;
-          break;
-        }
-      } catch (err) {
-        console.error('Formspree submission error:', err);
-      }
-    }
-
-    if (success) {
+    try {
+      const subject = encodeURIComponent(`Portfolio Inquiry from ${name}`);
+      const body = encodeURIComponent(
+        `Name: ${name}\n` +
+        `Sender Email: ${email}\n\n` +
+        `Message:\n${message}`
+      );
+      
+      const mailtoUrl = `mailto:${portfolioConfig.email}?subject=${subject}&body=${body}`;
+      
+      window.location.href = mailtoUrl;
+      
       setFormState('sent');
       form.reset();
-      onToast('✉️', 'Message sent! Talk to you soon.');
-    } else {
+      onToast('✉️', 'Opening your mail client...');
+      setTimeout(() => setFormState('idle'), 3000);
+    } catch (err) {
+      console.error('Mail client redirect error:', err);
       setFormState('error');
-      onToast('❌', 'Failed to send message. Please try again or use direct email!');
+      onToast('❌', 'Failed to open mail client.');
       setTimeout(() => setFormState('idle'), 3000);
     }
   };
@@ -220,7 +213,7 @@ export const ContactView: React.FC<ContactViewProps> = ({ onToast }) => {
           </form>
 
           <p style={styles.formFooter}>
-            {"// Powered by Formspree (delivers straight to Mahesh's inbox)"}
+            {"// Pre-fills your default mail client directly"}
           </p>
         </div>
 
