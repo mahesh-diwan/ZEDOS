@@ -99,7 +99,7 @@ export const portfolioConfig = {
       degree: "Secondary School Certificate (SSC)",
       period: "2020",
       gpa: "Score: 91%",
-      details: "Chhatrapati Sambhajinagar"
+      details: "English, Science, Maths "
     },
   ] as Education[],
   experience: [
