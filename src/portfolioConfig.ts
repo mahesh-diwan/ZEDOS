@@ -86,6 +86,14 @@ export const portfolioConfig = {
       details: "DevOps tools research, containerized application orchestration experiments."
     },
     {
+      id: "edu-2",
+      institution: "Government Polytechnic Jalna",
+      degree: "Diploma in Computer Engineering",
+      period: "2021 — 2023",
+      gpa: "Aggregate: 84.00%",
+      details: "Systems architecture basics, Bash automation scripting, Linux admin basics."
+    },
+    {
       id: "edu-3",
       institution: "Shri Saraswati Bhuvan Prashala",
       degree: "Secondary School Certificate (SSC)",
@@ -93,14 +101,6 @@ export const portfolioConfig = {
       gpa: "Score: 91%",
       details: "Chhatrapati Sambhajinagar"
     },
-    {
-      id: "edu-2",
-      institution: "Government Polytechnic Jalna",
-      degree: "Diploma in Computer Engineering",
-      period: "2021 — 2023",
-      gpa: "Aggregate: 84.00%",
-      details: "Systems architecture basics, Bash automation scripting, Linux admin basics."
-    }
   ] as Education[],
   experience: [
     {
