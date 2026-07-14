@@ -50,67 +50,12 @@ const SkillBar: React.FC<SkillBarProps> = ({ name, pct, color }) => {
 export const AboutView: React.FC = () => {
   const [activeSubTab, setActiveSubTab] = useState<'bio' | 'skills' | 'experience'>('bio');
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
-  const [activeSection, setActiveSection] = useState<'bio' | 'skills' | 'experience'>('bio');
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  // Intersection Observer for scroll tracking on mobile
-  useEffect(() => {
-    if (!isMobile) return;
-
-    const sections = ['sec-bio', 'sec-skills', 'sec-experience'];
-    const observerOptions = {
-      root: null,
-      rootMargin: '-80px 0px -50% 0px',
-      threshold: 0,
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          if (id === 'sec-bio') setActiveSection('bio');
-          if (id === 'sec-skills') setActiveSection('skills');
-          if (id === 'sec-experience') setActiveSection('experience');
-        }
-      });
-    }, observerOptions);
-
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => {
-      sections.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) observer.unobserve(el);
-      });
-    };
-  }, [isMobile]);
-
-  const handleScrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      // Offset for header (48px) + sticky mini-nav (approx 44px) + margin
-      const offset = 100;
-      const elementPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-
-      if (id === 'sec-bio') setActiveSection('bio');
-      if (id === 'sec-skills') setActiveSection('skills');
-      if (id === 'sec-experience') setActiveSection('experience');
-    }
-  };
 
   const renderBio = () => (
     <div style={styles.bioContainer}>

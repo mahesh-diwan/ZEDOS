@@ -140,7 +140,7 @@ coordinates:
 
 form_submission:
   method: POST
-  action: https://formspree.io/f/mnjgjpnk
+  action: https://formspree.io/f/mbdnjkpk
   fields:
     - name
     - email

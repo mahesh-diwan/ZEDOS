@@ -4,10 +4,7 @@ import { CodeView } from './views/CodeView';
 import { HomeView } from './views/HomeView';
 import { AboutView } from './views/AboutView';
 import { ProjectsView } from './views/ProjectsView';
-import { SkillsView } from './views/SkillsView';
-import { ExperienceView } from './views/ExperienceView';
 import { ContactView } from './views/ContactView';
-import { ReadmeView } from './views/ReadmeView';
 import { BlogView } from './views/BlogView';
 import { fileRawContents } from '../fileContents';
 

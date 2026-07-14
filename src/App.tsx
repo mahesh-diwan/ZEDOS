@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from './hooks/useTheme';
 import type { ThemeId } from './hooks/useTheme';
 import { TitleBar } from './components/TitleBar';
@@ -8,17 +8,6 @@ import { TerminalDock } from './components/TerminalDock';
 import { AssistantDock } from './components/AssistantDock';
 import { CommandPalette } from './components/CommandPalette';
 import { StatusBar } from './components/StatusBar';
-import {
-  Download,
-  Home,
-  User,
-  Folder,
-  BookOpen,
-  Mail,
-  Palette,
-  Sparkles,
-  X,
-} from 'lucide-react';
 
 interface Toast {
   id: string;

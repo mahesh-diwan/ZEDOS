@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { portfolioConfig } from '../../portfolioConfig';
-import { Terminal as TermIcon, ChevronRight, Download, Mail, ExternalLink, ArrowRight } from 'lucide-react';
+import { Terminal as TermIcon, ChevronRight, Download, Mail, ArrowRight } from 'lucide-react';
 
 const ClusterMonitor: React.FC = () => {
   const [cpu, setCpu] = useState(42);

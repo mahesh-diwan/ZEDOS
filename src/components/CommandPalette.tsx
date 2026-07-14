@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, File, Monitor, Terminal, Sparkles, AlertTriangle } from 'lucide-react';
+import { Search, File, Monitor, Terminal, AlertTriangle } from 'lucide-react';
 import type { ThemeId } from '../hooks/useTheme';
 
 interface CommandPaletteProps {
